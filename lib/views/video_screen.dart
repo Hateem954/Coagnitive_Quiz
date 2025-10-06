@@ -1,0 +1,501 @@
+// import 'package:flutter/material.dart';
+// import 'package:provider/provider.dart';
+// import 'package:quiz/model/video_model.dart';
+// import '../provider/video_provider.dart';
+// import 'package:video_player/video_player.dart';
+
+// class VideoScreen extends StatelessWidget {
+//   const VideoScreen({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: Colors.grey[200],
+//       body: SafeArea(
+//         child: Consumer<VideoProvider>(
+//           builder: (context, videoProvider, child) {
+//             if (videoProvider.videos.isEmpty) {
+//               return const Center(child: CircularProgressIndicator());
+//             }
+
+//             final videos = videoProvider.videos;
+
+//             return Column(
+//               children: [
+//                 const Padding(
+//                   padding: EdgeInsets.all(16.0),
+//                   child: Align(
+//                     alignment: Alignment.centerLeft,
+//                     child: Text(
+//                       "Video Trainings",
+//                       style: TextStyle(
+//                         fontSize: 26,
+//                         fontWeight: FontWeight.bold,
+//                         color: Colors.black87,
+//                       ),
+//                     ),
+//                   ),
+//                 ),
+//                 Expanded(
+//                   child: GridView.builder(
+//                     padding: const EdgeInsets.symmetric(horizontal: 12),
+//                     gridDelegate:
+//                         const SliverGridDelegateWithFixedCrossAxisCount(
+//                           crossAxisCount: 2, // ✅ 2-column layout
+//                           crossAxisSpacing: 12,
+//                           mainAxisSpacing: 12,
+//                           childAspectRatio: 0.85,
+//                         ),
+//                     itemCount: videos.length,
+//                     itemBuilder: (context, index) {
+//                       final video = videos[index];
+//                       return GestureDetector(
+//                         onTap: () {
+//                           videoProvider.changeVideo(index);
+//                           Navigator.push(
+//                             context,
+//                             MaterialPageRoute(
+//                               builder: (_) => const VideoPlayerScreen(),
+//                             ),
+//                           );
+//                         },
+//                         child: Container(
+//                           decoration: BoxDecoration(
+//                             color: Colors.white,
+//                             borderRadius: BorderRadius.circular(12),
+//                             boxShadow: [
+//                               BoxShadow(
+//                                 color: Colors.black12,
+//                                 blurRadius: 4,
+//                                 offset: const Offset(0, 2),
+//                               ),
+//                             ],
+//                           ),
+//                           child: Column(
+//                             crossAxisAlignment: CrossAxisAlignment.start,
+//                             children: [
+//                               ClipRRect(
+//                                 borderRadius: const BorderRadius.vertical(
+//                                   top: Radius.circular(12),
+//                                 ),
+//                                 child:
+//                                     (video.vedioImage == null ||
+//                                             video.vedioImage!.isEmpty)
+//                                         ? Container(
+//                                           height: 100,
+//                                           color: Colors.grey[300],
+//                                           child: const Center(
+//                                             child: Icon(
+//                                               Icons.broken_image,
+//                                               size: 40,
+//                                               color: Colors.grey,
+//                                             ),
+//                                           ),
+//                                         )
+//                                         : Image.network(
+//                                           "https://d8ca871017cc.ngrok-free.app/${video.vedioImage}",
+//                                           height: 100,
+//                                           width: double.infinity,
+//                                           fit: BoxFit.cover,
+//                                           errorBuilder: (
+//                                             context,
+//                                             error,
+//                                             stackTrace,
+//                                           ) {
+//                                             return Container(
+//                                               height: 100,
+//                                               color: Colors.grey[300],
+//                                               child: const Center(
+//                                                 child: Icon(
+//                                                   Icons.broken_image,
+//                                                   size: 40,
+//                                                   color: Colors.grey,
+//                                                 ),
+//                                               ),
+//                                             );
+//                                           },
+//                                         ),
+//                               ),
+//                               Padding(
+//                                 padding: const EdgeInsets.all(8.0),
+//                                 child: Column(
+//                                   crossAxisAlignment: CrossAxisAlignment.start,
+//                                   children: [
+//                                     Text(
+//                                       video.title ?? "No Title",
+//                                       style: const TextStyle(
+//                                         fontWeight: FontWeight.bold,
+//                                       ),
+//                                     ),
+//                                     const SizedBox(height: 4),
+//                                     Text(
+//                                       video.description ?? "",
+//                                       style: const TextStyle(
+//                                         fontSize: 12,
+//                                         color: Colors.black54,
+//                                       ),
+//                                       maxLines: 1,
+//                                       overflow: TextOverflow.ellipsis,
+//                                     ),
+//                                     const SizedBox(height: 4),
+//                                     const Text(
+//                                       "05 Min",
+//                                       style: TextStyle(
+//                                         fontSize: 12,
+//                                         fontWeight: FontWeight.w500,
+//                                       ),
+//                                     ),
+//                                   ],
+//                                 ),
+//                               ),
+//                             ],
+//                           ),
+//                         ),
+//                       );
+//                     },
+//                   ),
+//                 ),
+//               ],
+//             );
+//           },
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+// // ✅ Video Player Screen
+// class VideoPlayerScreen extends StatelessWidget {
+//   const VideoPlayerScreen({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final videoProvider = Provider.of<VideoProvider>(context);
+
+//     final currentVideo = videoProvider.currentVideo;
+
+//     return Scaffold(
+//       appBar: AppBar(title: Text(currentVideo?.title ?? "Video")),
+//       body: Center(
+//         child:
+//             videoProvider.controller != null &&
+//                     videoProvider.controller!.value.isInitialized
+//                 ? AspectRatio(
+//                   aspectRatio: videoProvider.controller!.value.aspectRatio,
+//                   child: VideoPlayer(videoProvider.controller!),
+//                 )
+//                 : const CircularProgressIndicator(),
+//       ),
+//     );
+//   }
+// }
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:quiz/model/subvideo_model.dart';
+import 'package:quiz/provider/subvideo_provider.dart';
+import 'package:video_player/video_player.dart';
+
+class VideoScreen extends StatefulWidget {
+  final String hashid; // ✅ we will pass hashid from previous screen
+
+  const VideoScreen({super.key, required this.hashid});
+
+  @override
+  State<VideoScreen> createState() => _VideoScreenState();
+}
+
+class _VideoScreenState extends State<VideoScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    // ✅ Show hashid in debug console
+    debugPrint("🎯 Fetching SubVideos with hashid: ${widget.hashid}");
+
+    // Fetch videos on screen load
+    Future.microtask(() {
+      final provider = Provider.of<SubVideoProvider>(context, listen: false);
+      provider.fetchSubVideos(widget.hashid);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[200],
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // ✅ Title Section
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                "Video Trainings",
+                style: const TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+            ),
+
+            // ✅ Video Grid Section
+            Expanded(
+              child: Consumer<SubVideoProvider>(
+                builder: (context, videoProvider, child) {
+                  if (videoProvider.isLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (videoProvider.subVideos.isEmpty) {
+                    return const Center(child: Text("❌ No videos available"));
+                  }
+
+                  final videos = videoProvider.subVideos;
+
+                  return GridView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2, // ✅ 2-column layout
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                          childAspectRatio: 0.85,
+                        ),
+                    itemCount: videos.length,
+                    itemBuilder: (context, index) {
+                      final video = videos[index];
+                      final imageUrl =
+                          (video.vedioImage != null &&
+                                  video.vedioImage!.isNotEmpty)
+                              ? "https://d8ca871017cc.ngrok-free.app/${video.vedioImage}"
+                              : null;
+
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => VideoPlayerScreen(video: video),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 4,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ClipRRect(
+                                borderRadius: const BorderRadius.vertical(
+                                  top: Radius.circular(12),
+                                ),
+                                child:
+                                    imageUrl == null
+                                        ? Container(
+                                          height: 100,
+                                          color: Colors.grey[300],
+                                          child: const Center(
+                                            child: Icon(
+                                              Icons.broken_image,
+                                              size: 40,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                        )
+                                        : Image.network(
+                                          imageUrl,
+                                          height: 100,
+                                          width: double.infinity,
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (
+                                            context,
+                                            error,
+                                            stackTrace,
+                                          ) {
+                                            return Container(
+                                              height: 100,
+                                              color: Colors.grey[300],
+                                              child: const Center(
+                                                child: Icon(
+                                                  Icons.broken_image,
+                                                  size: 40,
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      video.title.isNotEmpty
+                                          ? video.title
+                                          : "No Title",
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      video.description,
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.black54,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    const SizedBox(height: 4),
+                                    const Text(
+                                      "05 Min",
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ✅ Video Player Screen
+class VideoPlayerScreen extends StatefulWidget {
+  final SubVideoModel video;
+
+  const VideoPlayerScreen({super.key, required this.video});
+
+  @override
+  State<VideoPlayerScreen> createState() => _VideoPlayerScreenState();
+}
+
+class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
+  VideoPlayerController? _controller;
+  bool _videoError = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final videoUrl =
+        "https://d8ca871017cc.ngrok-free.app/${widget.video.video}";
+
+    debugPrint("▶️ Playing video from: $videoUrl");
+
+    _controller = VideoPlayerController.networkUrl(Uri.parse(videoUrl))
+      ..initialize()
+          .then((_) {
+            setState(() {});
+            _controller!.play();
+          })
+          .catchError((_) {
+            setState(() {
+              _videoError = true;
+            });
+          });
+  }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final imageUrl =
+        widget.video.vedioImage != null && widget.video.vedioImage!.isNotEmpty
+            ? "https://d8ca871017cc.ngrok-free.app/${widget.video.vedioImage}"
+            : null;
+
+    return Scaffold(
+      appBar: AppBar(title: Text(widget.video.title)),
+      body: Center(
+        child:
+            _videoError
+                ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(Icons.error, size: 60, color: Colors.red),
+                    SizedBox(height: 10),
+                    Text(
+                      "⚠️ Failed to load video",
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ],
+                )
+                : (_controller != null && _controller!.value.isInitialized)
+                ? AspectRatio(
+                  aspectRatio: _controller!.value.aspectRatio,
+                  child: VideoPlayer(_controller!),
+                )
+                : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (imageUrl != null)
+                      Image.network(
+                        imageUrl,
+                        height: 200,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            height: 200,
+                            color: Colors.grey[300],
+                            child: const Icon(
+                              Icons.broken_image,
+                              size: 50,
+                              color: Colors.grey,
+                            ),
+                          );
+                        },
+                      )
+                    else
+                      Container(
+                        height: 200,
+                        color: Colors.grey[300],
+                        child: const Icon(
+                          Icons.broken_image,
+                          size: 50,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      "Loading video...",
+                      style: TextStyle(color: Colors.black54),
+                    ),
+                    const SizedBox(height: 10),
+                    const CircularProgressIndicator(),
+                  ],
+                ),
+      ),
+    );
+  }
+}
