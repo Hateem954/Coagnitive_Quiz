@@ -202,7 +202,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quiz/Controller/quiz_controller.dart';
-import 'package:quiz/views/Quiz_questionscreen.dart';
+import 'package:quiz/views/level_screen.dart'; // ✅ Import your LevelScreen
+import 'package:quiz/utils/colors.dart';
 
 class Quizzes extends StatelessWidget {
   Quizzes({super.key});
@@ -261,22 +262,31 @@ class Quizzes extends StatelessWidget {
                     itemCount: quizController.quizzes.length,
                     itemBuilder: (context, index) {
                       final quiz = quizController.quizzes[index];
-                      return Column(
-                        children: [
-                          _quizCard(
-                            quizCode: "Q-${quiz.id}-${quiz.hashid}",
-                            category: quiz.category.name,
-                            categoryColor:
-                                Colors.red, // you can map color by category
-                            time:
-                                "5 min", // you may update when API provides duration
-                            title: quiz.title,
-                            questions: quiz.description,
-                            creator:
-                                "System", // API doesn’t provide creator yet
-                          ),
-                          const SizedBox(height: 20),
-                        ],
+
+                      return GestureDetector(
+                        onTap: () {
+                          // ✅ Navigate to LevelScreen with hashid and title
+                          Get.to(
+                            () => LevelScreen(
+                              hashid: quiz.hashid.toString(),
+                              title: quiz.title,
+                            ),
+                          );
+                        },
+                        child: Column(
+                          children: [
+                            _quizCard(
+                              quizCode: "Q-${quiz.id}-${quiz.hashid}",
+                              category: quiz.category.name,
+                              categoryColor: AppColors.black,
+                              time: "5 min",
+                              title: quiz.title,
+                              questions: quiz.description,
+                              creator: "System",
+                            ),
+                            const SizedBox(height: 20),
+                          ],
+                        ),
                       );
                     },
                   );
@@ -403,22 +413,11 @@ class Quizzes extends StatelessWidget {
                     style: const TextStyle(fontSize: 12, color: Colors.white),
                   ),
                   const Spacer(),
-                  // ElevatedButton(
-                  //   style: ElevatedButton.styleFrom(
-                  //     backgroundColor: Colors.blue,
-                  //     foregroundColor: Colors.white,
-                  //     shape: RoundedRectangleBorder(
-                  //       borderRadius: BorderRadius.circular(12),
-                  //     ),
-                  //   ),
-                  //   onPressed: () {
-                  //     Get.to(() => QuizQuestionScreen());
-                  //   },
-                  //   child: const Text(
-                  //     "Start Now",
-                  //     style: TextStyle(fontWeight: FontWeight.bold),
-                  //   ),
-                  // ),
+                  const Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.white70,
+                    size: 18,
+                  ),
                 ],
               ),
             ],

@@ -93,6 +93,54 @@ class ApiService {
     }
   }
 
+  Future<Response> forgetotp({var params}) async {
+    try {
+      return await apiClient.post(
+        url: AppUrl.forgetotp,
+        params: params,
+        baseUrl: _baseUrl,
+        headers: {
+          'Content-Type': 'application/json', // 👈 only this for signup
+        },
+      );
+    } catch (e) {
+      print('forget Email error: $e');
+      rethrow;
+    }
+  }
+
+  Future<Response> forgetverifyotp({var params}) async {
+    try {
+      return await apiClient.post(
+        url: AppUrl.verify_forget_otp,
+        params: params,
+        baseUrl: _baseUrl,
+        headers: {
+          'Content-Type': 'application/json', // 👈 only this for signup
+        },
+      );
+    } catch (e) {
+      print('forget otp error: $e');
+      rethrow;
+    }
+  }
+
+  Future<Response> forgetpasswordupdate({var params}) async {
+    try {
+      return await apiClient.post(
+        url: AppUrl.forget_password_update,
+        params: params,
+        baseUrl: _baseUrl,
+        headers: {
+          'Content-Type': 'application/json', // 👈 only this for signup
+        },
+      );
+    } catch (e) {
+      print('forget password update error: $e');
+      rethrow;
+    }
+  }
+
   Future<Response> getVideos(var params) async {
     try {
       return await apiClient.get(
@@ -307,7 +355,7 @@ class ApiService {
         },
       );
     } catch (e) {
-      print('Get age error: $e');
+      print('Get Quizzes show error: $e');
       rethrow;
     }
   }
@@ -328,82 +376,55 @@ class ApiService {
     }
   }
 
-  Future<Response> cancelOrder({
-    required int orderId,
-    required String orderStatus,
-  }) async {
+  Future<Response> showlevel(var params) async {
     try {
-      final formData = FormData.fromMap({
-        "id": orderId,
-        "order_status": orderStatus,
-      });
-
-      return await apiClient.post(
-        url: AppUrl.cancelOrder,
-        params: formData,
-        headers: _defaultHeaders,
-        baseUrl: _baseUrl,
-      );
-    } catch (e) {
-      print('Cancel order error: $e');
-      rethrow;
-    }
-  }
-
-  // Future<Response> fetchLikedItems({FormData? params}) async {
-  //   print('home api...: ${AppConstant.getUserToken}');
-  //   try {
-  //     return await apiClient.post(
-  //       url: AppUrl.fetchLiked,
-  //       params: params,
-  //       baseUrl: _baseUrl,
-  //       headers: _defaultHeaders,
-  //     );
-  //   } catch (e) {
-  //     print('Get liked items error: $e');
-  //     rethrow;
-  //   }
-  // }
-
-  // Future<Response> createOrder({dynamic params}) async {
-  //   try {
-  //     final response = await apiClient.post(
-  //       url: AppUrl.AddOrder,
-  //       params: params, // Send as JSON, not FormData
-  //       baseUrl: _baseUrl,
-  //       headers: _defaultHeaders,
-  //     );
-  //     print('Fetch Liked items response: ${response.data}');
-  //     return response;
-  //   } catch (e) {
-  //     print('Create Liked items error: $e');
-  //     rethrow;
-  //   }
-  // }
-
-  Future<Response> createOrder({dynamic params}) async {
-    try {
-      final isFormData = params is FormData;
-
-      final response = await apiClient.post(
-        url: AppUrl.AddOrder,
-        params: params,
-        baseUrl: _baseUrl,
+      return await apiClient.get(
+        url: AppUrl.getlevel, // ✅ correct endpoint
         headers: {
-          ..._defaultHeaders,
-          "Accept": "application/json",
-          if (isFormData) "Content-Type": "multipart/form-data",
+          'X-API-KEY': _apiKey,
+          'Accept': "application/json",
+          'Authorization': 'Bearer ${AppConstant.getUserToken}',
         },
       );
-
-      print('Create order response: ${response.data}');
-      return response;
     } catch (e) {
-      print('Create order error: $e');
+      print('Get level show error: $e');
       rethrow;
     }
   }
 
+  Future<Response> addlevel({required String level}) async {
+    final formData = FormData.fromMap({'s_level': level});
+    try {
+      return await apiClient.post(
+        url: AppUrl.add_level,
+        params: formData,
+        headers: {
+          'X-API-KEY': _apiKey,
+          'Accept': "application/json",
+          'Authorization': 'Bearer ${AppConstant.getUserToken}',
+        },
+      );
+    } catch (e) {
+      print('Add Level error: $e');
+      rethrow;
+    }
+  }
+
+  Future<Response> getquestions(String hashid) async {
+    try {
+      return await apiClient.get(
+        url: "${AppUrl.get_questions}/$hashid", // ✅ Correct interpolation
+        headers: {
+          'X-API-KEY': _apiKey,
+          'Accept': "application/json",
+          'Authorization': 'Bearer ${AppConstant.getUserToken}',
+        },
+      );
+    } catch (e) {
+      print('Get Questions error: $e');
+      rethrow;
+    }
+  }
   // Future<Response> fetchOrderDetails({required String orderId}) async {
   //   final formData = FormData.fromMap({'order_id': orderId});
   //   try {

@@ -1,9 +1,18 @@
 // import 'package:flutter/material.dart';
+// import 'package:flutter_tts/flutter_tts.dart';
+// import 'package:speech_to_text/speech_to_text.dart' as stt;
+
 // import 'package:quiz/utils/customimage.dart';
 // import 'package:quiz/utils/images.dart';
 
 // class QuizQuestionScreen extends StatefulWidget {
-//   const QuizQuestionScreen({super.key});
+//   final String title;
+//   final String hashid;
+//   const QuizQuestionScreen({
+//     super.key,
+//     required this.hashid,
+//     required this.title,
+//   });
 
 //   @override
 //   State<QuizQuestionScreen> createState() => _QuizQuestionScreenState();
@@ -11,6 +20,74 @@
 
 // class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
 //   int _selectedIndex = -1; // to track selected option
+//   final FlutterTts flutterTts = FlutterTts();
+//   late stt.SpeechToText _speech;
+//   bool _isListening = false;
+//   String _spokenText = "";
+
+//   final String question = "What is the capital city of Australia?";
+//   final List<String> options = ["a) Sydney", "b) Canberra", "c) Brisbane"];
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     _speech = stt.SpeechToText();
+//   }
+
+//   /// 🔹 Speak Question + Options
+//   Future<void> _speakQuestion() async {
+//     String textToSpeak = "$question. The options are. ${options.join(", ")}";
+//     await flutterTts.speak(textToSpeak);
+//   }
+
+//   /// 🔹 Start Listening for Answer
+//   Future<void> _listen() async {
+//     if (!_isListening) {
+//       bool available = await _speech.initialize();
+//       if (available) {
+//         setState(() => _isListening = true);
+//         _speech.listen(
+//           onResult: (val) {
+//             setState(() {
+//               _spokenText = val.recognizedWords.toLowerCase();
+//               _matchSpokenAnswer(_spokenText);
+//             });
+//           },
+//         );
+//       }
+//     } else {
+//       setState(() => _isListening = false);
+//       _speech.stop();
+//     }
+//   }
+
+//   /// 🔹 Match spoken text to an option
+//   void _matchSpokenAnswer(String spoken) {
+//     spoken = spoken.toLowerCase();
+
+//     // Match "option a/b/c" or just "a/b/c"
+//     if (spoken.contains("option a") || spoken.trim() == "a") {
+//       setState(() => _selectedIndex = 0);
+//       return;
+//     }
+//     if (spoken.contains("option b") || spoken.trim() == "b") {
+//       setState(() => _selectedIndex = 1);
+//       return;
+//     }
+//     if (spoken.contains("option c") || spoken.trim() == "c") {
+//       setState(() => _selectedIndex = 2);
+//       return;
+//     }
+
+//     // Match by actual option text (Sydney, Canberra, Brisbane)
+//     for (int i = 0; i < options.length; i++) {
+//       final optionText = options[i].split(")").last.trim().toLowerCase();
+//       if (spoken.contains(optionText)) {
+//         setState(() => _selectedIndex = i);
+//         break;
+//       }
+//     }
+//   }
 
 //   @override
 //   Widget build(BuildContext context) {
@@ -62,75 +139,76 @@
 //               ),
 //               const SizedBox(height: 16),
 
-//               // 🔹 Category + Q No + Timer
-//               const SizedBox(height: 16),
-
 //               // 🔹 Card containing Image + Question + Options
 //               Expanded(
-//                 child: Card(
-//                   shape: RoundedRectangleBorder(
-//                     borderRadius: BorderRadius.circular(16),
-//                   ),
-//                   elevation: 4,
-//                   child: Padding(
-//                     padding: const EdgeInsets.all(16),
-//                     child: Column(
-//                       crossAxisAlignment: CrossAxisAlignment.start,
-//                       children: [
-//                         Row(
-//                           children: [
-//                             Container(
-//                               padding: const EdgeInsets.symmetric(
-//                                 horizontal: 10,
-//                                 vertical: 4,
-//                               ),
-//                               decoration: BoxDecoration(
-//                                 color: Colors.white,
-//                                 borderRadius: BorderRadius.circular(12),
-//                                 border: Border.all(color: Colors.red),
-//                               ),
-//                               child: const Text(
-//                                 "General Knowledge",
-//                                 style: TextStyle(
-//                                   fontSize: 12,
-//                                   fontWeight: FontWeight.bold,
-//                                   color: Colors.red,
+//                 child: GestureDetector(
+//                   onTap: _speakQuestion, // 👈 Speak when tapped
+//                   child: Card(
+//                     shape: RoundedRectangleBorder(
+//                       borderRadius: BorderRadius.circular(16),
+//                     ),
+//                     elevation: 4,
+//                     child: Padding(
+//                       padding: const EdgeInsets.all(16),
+//                       child: Column(
+//                         crossAxisAlignment: CrossAxisAlignment.start,
+//                         children: [
+//                           Row(
+//                             children: [
+//                               Container(
+//                                 padding: const EdgeInsets.symmetric(
+//                                   horizontal: 10,
+//                                   vertical: 4,
+//                                 ),
+//                                 decoration: BoxDecoration(
+//                                   color: Colors.white,
+//                                   borderRadius: BorderRadius.circular(12),
+//                                   border: Border.all(color: Colors.red),
+//                                 ),
+//                                 child: const Text(
+//                                   "General Knowledge",
+//                                   style: TextStyle(
+//                                     fontSize: 12,
+//                                     fontWeight: FontWeight.bold,
+//                                     color: Colors.red,
+//                                   ),
 //                                 ),
 //                               ),
+//                               const SizedBox(width: 8),
+//                               _chip("Q1"),
+//                               const SizedBox(width: 8),
+//                               _chip("30"),
+//                             ],
+//                           ),
+//                           const SizedBox(height: 16),
+
+//                           // Image
+//                           ClipRRect(
+//                             borderRadius: BorderRadius.circular(12),
+//                             child: CustomImageContainer(
+//                               height: 200,
+//                               width: double.infinity,
+//                               imageUrl: AppImages.Welcome,
 //                             ),
-//                             const SizedBox(width: 8),
-//                             _chip("Q1"),
-//                             const SizedBox(width: 8),
-//                             _chip("30"),
-//                           ],
-//                         ),
-//                         // Image
-//                         ClipRRect(
-//                           borderRadius: BorderRadius.circular(12),
-//                           child: CustomImageContainer(
-//                             height: 250,
-//                             width: double.infinity,
-//                             imageUrl: AppImages.Welcome,
 //                           ),
-//                         ),
-//                         const SizedBox(height: 16),
+//                           const SizedBox(height: 16),
 
-//                         // Question
-//                         const Text(
-//                           "What is the capital city of Australia?",
-//                           style: TextStyle(
-//                             fontSize: 18,
-//                             fontWeight: FontWeight.bold,
-//                             color: Colors.black87,
+//                           // Question
+//                           Text(
+//                             question,
+//                             style: const TextStyle(
+//                               fontSize: 18,
+//                               fontWeight: FontWeight.bold,
+//                               color: Colors.black87,
+//                             ),
 //                           ),
-//                         ),
-//                         const SizedBox(height: 16),
+//                           const SizedBox(height: 16),
 
-//                         // Options
-//                         _optionTile("a) Sydney", 0),
-//                         _optionTile("b) Canberra", 1),
-//                         _optionTile("c) Brisbane", 2),
-//                       ],
+//                           // Options
+//                           for (int i = 0; i < options.length; i++)
+//                             _optionTile(options[i], i),
+//                         ],
+//                       ),
 //                     ),
 //                   ),
 //                 ),
@@ -138,31 +216,43 @@
 
 //               const SizedBox(height: 16),
 
-//               // 🔹 Next Button
-//               SizedBox(
-//                 width: double.infinity,
-//                 child: ElevatedButton(
-//                   style: ElevatedButton.styleFrom(
-//                     backgroundColor: Colors.blue,
-//                     padding: const EdgeInsets.symmetric(vertical: 14),
-//                     shape: RoundedRectangleBorder(
-//                       borderRadius: BorderRadius.circular(10),
+//               // 🔹 Mic + Next Button
+//               Row(
+//                 children: [
+//                   IconButton(
+//                     icon: Icon(
+//                       _isListening ? Icons.mic : Icons.mic_none,
+//                       color: _isListening ? Colors.red : Colors.grey,
+//                       size: 30,
+//                     ),
+//                     onPressed: _listen, // 👈 Start/Stop listening
+//                   ),
+//                   const SizedBox(width: 10),
+//                   Expanded(
+//                     child: ElevatedButton(
+//                       style: ElevatedButton.styleFrom(
+//                         backgroundColor: Colors.blue,
+//                         padding: const EdgeInsets.symmetric(vertical: 14),
+//                         shape: RoundedRectangleBorder(
+//                           borderRadius: BorderRadius.circular(10),
+//                         ),
+//                       ),
+//                       onPressed: () {
+//                         if (_selectedIndex != -1) {
+//                           // move to next question
+//                         }
+//                       },
+//                       child: const Text(
+//                         "Next",
+//                         style: TextStyle(
+//                           fontSize: 16,
+//                           fontWeight: FontWeight.bold,
+//                           color: Colors.white,
+//                         ),
+//                       ),
 //                     ),
 //                   ),
-//                   onPressed: () {
-//                     if (_selectedIndex != -1) {
-//                       // move to next question
-//                     }
-//                   },
-//                   child: const Text(
-//                     "Next",
-//                     style: TextStyle(
-//                       fontSize: 16,
-//                       fontWeight: FontWeight.bold,
-//                       color: Colors.white,
-//                     ),
-//                   ),
-//                 ),
+//                 ],
 //               ),
 //             ],
 //           ),
@@ -225,43 +315,54 @@
 // }
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
+import 'package:quiz/Controller/question_controller.dart';
 import 'package:quiz/utils/customimage.dart';
 import 'package:quiz/utils/images.dart';
 
 class QuizQuestionScreen extends StatefulWidget {
-  const QuizQuestionScreen({super.key});
+  final String title;
+  final String hashid;
+
+  const QuizQuestionScreen({
+    super.key,
+    required this.hashid,
+    required this.title,
+  });
 
   @override
   State<QuizQuestionScreen> createState() => _QuizQuestionScreenState();
 }
 
 class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
-  int _selectedIndex = -1; // to track selected option
+  final QuestionController _questionController = Get.put(QuestionController());
+
+  int _selectedIndex = -1;
+  int _currentIndex = 0;
+
   final FlutterTts flutterTts = FlutterTts();
   late stt.SpeechToText _speech;
   bool _isListening = false;
   String _spokenText = "";
 
-  final String question = "What is the capital city of Australia?";
-  final List<String> options = ["a) Sydney", "b) Canberra", "c) Brisbane"];
-
   @override
   void initState() {
     super.initState();
     _speech = stt.SpeechToText();
+    _questionController.fetchQuestions(widget.hashid);
   }
 
   /// 🔹 Speak Question + Options
-  Future<void> _speakQuestion() async {
+  Future<void> _speakQuestion(String question, List<String> options) async {
     String textToSpeak = "$question. The options are. ${options.join(", ")}";
     await flutterTts.speak(textToSpeak);
   }
 
   /// 🔹 Start Listening for Answer
-  Future<void> _listen() async {
+  Future<void> _listen(List<String> options) async {
     if (!_isListening) {
       bool available = await _speech.initialize();
       if (available) {
@@ -270,7 +371,7 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
           onResult: (val) {
             setState(() {
               _spokenText = val.recognizedWords.toLowerCase();
-              _matchSpokenAnswer(_spokenText);
+              _matchSpokenAnswer(_spokenText, options);
             });
           },
         );
@@ -281,27 +382,32 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
     }
   }
 
-  /// 🔹 Match spoken text to an option
-  void _matchSpokenAnswer(String spoken) {
-    spoken = spoken.toLowerCase();
+  /// 🔹 Match spoken text to option
+  void _matchSpokenAnswer(String spoken, List<String> options) {
+    spoken = spoken.toLowerCase().trim();
 
-    // Match "option a/b/c" or just "a/b/c"
-    if (spoken.contains("option a") || spoken.trim() == "a") {
+    // Match letters
+    if (spoken.contains("option a") || spoken == "a") {
       setState(() => _selectedIndex = 0);
       return;
     }
-    if (spoken.contains("option b") || spoken.trim() == "b") {
+    if (spoken.contains("option b") || spoken == "b") {
       setState(() => _selectedIndex = 1);
       return;
     }
-    if (spoken.contains("option c") || spoken.trim() == "c") {
+    if (spoken.contains("option c") || spoken == "c") {
       setState(() => _selectedIndex = 2);
       return;
     }
+    if (spoken.contains("option d") || spoken == "d") {
+      setState(() => _selectedIndex = 3);
+      return;
+    }
 
-    // Match by actual option text (Sydney, Canberra, Brisbane)
+    // Match actual option text (ignoring letters like "a)" etc.)
     for (int i = 0; i < options.length; i++) {
-      final optionText = options[i].split(")").last.trim().toLowerCase();
+      final optionText =
+          options[i].replaceAll(RegExp(r'[a-dA-D]\)'), '').trim().toLowerCase();
       if (spoken.contains(optionText)) {
         setState(() => _selectedIndex = i);
         break;
@@ -309,190 +415,235 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
     }
   }
 
+  /// 🔹 Move to next question
+  void _goToNextQuestion() {
+    if (_selectedIndex == -1) {
+      Get.snackbar(
+        "No Option Selected",
+        "Please select an option first!",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.orange,
+        colorText: Colors.white,
+      );
+      return;
+    }
+
+    if (_currentIndex < _questionController.questions.length - 1) {
+      setState(() {
+        _currentIndex++;
+        _selectedIndex = -1;
+      });
+    } else {
+      Get.snackbar(
+        "Quiz Completed",
+        "You’ve reached the end of the quiz!",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    double screenH = MediaQuery.of(context).size.height;
+    double screenW = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // 🔹 Header
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Stress Checker",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF1A1A40),
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.close, color: Colors.black87),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
+        child: Obx(() {
+          if (_questionController.isLoading.value) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-              // 🔹 Progress bar (fake stepper)
-              Row(
-                children: List.generate(
-                  6,
-                  (index) => Expanded(
-                    child: Container(
-                      height: 3,
-                      margin: const EdgeInsets.symmetric(horizontal: 2),
-                      decoration: BoxDecoration(
-                        color: index == 0 ? Colors.blue : Colors.grey.shade300,
-                        borderRadius: BorderRadius.circular(2),
+          if (_questionController.errorMessage.isNotEmpty) {
+            return Center(
+              child: Text(
+                _questionController.errorMessage.value,
+                style: const TextStyle(color: Colors.red, fontSize: 16),
+              ),
+            );
+          }
+
+          if (_questionController.questions.isEmpty) {
+            return const Center(child: Text("No questions available."));
+          }
+
+          final question =
+              _questionController.questions[_currentIndex].question;
+          final options =
+              _questionController.questions[_currentIndex].options
+                  .map((opt) => opt.options)
+                  .toList();
+
+          return Padding(
+            padding: EdgeInsets.all(screenW * 0.04),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 🔹 Header
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        widget.title,
+                        style: TextStyle(
+                          fontSize: screenW * 0.05,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF1A1A40),
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close, color: Colors.black87),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ],
+                ),
+                SizedBox(height: screenH * 0.01),
+
+                // 🔹 Progress bar
+                Row(
+                  children: List.generate(
+                    _questionController.questions.length,
+                    (index) => Expanded(
+                      child: Container(
+                        height: 3,
+                        margin: const EdgeInsets.symmetric(horizontal: 2),
+                        decoration: BoxDecoration(
+                          color:
+                              index <= _currentIndex
+                                  ? Colors.blue
+                                  : Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(2),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 16),
+                SizedBox(height: screenH * 0.02),
 
-              // 🔹 Card containing Image + Question + Options
-              Expanded(
-                child: GestureDetector(
-                  onTap: _speakQuestion, // 👈 Speak when tapped
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    elevation: 4,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
+                // 🔹 Scrollable Question Section
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: GestureDetector(
+                      onTap: () => _speakQuestion(question, options),
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        elevation: 4,
+                        child: Padding(
+                          padding: EdgeInsets.all(screenW * 0.04),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 4,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(color: Colors.red),
-                                ),
-                                child: const Text(
-                                  "General Knowledge",
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.red,
+                              Row(
+                                children: [
+                                  _chip("Q${_currentIndex + 1}"),
+                                  const SizedBox(width: 8),
+                                  _chip(
+                                    "${_questionController.questions.length - _currentIndex} left",
                                   ),
+                                ],
+                              ),
+                              SizedBox(height: screenH * 0.02),
+
+                              // 🔹 Image
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: CustomImageContainer(
+                                  height: screenH * 0.25,
+                                  width: double.infinity,
+                                  imageUrl: AppImages.Welcome,
                                 ),
                               ),
-                              const SizedBox(width: 8),
-                              _chip("Q1"),
-                              const SizedBox(width: 8),
-                              _chip("30"),
+                              SizedBox(height: screenH * 0.02),
+
+                              // 🔹 Question
+                              Text(
+                                question,
+                                style: TextStyle(
+                                  fontSize: screenW * 0.045,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              SizedBox(height: screenH * 0.02),
+
+                              // 🔹 Options
+                              for (int i = 0; i < options.length; i++)
+                                _optionTile(options[i], i, screenW, screenH),
                             ],
                           ),
-                          const SizedBox(height: 16),
-
-                          // Image
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: CustomImageContainer(
-                              height: 200,
-                              width: double.infinity,
-                              imageUrl: AppImages.Welcome,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-
-                          // Question
-                          Text(
-                            question,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-
-                          // Options
-                          for (int i = 0; i < options.length; i++)
-                            _optionTile(options[i], i),
-                        ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
 
-              const SizedBox(height: 16),
+                SizedBox(height: screenH * 0.02),
 
-              // 🔹 Mic + Next Button
-              Row(
-                children: [
-                  IconButton(
-                    icon: Icon(
-                      _isListening ? Icons.mic : Icons.mic_none,
-                      color: _isListening ? Colors.red : Colors.grey,
-                      size: 30,
+                // 🔹 Mic + Next Button
+                Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        _isListening ? Icons.mic : Icons.mic_none,
+                        color: _isListening ? Colors.red : Colors.grey,
+                        size: screenW * 0.08,
+                      ),
+                      onPressed: () => _listen(options),
                     ),
-                    onPressed: _listen, // 👈 Start/Stop listening
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          padding: EdgeInsets.symmetric(
+                            vertical: screenH * 0.018,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        onPressed: _goToNextQuestion,
+                        child: Text(
+                          _currentIndex <
+                                  _questionController.questions.length - 1
+                              ? "Next"
+                              : "Finish",
+                          style: TextStyle(
+                            fontSize: screenW * 0.045,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
-                      onPressed: () {
-                        if (_selectedIndex != -1) {
-                          // move to next question
-                        }
-                      },
-                      child: const Text(
-                        "Next",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        }),
       ),
     );
   }
 
   /// 🔹 Option Widget
-  Widget _optionTile(String text, int index) {
+  Widget _optionTile(String text, int index, double w, double h) {
     final isSelected = _selectedIndex == index;
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedIndex = index;
-        });
-      },
+      onTap: () => setState(() => _selectedIndex = index),
       child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+        margin: EdgeInsets.only(bottom: h * 0.015),
+        padding: EdgeInsets.symmetric(
+          vertical: h * 0.018,
+          horizontal: w * 0.03,
+        ),
         decoration: BoxDecoration(
           color: isSelected ? Colors.blue.shade100 : Colors.white,
           border: Border.all(
@@ -504,7 +655,7 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
         child: Text(
           text,
           style: TextStyle(
-            fontSize: 15,
+            fontSize: w * 0.04,
             fontWeight: FontWeight.w500,
             color: isSelected ? Colors.blue : Colors.black87,
           ),

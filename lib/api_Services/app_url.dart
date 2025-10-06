@@ -1,6 +1,6 @@
 class AppUrl {
   // static const String baseUrl = 'https://cf6a732c447c.ngrok-free.app/api';
-  static const String baseUrl = 'https://1f68c6de5409.ngrok-free.app/api';
+  static const String baseUrl = 'https://50d139fa2db6.ngrok-free.app/api';
 
   // login in section
   static const String login = '/login';
@@ -8,8 +8,8 @@ class AppUrl {
   static const String verifyOtp = '/otp';
   static const String resendotp = '';
   static const String forgetotp = '/forget-otp';
-  static const String verifyotp = '/verify-forget-otp';
-  static const String forgetpassword = '/forgot-password';
+  static const String verify_forget_otp = '/verify-forget-otp';
+  static const String forget_password_update = '/forgot-password';
 
   // video sections
   static const String getVideos = '/vedio';
@@ -25,10 +25,11 @@ class AppUrl {
   static const String get_user_age = '/user-age-level';
   static const String get_profile = '/get-profile';
 
+  //quizzes section
   static const String show_all_quiz = '/all-quizes';
   static const String get_category_quiz = '/category-quiz';
+  static const String get_questions = '/quizes-question';
 
-  static const String AddOrder = '/user/customer-order';
-  static const String getOrder = '/user/get-customer-order';
-  static const String cancelOrder = '/user/return-order';
+  static const String getlevel = '/quiz-level';
+  static const String add_level = '/level-profile';
 }

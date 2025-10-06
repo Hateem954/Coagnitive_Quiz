@@ -257,6 +257,7 @@ import 'package:quiz/Controller/get_category_quiz_controller.dart'; // ✅ Contr
 import 'package:quiz/utils/colors.dart';
 import 'package:quiz/utils/customimage.dart';
 import 'package:quiz/utils/images.dart';
+import 'package:quiz/views/level_screen.dart';
 import 'home_screen.dart';
 
 class CategoryQuizScreen extends StatefulWidget {
@@ -452,6 +453,7 @@ class _CategoryQuizScreenState extends State<CategoryQuizScreen> {
     return GestureDetector(
       onTap: () {
         debugPrint("Quiz tapped: $title | hashid: $hashid");
+        Get.to(LevelScreen(hashid: hashid, title: title));
       },
       child: Container(
         padding: const EdgeInsets.all(16),
