@@ -1,162 +1,3 @@
-// class QuizSubmitResponse {
-//   final bool success;
-//   final QuizData? data;
-//   final String message;
-
-//   QuizSubmitResponse({required this.success, this.data, required this.message});
-
-//   factory QuizSubmitResponse.fromJson(Map<String, dynamic> json) {
-//     return QuizSubmitResponse(
-//       success: json['success'] ?? false,
-//       data: json['data'] != null ? QuizData.fromJson(json['data']) : null,
-//       message: json['message'] ?? '',
-//     );
-//   }
-
-//   Map<String, dynamic> toJson() {
-//     return {'success': success, 'data': data?.toJson(), 'message': message};
-//   }
-// }
-
-// class QuizData {
-//   final int score;
-//   final int totalQuestions;
-//   final double percentage;
-//   final String aiFeedback;
-//   final String detailedAnalysis;
-//   final int attemptId;
-//   final String category;
-//   final List<AnswerDetail> answerDetails;
-//   final Summary summary;
-
-//   QuizData({
-//     required this.score,
-//     required this.totalQuestions,
-//     required this.percentage,
-//     required this.aiFeedback,
-//     required this.detailedAnalysis,
-//     required this.attemptId,
-//     required this.category,
-//     required this.answerDetails,
-//     required this.summary,
-//   });
-
-//   factory QuizData.fromJson(Map<String, dynamic> json) {
-//     return QuizData(
-//       score: json['score'] ?? 0,
-//       totalQuestions: json['total_questions'] ?? 0,
-//       percentage:
-//           (json['percentage'] is int)
-//               ? (json['percentage'] as int).toDouble()
-//               : (json['percentage'] ?? 0.0),
-//       aiFeedback: json['ai_feedback'] ?? '',
-//       detailedAnalysis: json['detailed_analysis'] ?? '',
-//       attemptId: json['attempt_id'] ?? 0,
-//       category: json['category'] ?? '',
-//       answerDetails:
-//           (json['answer_details'] as List<dynamic>? ?? [])
-//               .map((e) => AnswerDetail.fromJson(e))
-//               .toList(),
-//       summary: Summary.fromJson(json['summary'] ?? {}),
-//     );
-//   }
-
-//   Map<String, dynamic> toJson() {
-//     return {
-//       'score': score,
-//       'total_questions': totalQuestions,
-//       'percentage': percentage,
-//       'ai_feedback': aiFeedback,
-//       'detailed_analysis': detailedAnalysis,
-//       'attempt_id': attemptId,
-//       'category': category,
-//       'answer_details': answerDetails.map((e) => e.toJson()).toList(),
-//       'summary': summary.toJson(),
-//     };
-//   }
-// }
-
-// class AnswerDetail {
-//   final String question;
-//   final String userAnswer;
-//   final String correctAnswer;
-//   final bool isCorrect;
-
-//   AnswerDetail({
-//     required this.question,
-//     required this.userAnswer,
-//     required this.correctAnswer,
-//     required this.isCorrect,
-//   });
-
-//   factory AnswerDetail.fromJson(Map<String, dynamic> json) {
-//     return AnswerDetail(
-//       question: json['question'] ?? '',
-//       userAnswer: json['user_answer'] ?? '',
-//       correctAnswer: json['correct_answer'] ?? '',
-//       isCorrect: json['is_correct'] ?? false,
-//     );
-//   }
-
-//   Map<String, dynamic> toJson() {
-//     return {
-//       'question': question,
-//       'user_answer': userAnswer,
-//       'correct_answer': correctAnswer,
-//       'is_correct': isCorrect,
-//     };
-//   }
-// }
-
-// class Summary {
-//   final int correctAnswers;
-//   final int wrongAnswers;
-//   final Map<String, AnswerDetail> correctQuestions;
-//   final Map<String, AnswerDetail> wrongQuestions;
-
-//   Summary({
-//     required this.correctAnswers,
-//     required this.wrongAnswers,
-//     required this.correctQuestions,
-//     required this.wrongQuestions,
-//   });
-
-//   factory Summary.fromJson(Map<String, dynamic> json) {
-//     final correctMap = <String, AnswerDetail>{};
-//     final wrongMap = <String, AnswerDetail>{};
-
-//     if (json['correct_questions'] != null) {
-//       (json['correct_questions'] as Map<String, dynamic>).forEach((key, value) {
-//         correctMap[key] = AnswerDetail.fromJson(value);
-//       });
-//     }
-
-//     if (json['wrong_questions'] != null) {
-//       (json['wrong_questions'] as Map<String, dynamic>).forEach((key, value) {
-//         wrongMap[key] = AnswerDetail.fromJson(value);
-//       });
-//     }
-
-//     return Summary(
-//       correctAnswers: json['correct_answers'] ?? 0,
-//       wrongAnswers: json['wrong_answers'] ?? 0,
-//       correctQuestions: correctMap,
-//       wrongQuestions: wrongMap,
-//     );
-//   }
-
-//   Map<String, dynamic> toJson() {
-//     return {
-//       'correct_answers': correctAnswers,
-//       'wrong_answers': wrongAnswers,
-//       'correct_questions': correctQuestions.map(
-//         (k, v) => MapEntry(k, v.toJson()),
-//       ),
-//       'wrong_questions': wrongQuestions.map((k, v) => MapEntry(k, v.toJson())),
-//     };
-//   }
-// }
-
 class QuizSubmitResponse {
   final bool success;
   final QuizData? data;
@@ -166,7 +7,10 @@ class QuizSubmitResponse {
   factory QuizSubmitResponse.fromJson(Map<String, dynamic> json) {
     return QuizSubmitResponse(
       success: json['success'] ?? false,
-      data: json['data'] != null ? QuizData.fromJson(json['data']) : null,
+      data:
+          json['data'] != null
+              ? QuizData.fromJson(Map<String, dynamic>.from(json['data']))
+              : null,
     );
   }
 }
@@ -201,18 +45,23 @@ class QuizData {
       percentage:
           (json['percentage'] is int)
               ? (json['percentage'] as int).toDouble()
-              : json['percentage']?.toDouble(),
+              : (json['percentage'] ?? 0.0).toDouble(),
       aiFeedback: json['ai_feedback'],
       detailedAnalysis: json['detailed_analysis'],
       attemptId: json['attempt_id'],
       category: json['category'],
       answerDetails:
-          (json['answer_details'] as List<dynamic>?)
-              ?.map((e) => AnswerDetail.fromJson(e))
-              .toList(),
+          (json['answer_details'] is List)
+              ? (json['answer_details'] as List)
+                  .whereType<Map>()
+                  .map(
+                    (e) => AnswerDetail.fromJson(Map<String, dynamic>.from(e)),
+                  )
+                  .toList()
+              : [],
       summary:
-          json['summary'] is Map<String, dynamic>
-              ? Summary.fromJson(json['summary'])
+          (json['summary'] is Map)
+              ? Summary.fromJson(Map<String, dynamic>.from(json['summary']))
               : null,
     );
   }
@@ -236,7 +85,7 @@ class AnswerDetail {
       question: json['question'],
       userAnswer: json['user_answer'],
       correctAnswer: json['correct_answer'],
-      isCorrect: json['is_correct'],
+      isCorrect: json['is_correct'] ?? false,
     );
   }
 }
@@ -256,17 +105,25 @@ class Summary {
 
   factory Summary.fromJson(Map<String, dynamic> json) {
     return Summary(
-      correctAnswers: json['correct_answers'],
-      wrongAnswers: json['wrong_answers'],
-      correctQuestions:
-          (json['correct_questions'] as List<dynamic>?)
-              ?.map((e) => QuestionResult.fromJson(e))
-              .toList(),
-      wrongQuestions:
-          (json['wrong_questions'] as List<dynamic>?)
-              ?.map((e) => QuestionResult.fromJson(e))
-              .toList(),
+      correctAnswers: json['correct_answers'] ?? 0,
+      wrongAnswers: json['wrong_answers'] ?? 0,
+      correctQuestions: _parseQuestionList(json['correct_questions']),
+      wrongQuestions: _parseQuestionList(json['wrong_questions']),
     );
+  }
+
+  /// ✅ Handles both list and map structures safely
+  static List<QuestionResult> _parseQuestionList(dynamic data) {
+    if (data is List) {
+      return data
+          .whereType<Map>()
+          .map((e) => QuestionResult.fromJson(Map<String, dynamic>.from(e)))
+          .toList();
+    } else if (data is Map) {
+      // Sometimes backend sends a map instead of list
+      return [QuestionResult.fromJson(Map<String, dynamic>.from(data))];
+    }
+    return [];
   }
 }
 

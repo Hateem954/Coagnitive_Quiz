@@ -946,7 +946,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       // 👉 Navigate to CategoryQuizScreen with hashid
                       Get.to(
                         () => CategoryQuizScreen(
-                          hashid: quiz.hashid,
+                          hashid: quiz.category.hashid,
                           CategoryName: quiz.category.name,
                         ),
                       );
