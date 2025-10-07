@@ -307,7 +307,7 @@ class _CategoryQuizScreenState extends State<CategoryQuizScreen> {
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF1A1A40),
+                  color: AppColors.black,
                 ),
               ),
               const SizedBox(height: 20),
@@ -323,7 +323,7 @@ class _CategoryQuizScreenState extends State<CategoryQuizScreen> {
                     return const Center(
                       child: Text(
                         "No quizzes found",
-                        style: TextStyle(fontSize: 16, color: Colors.black54),
+                        style: TextStyle(fontSize: 16, color: AppColors.black),
                       ),
                     );
                   }
@@ -358,7 +358,7 @@ class _CategoryQuizScreenState extends State<CategoryQuizScreen> {
           Get.snackbar("Action", "Create new quiz tapped");
         },
         backgroundColor: AppColors.darkblue,
-        child: const Icon(Icons.add, color: Colors.white),
+        child: const Icon(Icons.add, color: AppColors.white),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
@@ -414,12 +414,12 @@ class _CategoryQuizScreenState extends State<CategoryQuizScreen> {
             Container(
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
-                color: isActive ? AppColors.darkblue : Colors.transparent,
+                color: isActive ? AppColors.darkblue : AppColors.transparent,
                 borderRadius: BorderRadius.circular(50),
               ),
               child: Icon(
                 icon,
-                color: isActive ? Colors.white : Colors.grey,
+                color: isActive ? AppColors.white : AppColors.grey,
                 size: 22,
               ),
             ),
@@ -428,7 +428,7 @@ class _CategoryQuizScreenState extends State<CategoryQuizScreen> {
               label,
               style: TextStyle(
                 fontSize: 12,
-                color: isActive ? AppColors.darkblue : Colors.grey,
+                color: isActive ? AppColors.darkblue : AppColors.grey,
                 fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
               ),
             ),
@@ -473,25 +473,28 @@ class _CategoryQuizScreenState extends State<CategoryQuizScreen> {
                     title,
                     style: const TextStyle(
                       fontSize: 18,
-                      color: Colors.white,
+                      color: AppColors.white,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 6),
                   Text(
                     "$questions Questions • $duration",
-                    style: const TextStyle(fontSize: 13, color: Colors.white70),
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: AppColors.white,
+                    ),
                   ),
                   const SizedBox(height: 12),
                   Row(
                     children: [
                       const CircleAvatar(
                         radius: 14,
-                        backgroundColor: Colors.white,
+                        backgroundColor: AppColors.white,
                         child: Icon(
                           Icons.person,
                           size: 18,
-                          color: Colors.black,
+                          color: AppColors.black,
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -499,7 +502,7 @@ class _CategoryQuizScreenState extends State<CategoryQuizScreen> {
                         "Created by $createdBy",
                         style: const TextStyle(
                           fontSize: 12,
-                          color: Colors.white,
+                          color: AppColors.white,
                         ),
                       ),
                     ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+import 'package:quiz/utils/colors.dart';
 import 'package:quiz/views/sign_inscreeen.dart';
 
 class ForgetVerifyPassword extends StatelessWidget {
@@ -12,7 +13,7 @@ class ForgetVerifyPassword extends StatelessWidget {
     final height = size.height;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: AppColors.white,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: width * 0.08),
@@ -29,7 +30,7 @@ class ForgetVerifyPassword extends StatelessWidget {
                 child: Icon(
                   Icons.check,
                   size: width * 0.15,
-                  color: Colors.white,
+                  color: AppColors.white,
                 ),
               ),
               SizedBox(height: height * 0.04),
@@ -40,7 +41,7 @@ class ForgetVerifyPassword extends StatelessWidget {
                 style: TextStyle(
                   fontSize: width * 0.07,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  color: AppColors.black,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -49,7 +50,10 @@ class ForgetVerifyPassword extends StatelessWidget {
               // ✅ Subtitle
               Text(
                 "Your password has been changed successfully.",
-                style: TextStyle(fontSize: width * 0.04, color: Colors.black54),
+                style: TextStyle(
+                  fontSize: width * 0.04,
+                  color: AppColors.black,
+                ),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: height * 0.06),
@@ -59,7 +63,7 @@ class ForgetVerifyPassword extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF4A5CF6),
+                    backgroundColor: AppColors.lightblue,
                     padding: EdgeInsets.symmetric(vertical: height * 0.02),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -73,7 +77,7 @@ class ForgetVerifyPassword extends StatelessWidget {
                     style: TextStyle(
                       fontSize: width * 0.045,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: AppColors.white,
                     ),
                   ),
                 ),

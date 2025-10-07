@@ -344,6 +344,34 @@ class ApiService {
     }
   }
 
+  Future<Response> updateprofile({
+    required String emergency_contact,
+    required String gender,
+    required String age,
+    required String level,
+  }) async {
+    final formData = FormData.fromMap({
+      'f_emergency_contact': emergency_contact,
+      's_gender': gender,
+      's_age': age,
+      's_level': level,
+    });
+    try {
+      return await apiClient.post(
+        url: AppUrl.update_profile,
+        params: formData,
+        headers: {
+          'X-API-KEY': _apiKey,
+          'Accept': "application/json",
+          'Authorization': 'Bearer ${AppConstant.getUserToken}',
+        },
+      );
+    } catch (e) {
+      print('Update Profile error: $e');
+      rethrow;
+    }
+  }
+
   Future<Response> showallquizzes(var params) async {
     try {
       return await apiClient.get(

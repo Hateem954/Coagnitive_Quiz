@@ -244,8 +244,8 @@ class _ForgetOtpState extends State<ForgetOtp> {
         "Invalid OTP",
         "Please enter a valid 4-digit OTP.",
         snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
+        backgroundColor: AppColors.red,
+        colorText: AppColors.white,
       );
       return;
     }
@@ -258,8 +258,8 @@ class _ForgetOtpState extends State<ForgetOtp> {
           "Success",
           "OTP Verified Successfully!",
           snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
+          backgroundColor: AppColors.transparent,
+          colorText: AppColors.white,
         );
         // ✅ Navigate to Forget Password Screen
         Get.to(() => ForgetPassword(email: widget.email));
@@ -268,8 +268,8 @@ class _ForgetOtpState extends State<ForgetOtp> {
           "Error",
           verifyController.errorMessage.value,
           snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.redAccent,
-          colorText: Colors.white,
+          backgroundColor: AppColors.red,
+          colorText: AppColors.white,
         );
       }
     });
@@ -378,7 +378,7 @@ class _ForgetOtpState extends State<ForgetOtp> {
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF4A5CF6),
+                      backgroundColor: AppColors.lightblue,
                       padding: EdgeInsets.symmetric(vertical: height * 0.02),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -391,7 +391,7 @@ class _ForgetOtpState extends State<ForgetOtp> {
                     child:
                         verifyController.isLoading.value
                             ? const CircularProgressIndicator(
-                              color: Colors.white,
+                              color: AppColors.white,
                             )
                             : Text(
                               "Verify",

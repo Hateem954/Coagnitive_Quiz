@@ -321,7 +321,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                     Get.snackbar(
                                       "Error",
                                       "Please fill all password fields",
-                                      backgroundColor: Colors.red.shade200,
+                                      backgroundColor: AppColors.transparent,
                                     );
                                     return;
                                   }
@@ -329,7 +329,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                     Get.snackbar(
                                       "Error",
                                       "Passwords do not match. Try again.",
-                                      backgroundColor: Colors.red.shade200,
+                                      backgroundColor: AppColors.transparent,
                                     );
                                     return;
                                   }
@@ -349,7 +349,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                     Get.snackbar(
                                       "Success",
                                       _controller.updateResponse.value!.message,
-                                      backgroundColor: Colors.green.shade300,
+                                      backgroundColor: AppColors.transparent,
                                     );
 
                                     // ✅ Navigate to Verify Screen
@@ -360,14 +360,14 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                       _controller.errorMessage.value.isNotEmpty
                                           ? _controller.errorMessage.value
                                           : "Failed to update password",
-                                      backgroundColor: Colors.red.shade200,
+                                      backgroundColor: AppColors.transparent,
                                     );
                                   }
                                 },
                         child:
                             _controller.isLoading.value
                                 ? const CircularProgressIndicator(
-                                  color: Colors.white,
+                                  color: AppColors.white,
                                 )
                                 : Text(
                                   "Reset Password",
@@ -422,7 +422,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Colors.black45, width: 1.2),
+            borderSide: const BorderSide(color: AppColors.black, width: 1.2),
           ),
           contentPadding: const EdgeInsets.symmetric(
             vertical: 14,

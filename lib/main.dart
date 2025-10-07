@@ -13,6 +13,7 @@ import 'package:quiz/provider/image_provider.dart';
 import 'package:quiz/provider/login_provider.dart';
 import 'package:quiz/provider/otp_provider.dart';
 import 'package:quiz/provider/profile_provider.dart';
+import 'package:quiz/provider/profile_update_provider.dart';
 import 'package:quiz/provider/subvideo_provider.dart';
 import 'package:quiz/provider/video_provider.dart';
 import 'package:quiz/splash_screen.dart';
@@ -36,6 +37,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => ProfileImageProvider()),
         ChangeNotifierProvider(create: (_) => AgeProvider()),
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
+        ChangeNotifierProvider(create: (_) => ProfileUpdateProvider()),
       ],
       child: const MyApp(),
     ),

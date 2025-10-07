@@ -24,6 +24,7 @@ class AppUrl {
   static const String add_image = '/image-profile';
   static const String get_user_age = '/user-age-level';
   static const String get_profile = '/get-profile';
+  static const String update_profile = '/update-profile';
 
   //quizzes section
   static const String show_all_quiz = '/all-quizes';

@@ -67,7 +67,7 @@ class _QuizResultPopupScreenState extends State<QuizResultPopupScreen> {
                   CustomImageContainer(
                     height: screenHeight * 0.1,
                     width: screenWidth * 0.2,
-                    imageUrl: AppImages.Welcome,
+                    imageUrl: AppImages.result_image,
                   ),
                   IconButton(
                     icon: const Icon(

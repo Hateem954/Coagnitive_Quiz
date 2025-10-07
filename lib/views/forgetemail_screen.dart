@@ -251,8 +251,9 @@ class ForgetEmail extends StatelessWidget {
                                 Get.snackbar(
                                   "Success",
                                   "OTP sent successfully! (${otpController.otpResponse.value!.otp})",
-                                  backgroundColor: Colors.green.shade100,
-                                  colorText: Colors.green.shade900,
+                                  backgroundColor: AppColors.transparent,
+                                  colorText: AppColors.black,
+                                  snackPosition: SnackPosition.BOTTOM,
                                 );
 
                                 // 👇 Navigate to OTP screen

@@ -1,9 +1,9 @@
 // import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
+// import 'package:get/get.dart'; // ✅ Required for Get.to()
 // import 'package:quiz/utils/colors.dart';
 // import 'package:quiz/utils/customimage.dart';
 // import 'package:quiz/utils/images.dart';
-// import 'package:quiz/views/profile3_screen.dart';
+// import 'package:quiz/views/home_screen.dart'; // ✅ Make sure HomeScreen is imported
 
 // class ViewProfile extends StatefulWidget {
 //   const ViewProfile({super.key});
@@ -13,8 +13,18 @@
 // }
 
 // class _ViewProfileState extends State<ViewProfile> {
-//   // 🔹 Start with no selection
-//   String selectedAge = "";
+//   bool isEditing = false; // ✅ Toggle between view & edit mode
+
+//   // Controllers for editable fields
+//   final TextEditingController phoneController = TextEditingController(
+//     text: "+92 333 1234567",
+//   );
+//   final TextEditingController genderController = TextEditingController(
+//     text: "Female",
+//   );
+//   final TextEditingController ageController = TextEditingController(
+//     text: "05-07",
+//   );
 
 //   @override
 //   Widget build(BuildContext context) {
@@ -26,7 +36,7 @@
 //     double sp(double value) => screenWidth * (value / 390);
 
 //     return Scaffold(
-//       backgroundColor: Colors.white,
+//       // backgroundColor: Colors.white,
 //       body: Stack(
 //         children: [
 //           // 🔹 Background Illustration
@@ -35,8 +45,28 @@
 //             width: screenWidth,
 //             child: CustomImageContainer(
 //               height: h(0.7),
-//               width: w(2),
+//               width: w(2.2),
 //               imageUrl: AppImages.editbg,
+//             ),
+//           ),
+
+//           // 🔹 Back Arrow Button (Top Left)
+//           Positioned(
+//             top: 40,
+//             left: 10,
+//             child: GestureDetector(
+//               onTap: () {
+//                 Get.to(const HomeScreen()); // ✅ Navigate back to HomeScreen
+//               },
+//               child: Container(
+//                 padding: const EdgeInsets.all(8),
+
+//                 child: const Icon(
+//                   Icons.arrow_back,
+//                   color: Colors.white,
+//                   size: 22,
+//                 ),
+//               ),
 //             ),
 //           ),
 
@@ -70,39 +100,58 @@
 //                   children: [
 //                     SizedBox(height: h(0.02)),
 
-//                     // 🔹 Profile Avatar
-//                     CircleAvatar(
-//                       radius: sp(35),
-//                       backgroundImage: const NetworkImage(
-//                         "https://i.pravatar.cc/150?img=3",
+//                     // 🔹 Profile Image in Box
+//                     Container(
+//                       width: w(0.25),
+//                       height: w(0.25),
+//                       decoration: BoxDecoration(
+//                         borderRadius: BorderRadius.circular(12),
+//                         border: Border.all(
+//                           color: Colors.grey.shade400,
+//                           width: 1,
+//                         ),
+//                         image: const DecorationImage(
+//                           image: NetworkImage(
+//                             "https://i.pravatar.cc/150?img=3",
+//                           ),
+//                           fit: BoxFit.cover,
+//                         ),
 //                       ),
 //                     ),
-//                     SizedBox(height: h(0.015)),
 
-//                     // 🔹 User Name
-//                     Text(
-//                       "User One",
-//                       style: TextStyle(
-//                         fontSize: sp(16),
-//                         fontWeight: FontWeight.bold,
-//                         color: Colors.black,
-//                       ),
-//                     ),
 //                     SizedBox(height: h(0.03)),
 
-//                     // 🔹 Phone Number
-//                     profileInfoRow(Icons.phone, "+92 333 1234567", sp, h, w),
-
+//                     // 🔹 Phone
+//                     profileInfoRow(
+//                       Icons.phone,
+//                       "Phone",
+//                       phoneController,
+//                       sp,
+//                       h,
+//                       w,
+//                     ),
 //                     SizedBox(height: h(0.015)),
 
 //                     // 🔹 Gender
-//                     profileInfoRow(Icons.wc, "Female", sp, h, w),
-
+//                     profileInfoRow(
+//                       Icons.wc,
+//                       "Gender",
+//                       genderController,
+//                       sp,
+//                       h,
+//                       w,
+//                     ),
 //                     SizedBox(height: h(0.015)),
 
-//                     // 🔹 Age Group
-//                     profileInfoRow(Icons.hourglass_bottom, "05-07", sp, h, w),
-
+//                     // 🔹 Age
+//                     profileInfoRow(
+//                       Icons.hourglass_bottom,
+//                       "Age Group",
+//                       ageController,
+//                       sp,
+//                       h,
+//                       w,
+//                     ),
 //                     SizedBox(height: h(0.04)),
 
 //                     // 🔹 Buttons
@@ -115,17 +164,21 @@
 //                             style: ElevatedButton.styleFrom(
 //                               backgroundColor: Colors.white,
 //                               foregroundColor: Colors.black,
-//                               side: const BorderSide(color: Colors.grey),
+//                               side: const BorderSide(
+//                                 color: AppColors.greytextfields,
+//                               ),
 //                               padding: EdgeInsets.symmetric(vertical: h(0.018)),
 //                               shape: RoundedRectangleBorder(
-//                                 borderRadius: BorderRadius.circular(8),
+//                                 borderRadius: BorderRadius.circular(6),
 //                               ),
 //                             ),
 //                             onPressed: () {
-//                               // edit details
+//                               setState(() {
+//                                 isEditing = !isEditing; // toggle edit mode
+//                               });
 //                             },
 //                             child: Text(
-//                               "Edit Details",
+//                               isEditing ? "Save" : "Edit Details",
 //                               style: TextStyle(
 //                                 fontSize: sp(14),
 //                                 fontWeight: FontWeight.normal,
@@ -139,10 +192,12 @@
 //                             style: ElevatedButton.styleFrom(
 //                               backgroundColor: Colors.white,
 //                               foregroundColor: Colors.black,
-//                               side: const BorderSide(color: Colors.grey),
+//                               side: const BorderSide(
+//                                 color: AppColors.greytextfields,
+//                               ),
 //                               padding: EdgeInsets.symmetric(vertical: h(0.018)),
 //                               shape: RoundedRectangleBorder(
-//                                 borderRadius: BorderRadius.circular(8),
+//                                 borderRadius: BorderRadius.circular(6),
 //                               ),
 //                             ),
 //                             onPressed: () {
@@ -169,9 +224,11 @@
 //     );
 //   }
 
+//   // 🔹 Profile Row Helper
 //   Widget profileInfoRow(
 //     IconData icon,
-//     String text,
+//     String label,
+//     TextEditingController controller,
 //     double Function(double) sp,
 //     double Function(double) h,
 //     double Function(double) w,
@@ -184,9 +241,25 @@
 //       ),
 //       child: Row(
 //         children: [
-//           Icon(icon, color: Colors.blue, size: sp(18)),
+//           Icon(icon, color: Colors.blue, size: sp(22)),
 //           SizedBox(width: w(0.04)),
-//           Text(text, style: TextStyle(fontSize: sp(14), color: Colors.black)),
+//           Expanded(
+//             child:
+//                 isEditing
+//                     ? TextField(
+//                       controller: controller,
+//                       decoration: const InputDecoration(
+//                         border: InputBorder.none,
+//                         isDense: true,
+//                         contentPadding: EdgeInsets.zero,
+//                       ),
+//                       style: TextStyle(fontSize: sp(14), color: Colors.black),
+//                     )
+//                     : Text(
+//                       controller.text,
+//                       style: TextStyle(fontSize: sp(14), color: Colors.black),
+//                     ),
+//           ),
 //         ],
 //       ),
 //     );
@@ -194,11 +267,15 @@
 // }
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart'; // ✅ Required for Get.to()
+import 'package:provider/provider.dart';
+import 'package:get/get.dart';
+import 'package:quiz/provider/login_provider.dart';
+import 'package:quiz/provider/profile_update_provider.dart';
+import 'package:quiz/provider/profile_provider.dart';
 import 'package:quiz/utils/colors.dart';
 import 'package:quiz/utils/customimage.dart';
 import 'package:quiz/utils/images.dart';
-import 'package:quiz/views/home_screen.dart'; // ✅ Make sure HomeScreen is imported
+import 'package:quiz/views/home_screen.dart';
 
 class ViewProfile extends StatefulWidget {
   const ViewProfile({super.key});
@@ -208,33 +285,44 @@ class ViewProfile extends StatefulWidget {
 }
 
 class _ViewProfileState extends State<ViewProfile> {
-  bool isEditing = false; // ✅ Toggle between view & edit mode
+  bool isEditing = false;
 
-  // Controllers for editable fields
-  final TextEditingController phoneController = TextEditingController(
-    text: "+92 333 1234567",
-  );
-  final TextEditingController genderController = TextEditingController(
-    text: "Female",
-  );
-  final TextEditingController ageController = TextEditingController(
-    text: "05-07",
-  );
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController genderController = TextEditingController();
+  final TextEditingController ageController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      Provider.of<ProfileProvider>(context, listen: false).fetchProfile();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
-    final double screenHeight = MediaQuery.of(context).size.height;
+    final profileProvider = Provider.of<ProfileProvider>(context);
+    final updateProvider = Provider.of<ProfileUpdateProvider>(context);
+    final profile = profileProvider.profile;
 
-    double h(double value) => screenHeight * value;
-    double w(double value) => screenWidth * value;
-    double sp(double value) => screenWidth * (value / 390);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    double h(double v) => screenHeight * v;
+    double w(double v) => screenWidth * v;
+    double sp(double v) => screenWidth * (v / 390);
+
+    // populate text fields if not editing
+    if (profile != null && !isEditing) {
+      phoneController.text = profile.emergencyContact;
+      genderController.text = profile.gender;
+      ageController.text = profile.age;
+    }
 
     return Scaffold(
-      // backgroundColor: Colors.white,
       body: Stack(
         children: [
-          // 🔹 Background Illustration
+          /// 🔹 Background
           SizedBox(
             height: screenHeight,
             width: screenWidth,
@@ -245,27 +333,21 @@ class _ViewProfileState extends State<ViewProfile> {
             ),
           ),
 
-          // 🔹 Back Arrow Button (Top Left)
+          /// 🔹 Back Arrow
           Positioned(
             top: 40,
             left: 10,
             child: GestureDetector(
-              onTap: () {
-                Get.to(const HomeScreen()); // ✅ Navigate back to HomeScreen
-              },
-              child: Container(
-                padding: const EdgeInsets.all(8),
-
-                child: const Icon(
-                  Icons.arrow_back,
-                  color: Colors.white,
-                  size: 22,
-                ),
+              onTap: () => Get.to(const HomeScreen()),
+              child: const Icon(
+                Icons.arrow_back,
+                color: Colors.white,
+                size: 22,
               ),
             ),
           ),
 
-          // 🔹 Bottom Card
+          /// 🔹 Main Card
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -273,10 +355,7 @@ class _ViewProfileState extends State<ViewProfile> {
               height: screenHeight * 0.55,
               decoration: const BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(25),
-                  topRight: Radius.circular(25),
-                ),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black12,
@@ -287,130 +366,188 @@ class _ViewProfileState extends State<ViewProfile> {
               ),
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.06,
-                  vertical: screenHeight * 0.02,
+                  horizontal: w(0.06),
+                  vertical: h(0.02),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(height: h(0.02)),
-
-                    // 🔹 Profile Image in Box
-                    Container(
-                      width: w(0.25),
-                      height: w(0.25),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: Colors.grey.shade400,
-                          width: 1,
-                        ),
-                        image: const DecorationImage(
-                          image: NetworkImage(
-                            "https://i.pravatar.cc/150?img=3",
+                child:
+                    profileProvider.isLoading || updateProvider.isLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : profile == null
+                        ? Center(
+                          child: Text(
+                            profileProvider.errorMessage ??
+                                "No profile data available",
+                            style: const TextStyle(color: Colors.black54),
                           ),
-                          fit: BoxFit.cover,
+                        )
+                        : Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(height: h(0.02)),
+
+                            /// 🔹 Profile Image
+                            Container(
+                              width: w(0.25),
+                              height: w(0.25),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: Colors.grey.shade400,
+                                  width: 1,
+                                ),
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                    profile.image.isNotEmpty
+                                        ? profile.image
+                                        : "https://i.pravatar.cc/150?img=3",
+                                  ),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+
+                            SizedBox(height: h(0.03)),
+
+                            /// 🔹 Editable Info Fields
+                            profileInfoRow(
+                              Icons.phone,
+                              "Phone",
+                              phoneController,
+                              sp,
+                              h,
+                              w,
+                            ),
+                            SizedBox(height: h(0.015)),
+                            profileInfoRow(
+                              Icons.wc,
+                              "Gender",
+                              genderController,
+                              sp,
+                              h,
+                              w,
+                            ),
+                            SizedBox(height: h(0.015)),
+                            profileInfoRow(
+                              Icons.hourglass_bottom,
+                              "Age Group",
+                              ageController,
+                              sp,
+                              h,
+                              w,
+                            ),
+                            SizedBox(height: h(0.04)),
+
+                            /// 🔹 Buttons
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                SizedBox(
+                                  width: screenWidth * 0.35,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.white,
+                                      foregroundColor: Colors.black,
+                                      side: const BorderSide(
+                                        color: AppColors.greytextfields,
+                                      ),
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: h(0.018),
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(6),
+                                      ),
+                                    ),
+                                    onPressed: () async {
+                                      if (isEditing) {
+                                        // ✅ Send correct API keys
+                                        await updateProvider.updateProfile(
+                                          fEmergencyContact:
+                                              phoneController.text.trim(),
+                                          sGender: genderController.text.trim(),
+                                          sAge: ageController.text.trim(),
+                                          sLevel: profile.level,
+                                        );
+
+                                        if (updateProvider.profileResponse !=
+                                                null &&
+                                            updateProvider
+                                                .profileResponse!
+                                                .success) {
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                "✅ Profile updated successfully!",
+                                              ),
+                                            ),
+                                          );
+
+                                          // ✅ Refresh profile data
+                                          await Provider.of<ProfileProvider>(
+                                            context,
+                                            listen: false,
+                                          ).fetchProfile();
+                                        } else {
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                updateProvider.errorMessage ??
+                                                    "Failed to update profile.",
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                      }
+
+                                      setState(() {
+                                        isEditing = !isEditing;
+                                      });
+                                    },
+                                    child: Text(
+                                      isEditing ? "Save" : "Edit Details",
+                                      style: TextStyle(fontSize: sp(14)),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: screenWidth * 0.35,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.white,
+                                      foregroundColor: Colors.black,
+                                      side: const BorderSide(
+                                        color: AppColors.greytextfields,
+                                      ),
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: h(0.018),
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(6),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      // TODO: Add logout logic
+                                      Provider.of<LoginProvider>(
+                                        context,
+                                        listen: false,
+                                      ).logout();
+                                    },
+                                    child: Text(
+                                      "Logout",
+                                      style: TextStyle(
+                                        fontSize: sp(14),
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                      ),
-                    ),
-
-                    SizedBox(height: h(0.03)),
-
-                    // 🔹 Phone
-                    profileInfoRow(
-                      Icons.phone,
-                      "Phone",
-                      phoneController,
-                      sp,
-                      h,
-                      w,
-                    ),
-                    SizedBox(height: h(0.015)),
-
-                    // 🔹 Gender
-                    profileInfoRow(
-                      Icons.wc,
-                      "Gender",
-                      genderController,
-                      sp,
-                      h,
-                      w,
-                    ),
-                    SizedBox(height: h(0.015)),
-
-                    // 🔹 Age
-                    profileInfoRow(
-                      Icons.hourglass_bottom,
-                      "Age Group",
-                      ageController,
-                      sp,
-                      h,
-                      w,
-                    ),
-                    SizedBox(height: h(0.04)),
-
-                    // 🔹 Buttons
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        SizedBox(
-                          width: screenWidth * 0.35,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: Colors.black,
-                              side: const BorderSide(
-                                color: AppColors.greytextfields,
-                              ),
-                              padding: EdgeInsets.symmetric(vertical: h(0.018)),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                isEditing = !isEditing; // toggle edit mode
-                              });
-                            },
-                            child: Text(
-                              isEditing ? "Save" : "Edit Details",
-                              style: TextStyle(
-                                fontSize: sp(14),
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: screenWidth * 0.35,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: Colors.black,
-                              side: const BorderSide(
-                                color: AppColors.greytextfields,
-                              ),
-                              padding: EdgeInsets.symmetric(vertical: h(0.018)),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                            ),
-                            onPressed: () {
-                              // logout logic
-                            },
-                            child: Text(
-                              "Logout",
-                              style: TextStyle(
-                                fontSize: sp(14),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
               ),
             ),
           ),
@@ -419,7 +556,7 @@ class _ViewProfileState extends State<ViewProfile> {
     );
   }
 
-  // 🔹 Profile Row Helper
+  /// 🔹 Reusable Input Row
   Widget profileInfoRow(
     IconData icon,
     String label,
@@ -451,7 +588,9 @@ class _ViewProfileState extends State<ViewProfile> {
                       style: TextStyle(fontSize: sp(14), color: Colors.black),
                     )
                     : Text(
-                      controller.text,
+                      controller.text.isNotEmpty
+                          ? controller.text
+                          : "Not provided",
                       style: TextStyle(fontSize: sp(14), color: Colors.black),
                     ),
           ),

@@ -9,4 +9,5 @@ class AppColors {
   static const Color greytextfields = Color(0xFFCFCACA);
   static const Color white = Color(0xFFFFFFFF);
   static const Color lightblue = Color(0xFF4A5CF6);
+  static const Color red = Color(0xFFFF5252);
 }
