@@ -29,6 +29,7 @@ class AppUrl {
   static const String show_all_quiz = '/all-quizes';
   static const String get_category_quiz = '/category-quiz';
   static const String get_questions = '/quizes-question';
+  static const String post_question = '/quiz/submit';
 
   static const String getlevel = '/quiz-level';
   static const String add_level = '/level-profile';

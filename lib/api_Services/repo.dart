@@ -425,6 +425,26 @@ class ApiService {
       rethrow;
     }
   }
+
+  Future<Response> postQuestions({required Map<String, dynamic> params}) async {
+    try {
+      return await apiClient.post(
+        url: AppUrl.post_question,
+        params: params, // 👈 Don't encode
+        baseUrl: _baseUrl,
+        headers: {
+          'X-API-KEY': _apiKey,
+          'Accept': "application/json",
+          'Authorization':
+              'Bearer ${AppConstant.getUserToken}', // ensure token exists
+        },
+      );
+    } catch (e) {
+      print('❌ Post Questions error: $e');
+      rethrow;
+    }
+  }
+
   // Future<Response> fetchOrderDetails({required String orderId}) async {
   //   final formData = FormData.fromMap({'order_id': orderId});
   //   try {

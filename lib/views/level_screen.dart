@@ -151,13 +151,21 @@ import 'package:quiz/views/Quiz_questionscreen.dart';
 class LevelScreen extends StatelessWidget {
   final String title;
   final String hashid;
+  final String id;
   final LevelController levelController = Get.put(LevelController());
 
-  LevelScreen({super.key, required this.hashid, required this.title});
+  LevelScreen({
+    super.key,
+    required this.hashid,
+    required this.title,
+    required this.id,
+  });
 
   @override
   Widget build(BuildContext context) {
-    print("Title is $title and hashid is $hashid"); // ✅ added missing semicolon
+    print(
+      "Title is $title and hashid is $hashid OOOOOOOOOOOOOR ID is $id",
+    ); // ✅ added missing semicolon
 
     // ✅ Fetch levels once when screen loads
     levelController.fetchLevels();
@@ -234,7 +242,11 @@ class LevelScreen extends StatelessWidget {
                           // ✅ Update selected visually
                           levelController.selectedLevel.value = level.name;
                           Get.to(
-                            QuizQuestionScreen(title: title, hashid: hashid),
+                            QuizQuestionScreen(
+                              title: title,
+                              hashid: hashid,
+                              id: id,
+                            ),
                           );
                         },
                         child: AnimatedContainer(

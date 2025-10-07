@@ -453,7 +453,7 @@ class _CategoryQuizScreenState extends State<CategoryQuizScreen> {
     return GestureDetector(
       onTap: () {
         debugPrint("Quiz tapped: $title | hashid: $hashid");
-        Get.to(LevelScreen(hashid: hashid, title: title));
+        // Get.to(LevelScreen(hashid: hashid, title: title,id: ,));
       },
       child: Container(
         padding: const EdgeInsets.all(16),

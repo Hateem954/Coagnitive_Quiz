@@ -270,6 +270,7 @@ class Quizzes extends StatelessWidget {
                             () => LevelScreen(
                               hashid: quiz.hashid.toString(),
                               title: quiz.title,
+                              id: quiz.id.toString(),
                             ),
                           );
                         },
