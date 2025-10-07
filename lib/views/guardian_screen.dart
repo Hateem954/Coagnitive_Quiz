@@ -270,7 +270,7 @@ class _GuardianInfoScreenState extends State<GuardianInfoScreen> {
     double sp(double value) => screenWidth * (value / 390);
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: Consumer<GuardianProvider>(
         builder: (context, guardianProvider, child) {
           return Stack(
@@ -297,12 +297,12 @@ class _GuardianInfoScreenState extends State<GuardianInfoScreen> {
                       vertical: 6,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.white,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: const Text(
                       "Skip",
-                      style: TextStyle(color: Colors.black, fontSize: 14),
+                      style: TextStyle(color: AppColors.black, fontSize: 14),
                     ),
                   ),
                 ),
@@ -315,14 +315,14 @@ class _GuardianInfoScreenState extends State<GuardianInfoScreen> {
                   width: double.infinity,
                   height: screenHeight * 0.52,
                   decoration: const BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.white,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(25),
                       topRight: Radius.circular(25),
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black12,
+                        color: AppColors.black,
                         blurRadius: 8,
                         offset: Offset(0, -2),
                       ),
@@ -341,7 +341,7 @@ class _GuardianInfoScreenState extends State<GuardianInfoScreen> {
                           style: TextStyle(
                             fontSize: sp(18),
                             fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                            color: AppColors.black,
                           ),
                         ),
                         SizedBox(height: h(0.02)),
@@ -376,8 +376,8 @@ class _GuardianInfoScreenState extends State<GuardianInfoScreen> {
                               width: screenWidth * 0.45,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white,
-                                  foregroundColor: Colors.black,
+                                  backgroundColor: AppColors.white,
+                                  foregroundColor: AppColors.black,
                                   side: const BorderSide(
                                     color: AppColors.greytextfields,
                                   ),
@@ -394,7 +394,7 @@ class _GuardianInfoScreenState extends State<GuardianInfoScreen> {
                                   style: TextStyle(
                                     fontSize: sp(14),
                                     fontWeight: FontWeight.normal,
-                                    color: Colors.black,
+                                    color: AppColors.black,
                                   ),
                                 ),
                               ),
@@ -404,8 +404,8 @@ class _GuardianInfoScreenState extends State<GuardianInfoScreen> {
                               width: screenWidth * 0.35,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.black,
-                                  foregroundColor: Colors.white,
+                                  backgroundColor: AppColors.black,
+                                  foregroundColor: AppColors.white,
                                   padding: EdgeInsets.symmetric(
                                     vertical: h(0.018),
                                   ),
@@ -468,7 +468,7 @@ class _GuardianInfoScreenState extends State<GuardianInfoScreen> {
                                           width: 18,
                                           child: CircularProgressIndicator(
                                             strokeWidth: 2,
-                                            color: Colors.white,
+                                            color: AppColors.white,
                                           ),
                                         )
                                         : Text(
@@ -512,15 +512,15 @@ class _GuardianInfoScreenState extends State<GuardianInfoScreen> {
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6),
-          borderSide: const BorderSide(color: Colors.grey),
+          borderSide: const BorderSide(color: AppColors.grey),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6),
-          borderSide: const BorderSide(color: Colors.grey),
+          borderSide: const BorderSide(color: AppColors.grey),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6),
-          borderSide: const BorderSide(color: Colors.black),
+          borderSide: const BorderSide(color: AppColors.black),
         ),
       ),
     );
