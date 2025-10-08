@@ -427,14 +427,14 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
 
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.grey,
       body: SafeArea(child: pages[_selectedIndex]),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Get.snackbar("Action", "Create new quiz tapped");
         },
         backgroundColor: AppColors.darkblue,
-        child: const Icon(Icons.add, color: AppColors.white),
+        child: const Icon(Icons.chat, color: AppColors.white),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
@@ -518,7 +518,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         onTap: () => Get.to(ViewProfile()),
                         child: CircleAvatar(
                           radius: 22,
-                          backgroundColor: AppColors.grey,
+                          backgroundColor: AppColors.greytextfields,
                           backgroundImage:
                               imageUrl != null ? NetworkImage(imageUrl) : null,
                           child:

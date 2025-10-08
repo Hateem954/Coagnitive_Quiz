@@ -179,7 +179,7 @@ class _QuizResultPopupScreenState extends State<QuizResultPopupScreen> {
                     child: const Text(
                       "Close",
                       style: TextStyle(
-                        color: AppColors.white,
+                        color: AppColors.black,
                         fontWeight: FontWeight.w600,
                         fontSize: 14,
                       ),

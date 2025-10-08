@@ -388,6 +388,22 @@ class ApiService {
     }
   }
 
+  Future<Response> showperformquiz(var params) async {
+    try {
+      return await apiClient.get(
+        url: AppUrl.get_perform_quiz, // ✅ correct endpoint
+        headers: {
+          'X-API-KEY': _apiKey,
+          'Accept': "application/json",
+          'Authorization': 'Bearer ${AppConstant.getUserToken}',
+        },
+      );
+    } catch (e) {
+      print('Get Perform quiz error: $e');
+      rethrow;
+    }
+  }
+
   Future<Response> getcategoryquiz(String hashid) async {
     try {
       return await apiClient.get(
