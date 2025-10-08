@@ -1,15 +1,393 @@
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+// import 'package:provider/provider.dart';
+// import 'package:quiz/Controller/category_controller.dart';
+// import 'package:quiz/api_Services/app_url.dart';
+// import 'package:quiz/model/category_model.dart';
+// import 'package:quiz/provider/profile_provider.dart';
+// import 'package:quiz/utils/colors.dart';
+// import 'package:quiz/views/category_quiz_screen.dart';
+// import 'package:quiz/views/profile_view.dart';
+// import 'package:quiz/views/quizzes_screen.dart';
+// import 'package:quiz/views/video_screen.dart';
+// import 'package:quiz/views/videotraining_screeen.dart';
+// import 'package:quiz/views/your_quezzesscreen.dart';
+
+// class HomeScreen extends StatefulWidget {
+//   const HomeScreen({super.key});
+
+//   @override
+//   State<HomeScreen> createState() => _HomeScreenState();
+// }
+
+// class _HomeScreenState extends State<HomeScreen> {
+//   int _selectedIndex = 0;
+//   final CategoryController categoryController = Get.put(CategoryController());
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     // ✅ Fetch profile automatically on screen load
+//     Future.microtask(() {
+//       Provider.of<ProfileProvider>(context, listen: false).fetchProfile();
+//     });
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final screenWidth = MediaQuery.of(context).size.width;
+//     final screenHeight = MediaQuery.of(context).size.height;
+
+//     double h(double value) => screenHeight * value;
+//     double w(double value) => screenWidth * value;
+//     double sp(double value) => screenWidth * (value / 390);
+
+//     // 👇 Pages for bottom nav
+//     final List<Widget> pages = [
+//       _homePage(h, w, sp),
+//       Quizzes(),
+//       VideoTrainingsScreen(),
+//       const Center(child: Text("Advice Page")),
+//     ];
+
+//     return Scaffold(
+//       resizeToAvoidBottomInset: false,
+//       backgroundColor: AppColors.white,
+//       body: SafeArea(child: pages[_selectedIndex]),
+
+//       floatingActionButton: FloatingActionButton(
+//         onPressed: () {
+//           Get.snackbar("Action", "Create new quiz tapped");
+//         },
+//         backgroundColor: AppColors.darkblue,
+//         child: const Icon(Icons.add, color: AppColors.white),
+//       ),
+//       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+
+//       bottomNavigationBar: BottomAppBar(
+//         shape: const CircularNotchedRectangle(),
+//         notchMargin: 6,
+//         child: SizedBox(
+//           height: 60,
+//           child: Padding(
+//             padding: EdgeInsets.symmetric(horizontal: w(0.001)),
+//             child: Row(
+//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//               children: [
+//                 _bottomNavItem(Icons.home, "Home", 0),
+//                 _bottomNavItem(Icons.quiz, "Quizzes", 1),
+//                 SizedBox(width: w(0.1)),
+//                 _bottomNavItem(Icons.bar_chart, "Videos", 2),
+//                 _bottomNavItem(Icons.lightbulb, "Advice", 3),
+//               ],
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+
+//   /// 🔹 Home Page Content
+//   Widget _homePage(
+//     double Function(double) h,
+//     double Function(double) w,
+//     double Function(double) sp,
+//   ) {
+//     return ListView(
+//       padding: EdgeInsets.symmetric(horizontal: w(0.05), vertical: h(0.02)),
+//       children: [
+//         // Header
+//         Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           children: [
+//             Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Text(
+//                   "GOOD MORNING",
+//                   style: TextStyle(
+//                     fontSize: sp(12),
+//                     fontWeight: FontWeight.w500,
+//                     color: AppColors.lightblue,
+//                   ),
+//                 ),
+//                 SizedBox(height: h(0.004)),
+
+//                 // ✅ Dynamic Student Name
+//                 Consumer<ProfileProvider>(
+//                   builder: (context, profileProvider, child) {
+//                     if (profileProvider.isLoading) {
+//                       return Text(
+//                         "Loading...",
+//                         style: TextStyle(
+//                           fontSize: sp(18),
+//                           fontWeight: FontWeight.bold,
+//                           color: AppColors.black,
+//                         ),
+//                       );
+//                     }
+
+//                     if (profileProvider.profile == null) {
+//                       return Text(
+//                         "GUEST USER",
+//                         style: TextStyle(
+//                           fontSize: sp(18),
+//                           fontWeight: FontWeight.bold,
+//                           color: AppColors.black,
+//                         ),
+//                       );
+//                     }
+
+//                     return Text(
+//                       profileProvider.profile!.studentName.toUpperCase(),
+//                       style: TextStyle(
+//                         fontSize: sp(18),
+//                         fontWeight: FontWeight.bold,
+//                         color: AppColors.black,
+//                       ),
+//                     );
+//                   },
+//                 ),
+//               ],
+//             ),
+
+//             // ✅ Profile Image
+//             Consumer<ProfileProvider>(
+//               builder: (context, profileProvider, child) {
+//                 final profile = profileProvider.profile;
+
+//                 final String? imageUrl =
+//                     (profile != null && profile.image.isNotEmpty)
+//                         ? (profile.image.startsWith("http")
+//                             ? profile.image
+//                             : "${AppUrl.baseUrl}${profile.image}")
+//                         : null;
+
+//                 return GestureDetector(
+//                   onTap: () {
+//                     Get.to(ViewProfile());
+//                   },
+//                   child: CircleAvatar(
+//                     radius: 22,
+//                     backgroundColor: AppColors.grey,
+//                     backgroundImage:
+//                         imageUrl != null ? NetworkImage(imageUrl) : null,
+//                     child:
+//                         imageUrl == null
+//                             ? const Icon(
+//                               Icons.person,
+//                               size: 26,
+//                               color: AppColors.black,
+//                             )
+//                             : null,
+//                   ),
+//                 );
+//               },
+//             ),
+//           ],
+//         ),
+
+//         SizedBox(height: h(0.025)),
+
+//         // 🔹 Dynamic Quizzes from API
+//         Obx(() {
+//           if (categoryController.isLoading.value) {
+//             return const Center(child: CircularProgressIndicator());
+//           }
+
+//           if (categoryController.quizzes.isEmpty) {
+//             return const Center(child: Text("⚠️ No Categories are available"));
+//           }
+
+//           return Column(
+//             children:
+//                 categoryController.quizzes.map((quiz) {
+//                   return GestureDetector(
+//                     onTap: () {
+//                       // 👉 Navigate to CategoryQuizScreen with hashid
+//                       Get.to(
+//                         () => CategoryQuizScreen(
+//                           hashid: quiz.category.hashid,
+//                           CategoryName: quiz.category.name,
+//                         ),
+//                       );
+//                     },
+//                     child: Container(
+//                       margin: const EdgeInsets.only(bottom: 16),
+//                       width: double.infinity,
+//                       padding: EdgeInsets.all(w(0.04)),
+//                       decoration: BoxDecoration(
+//                         borderRadius: BorderRadius.circular(16),
+//                         gradient: const LinearGradient(
+//                           colors: [AppColors.red, AppColors.lightblue],
+//                           begin: Alignment.topLeft,
+//                           end: Alignment.bottomRight,
+//                         ),
+//                       ),
+//                       child: Column(
+//                         crossAxisAlignment: CrossAxisAlignment.start,
+//                         children: [
+//                           Text(
+//                             quiz.title,
+//                             style: TextStyle(
+//                               fontSize: sp(16),
+//                               fontWeight: FontWeight.bold,
+//                               color: AppColors.white,
+//                             ),
+//                           ),
+//                           SizedBox(height: h(0.005)),
+//                           Text(
+//                             quiz.description,
+//                             style: TextStyle(
+//                               fontSize: sp(14),
+//                               color: AppColors.white,
+//                             ),
+//                           ),
+//                           SizedBox(height: h(0.01)),
+//                           Text(
+//                             "Category: ${quiz.category.name}",
+//                             style: const TextStyle(color: AppColors.white),
+//                           ),
+//                           Text(
+//                             "${categoryController.count.value} Videos",
+//                             style: const TextStyle(color: AppColors.white),
+//                           ),
+
+//                           SizedBox(height: h(0.015)),
+//                         ],
+//                       ),
+//                     ),
+//                   );
+//                 }).toList(),
+//           );
+//         }),
+
+//         SizedBox(height: h(0.03)),
+
+//         // Your Quizzes Section
+//         Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           children: [
+//             Text(
+//               "Your Quizzes",
+//               style: TextStyle(fontSize: sp(15), fontWeight: FontWeight.bold),
+//             ),
+//             GestureDetector(
+//               onTap: () {
+//                 Get.to(YourQuizzes());
+//               },
+//               child: Text(
+//                 "See all",
+//                 style: TextStyle(
+//                   fontSize: sp(15),
+//                   fontWeight: FontWeight.w500,
+//                   color: AppColors.lightblue,
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ),
+
+//         SizedBox(height: h(0.015)),
+
+//         _quizItem("Stress Checker", "20-09-2025"),
+//         _quizItem("General Knowledge", "18-09-2025"),
+//         _quizItem("Statistic Quiz", "12-09-2025"),
+//       ],
+//     );
+//   }
+
+//   /// 🔹 Quiz Item
+//   Widget _quizItem(String title, String date) {
+//     return Container(
+//       margin: const EdgeInsets.only(bottom: 12),
+//       padding: const EdgeInsets.all(16),
+//       decoration: BoxDecoration(
+//         color: AppColors.grey,
+//         borderRadius: BorderRadius.circular(12),
+//       ),
+//       child:
+//       Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//         children: [
+//           Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               Text(
+//                 title,
+//                 style: const TextStyle(
+//                   fontWeight: FontWeight.w600,
+//                   fontSize: 14,
+//                 ),
+//               ),
+//               const SizedBox(height: 4),
+//               Text(date, style: TextStyle(color: AppColors.grey, fontSize: 12)),
+//             ],
+//           ),
+//           Text(
+//             "Result",
+//             style: TextStyle(
+//               fontSize: 13,
+//               fontWeight: FontWeight.w600,
+//               color: AppColors.lightblue,
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+
+//   /// 🔹 Bottom Nav Item
+//   Widget _bottomNavItem(IconData icon, String label, int index) {
+//     final bool isActive = _selectedIndex == index;
+
+//     return Expanded(
+//       child: GestureDetector(
+//         onTap: () {
+//           setState(() {
+//             _selectedIndex = index;
+//           });
+//         },
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.end,
+//           children: [
+//             Container(
+//               padding: const EdgeInsets.all(6),
+//               decoration: BoxDecoration(
+//                 color: isActive ? AppColors.darkblue : AppColors.transparent,
+//                 borderRadius: BorderRadius.circular(12),
+//               ),
+//               child: Icon(
+//                 icon,
+//                 color: isActive ? AppColors.white : AppColors.greytextfields,
+//                 size: 22,
+//               ),
+//             ),
+//             const SizedBox(height: 4),
+//             Text(
+//               label,
+//               style: TextStyle(
+//                 fontSize: 12,
+//                 color: isActive ? AppColors.darkblue : Colors.grey,
+//                 fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:quiz/Controller/category_controller.dart';
 import 'package:quiz/api_Services/app_url.dart';
-import 'package:quiz/model/category_model.dart';
 import 'package:quiz/provider/profile_provider.dart';
 import 'package:quiz/utils/colors.dart';
 import 'package:quiz/views/category_quiz_screen.dart';
 import 'package:quiz/views/profile_view.dart';
 import 'package:quiz/views/quizzes_screen.dart';
-import 'package:quiz/views/video_screen.dart';
 import 'package:quiz/views/videotraining_screeen.dart';
 import 'package:quiz/views/your_quezzesscreen.dart';
 
@@ -27,7 +405,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // ✅ Fetch profile automatically on screen load
     Future.microtask(() {
       Provider.of<ProfileProvider>(context, listen: false).fetchProfile();
     });
@@ -42,7 +419,6 @@ class _HomeScreenState extends State<HomeScreen> {
     double w(double value) => screenWidth * value;
     double sp(double value) => screenWidth * (value / 390);
 
-    // 👇 Pages for bottom nav
     final List<Widget> pages = [
       _homePage(h, w, sp),
       Quizzes(),
@@ -51,10 +427,8 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.white,
       body: SafeArea(child: pages[_selectedIndex]),
-
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Get.snackbar("Action", "Create new quiz tapped");
@@ -63,248 +437,266 @@ class _HomeScreenState extends State<HomeScreen> {
         child: const Icon(Icons.add, color: AppColors.white),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         notchMargin: 6,
         child: SizedBox(
           height: 60,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: w(0.001)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _bottomNavItem(Icons.home, "Home", 0),
-                _bottomNavItem(Icons.quiz, "Quizzes", 1),
-                SizedBox(width: w(0.1)),
-                _bottomNavItem(Icons.bar_chart, "Videos", 2),
-                _bottomNavItem(Icons.lightbulb, "Advice", 3),
-              ],
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _bottomNavItem(Icons.home, "Home", 0),
+              _bottomNavItem(Icons.quiz, "Quizzes", 1),
+              const SizedBox(width: 40),
+              _bottomNavItem(Icons.bar_chart, "Videos", 2),
+              _bottomNavItem(Icons.lightbulb, "Advice", 3),
+            ],
           ),
         ),
       ),
     );
   }
 
-  /// 🔹 Home Page Content
   Widget _homePage(
     double Function(double) h,
     double Function(double) w,
     double Function(double) sp,
   ) {
-    return ListView(
-      padding: EdgeInsets.symmetric(horizontal: w(0.05), vertical: h(0.02)),
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    return Stack(
       children: [
-        // Header
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "GOOD MORNING",
-                  style: TextStyle(
-                    fontSize: sp(12),
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.lightblue,
-                  ),
-                ),
-                SizedBox(height: h(0.004)),
-
-                // ✅ Dynamic Student Name
-                Consumer<ProfileProvider>(
-                  builder: (context, profileProvider, child) {
-                    if (profileProvider.isLoading) {
-                      return Text(
-                        "Loading...",
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: w(0.05), vertical: h(0.02)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // HEADER
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "GOOD MORNING",
                         style: TextStyle(
-                          fontSize: sp(18),
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.black,
+                          fontSize: sp(12),
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.lightblue,
                         ),
-                      );
-                    }
-
-                    if (profileProvider.profile == null) {
-                      return Text(
-                        "GUEST USER",
-                        style: TextStyle(
-                          fontSize: sp(18),
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.black,
-                        ),
-                      );
-                    }
-
-                    return Text(
-                      profileProvider.profile!.studentName.toUpperCase(),
-                      style: TextStyle(
-                        fontSize: sp(18),
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.black,
                       ),
-                    );
-                  },
-                ),
-              ],
-            ),
-
-            // ✅ Profile Image
-            Consumer<ProfileProvider>(
-              builder: (context, profileProvider, child) {
-                final profile = profileProvider.profile;
-
-                final String? imageUrl =
-                    (profile != null && profile.image.isNotEmpty)
-                        ? (profile.image.startsWith("http")
-                            ? profile.image
-                            : "${AppUrl.baseUrl}${profile.image}")
-                        : null;
-
-                return GestureDetector(
-                  onTap: () {
-                    Get.to(ViewProfile());
-                  },
-                  child: CircleAvatar(
-                    radius: 22,
-                    backgroundColor: AppColors.grey,
-                    backgroundImage:
-                        imageUrl != null ? NetworkImage(imageUrl) : null,
-                    child:
-                        imageUrl == null
-                            ? const Icon(
-                              Icons.person,
-                              size: 26,
+                      const SizedBox(height: 4),
+                      Consumer<ProfileProvider>(
+                        builder: (context, profileProvider, child) {
+                          final name =
+                              profileProvider.profile?.studentName ??
+                              "GUEST USER";
+                          return Text(
+                            name.toUpperCase(),
+                            style: TextStyle(
+                              fontSize: sp(18),
+                              fontWeight: FontWeight.bold,
                               color: AppColors.black,
-                            )
-                            : null,
+                            ),
+                          );
+                        },
+                      ),
+                    ],
                   ),
-                );
-              },
-            ),
-          ],
-        ),
-
-        SizedBox(height: h(0.025)),
-
-        // 🔹 Dynamic Quizzes from API
-        Obx(() {
-          if (categoryController.isLoading.value) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (categoryController.quizzes.isEmpty) {
-            return const Center(child: Text("⚠️ No Categories are available"));
-          }
-
-          return Column(
-            children:
-                categoryController.quizzes.map((quiz) {
-                  return GestureDetector(
-                    onTap: () {
-                      // 👉 Navigate to CategoryQuizScreen with hashid
-                      Get.to(
-                        () => CategoryQuizScreen(
-                          hashid: quiz.category.hashid,
-                          CategoryName: quiz.category.name,
+                  Consumer<ProfileProvider>(
+                    builder: (context, provider, child) {
+                      final image = provider.profile?.image;
+                      final imageUrl =
+                          (image != null && image.isNotEmpty)
+                              ? (image.startsWith("http")
+                                  ? image
+                                  : "${AppUrl.baseUrl}$image")
+                              : null;
+                      return GestureDetector(
+                        onTap: () => Get.to(ViewProfile()),
+                        child: CircleAvatar(
+                          radius: 22,
+                          backgroundColor: AppColors.grey,
+                          backgroundImage:
+                              imageUrl != null ? NetworkImage(imageUrl) : null,
+                          child:
+                              imageUrl == null
+                                  ? const Icon(
+                                    Icons.person,
+                                    color: AppColors.black,
+                                  )
+                                  : null,
                         ),
                       );
                     },
-                    child: Container(
-                      margin: const EdgeInsets.only(bottom: 16),
-                      width: double.infinity,
-                      padding: EdgeInsets.all(w(0.04)),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        gradient: const LinearGradient(
-                          colors: [AppColors.red, AppColors.lightblue],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            quiz.title,
-                            style: TextStyle(
-                              fontSize: sp(16),
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.white,
-                            ),
-                          ),
-                          SizedBox(height: h(0.005)),
-                          Text(
-                            quiz.description,
-                            style: TextStyle(
-                              fontSize: sp(14),
-                              color: AppColors.white,
-                            ),
-                          ),
-                          SizedBox(height: h(0.01)),
-                          Text(
-                            "Category: ${quiz.category.name}",
-                            style: const TextStyle(color: AppColors.white),
-                          ),
-                          Text(
-                            "${categoryController.count.value} Videos",
-                            style: const TextStyle(color: AppColors.white),
-                          ),
-
-                          SizedBox(height: h(0.015)),
-                        ],
-                      ),
-                    ),
-                  );
-                }).toList(),
-          );
-        }),
-
-        SizedBox(height: h(0.03)),
-
-        // Your Quizzes Section
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "Your Quizzes",
-              style: TextStyle(fontSize: sp(15), fontWeight: FontWeight.bold),
-            ),
-            GestureDetector(
-              onTap: () {
-                Get.to(YourQuizzes());
-              },
-              child: Text(
-                "See all",
-                style: TextStyle(
-                  fontSize: sp(15),
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.lightblue,
-                ),
+                  ),
+                ],
               ),
-            ),
-          ],
+              const SizedBox(height: 20),
+
+              // QUIZ CARD SECTION
+              Obx(() {
+                if (categoryController.isLoading.value) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (categoryController.quizzes.isEmpty) {
+                  return const Center(
+                    child: Text("⚠️ No Categories are available"),
+                  );
+                }
+
+                return Column(
+                  children:
+                      categoryController.quizzes.map((quiz) {
+                        return GestureDetector(
+                          onTap: () {
+                            // 👉 Navigate to CategoryQuizScreen with hashid
+                            Get.to(
+                              () => CategoryQuizScreen(
+                                hashid: quiz.category.hashid,
+                                CategoryName: quiz.category.name,
+                              ),
+                            );
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(bottom: 16),
+                            width: double.infinity,
+                            padding: EdgeInsets.all(w(0.04)),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              gradient: const LinearGradient(
+                                colors: [AppColors.red, AppColors.lightblue],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  quiz.title,
+                                  style: TextStyle(
+                                    fontSize: sp(16),
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.white,
+                                  ),
+                                ),
+                                SizedBox(height: h(0.005)),
+                                Text(
+                                  quiz.description,
+                                  style: TextStyle(
+                                    fontSize: sp(14),
+                                    color: AppColors.white,
+                                  ),
+                                ),
+                                SizedBox(height: h(0.01)),
+                                Text(
+                                  "Category: ${quiz.category.name}",
+                                  style: const TextStyle(
+                                    color: AppColors.white,
+                                  ),
+                                ),
+                                Text(
+                                  "${categoryController.count.value} Videos",
+                                  style: const TextStyle(
+                                    color: AppColors.white,
+                                  ),
+                                ),
+
+                                SizedBox(height: h(0.015)),
+                              ],
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                );
+              }),
+            ],
+          ),
         ),
 
-        SizedBox(height: h(0.015)),
+        // 🔹 Your Quizzes Section as Bottom Container Card
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            width: double.infinity,
+            height: screenHeight * 0.45,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(25),
+                topRight: Radius.circular(25),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 8,
+                  offset: Offset(0, -2),
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: screenWidth * 0.06,
+                vertical: screenHeight * 0.02,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Title + See all
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "Your Quizzes",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () => Get.to(YourQuizzes()),
+                        child: const Text(
+                          "See all",
+                          style: TextStyle(
+                            color: AppColors.darkblue,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 15),
 
-        _quizItem("Stress Checker", "20-09-2025"),
-        _quizItem("General Knowledge", "18-09-2025"),
-        _quizItem("Statistic Quiz", "12-09-2025"),
+                  // Quiz list
+                  Expanded(
+                    child: ListView(
+                      children: [
+                        _quizItem("Stress Checker", "20-09-2025"),
+                        _quizItem("General Knowledge", "18-09-2025"),
+                        _quizItem("Statistic Quiz", "12-09-2025"),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
 
-  /// 🔹 Quiz Item
   Widget _quizItem(String title, String date) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.grey,
-        borderRadius: BorderRadius.circular(12),
+        color: Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -315,50 +707,44 @@ class _HomeScreenState extends State<HomeScreen> {
               Text(
                 title,
                 style: const TextStyle(
-                  fontWeight: FontWeight.w600,
                   fontSize: 14,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               const SizedBox(height: 4),
-              Text(date, style: TextStyle(color: AppColors.grey, fontSize: 12)),
+              Text(
+                date,
+                style: const TextStyle(color: Colors.grey, fontSize: 12),
+              ),
             ],
           ),
-          Text(
+          const Text(
             "Result",
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-              color: AppColors.lightblue,
-            ),
+            style: TextStyle(color: Colors.indigo, fontWeight: FontWeight.w600),
           ),
         ],
       ),
     );
   }
 
-  /// 🔹 Bottom Nav Item
   Widget _bottomNavItem(IconData icon, String label, int index) {
     final bool isActive = _selectedIndex == index;
 
     return Expanded(
       child: GestureDetector(
-        onTap: () {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
+        onTap: () => setState(() => _selectedIndex = index),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Container(
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
-                color: isActive ? AppColors.darkblue : AppColors.transparent,
+                color: isActive ? AppColors.darkblue : Colors.transparent,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
                 icon,
-                color: isActive ? AppColors.white : AppColors.greytextfields,
+                color: isActive ? Colors.white : Colors.grey,
                 size: 22,
               ),
             ),

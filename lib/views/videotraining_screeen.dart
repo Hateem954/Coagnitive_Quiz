@@ -518,7 +518,7 @@ class VideoTrainingsScreen extends StatelessWidget {
         alignment: Alignment.bottomCenter,
         child: Container(
           width: double.infinity,
-          height: screenHeight * 0.85,
+          height: screenHeight * 0.75,
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
@@ -669,7 +669,7 @@ class VideoTrainingsScreen extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: CustomImageContainer(
-                height: MediaQuery.of(context).size.height * 0.2,
+                height: MediaQuery.of(context).size.height * 0.15,
                 width: MediaQuery.of(context).size.width * 0.25,
                 imageUrl: AppImages.error_image,
               ),
