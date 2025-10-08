@@ -52,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: SafeArea(child: pages[_selectedIndex]),
 
       floatingActionButton: FloatingActionButton(
@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Get.snackbar("Action", "Create new quiz tapped");
         },
         backgroundColor: AppColors.darkblue,
-        child: const Icon(Icons.add, color: Colors.white),
+        child: const Icon(Icons.add, color: AppColors.white),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
@@ -108,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(
                     fontSize: sp(12),
                     fontWeight: FontWeight.w500,
-                    color: Colors.blueAccent,
+                    color: AppColors.lightblue,
                   ),
                 ),
                 SizedBox(height: h(0.004)),
@@ -122,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         style: TextStyle(
                           fontSize: sp(18),
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: AppColors.black,
                         ),
                       );
                     }
@@ -133,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         style: TextStyle(
                           fontSize: sp(18),
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: AppColors.black,
                         ),
                       );
                     }
@@ -143,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: TextStyle(
                         fontSize: sp(18),
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: AppColors.black,
                       ),
                     );
                   },
@@ -169,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                   child: CircleAvatar(
                     radius: 22,
-                    backgroundColor: Colors.grey.shade200,
+                    backgroundColor: AppColors.grey,
                     backgroundImage:
                         imageUrl != null ? NetworkImage(imageUrl) : null,
                     child:
@@ -177,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ? const Icon(
                               Icons.person,
                               size: 26,
-                              color: Colors.black,
+                              color: AppColors.black,
                             )
                             : null,
                   ),
@@ -219,7 +219,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16),
                         gradient: const LinearGradient(
-                          colors: [Colors.redAccent, Colors.blueAccent],
+                          colors: [AppColors.red, AppColors.lightblue],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
@@ -232,7 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             style: TextStyle(
                               fontSize: sp(16),
                               fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                              color: AppColors.white,
                             ),
                           ),
                           SizedBox(height: h(0.005)),
@@ -240,17 +240,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             quiz.description,
                             style: TextStyle(
                               fontSize: sp(14),
-                              color: Colors.white70,
+                              color: AppColors.white,
                             ),
                           ),
                           SizedBox(height: h(0.01)),
                           Text(
                             "Category: ${quiz.category.name}",
-                            style: const TextStyle(color: Colors.white),
+                            style: const TextStyle(color: AppColors.white),
                           ),
                           Text(
                             "${categoryController.count.value} Videos",
-                            style: const TextStyle(color: Colors.white),
+                            style: const TextStyle(color: AppColors.white),
                           ),
 
                           SizedBox(height: h(0.015)),
@@ -281,7 +281,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(
                   fontSize: sp(15),
                   fontWeight: FontWeight.w500,
-                  color: Colors.blue,
+                  color: AppColors.lightblue,
                 ),
               ),
             ),
@@ -303,7 +303,7 @@ class _HomeScreenState extends State<HomeScreen> {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
+        color: AppColors.grey,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -320,10 +320,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               const SizedBox(height: 4),
-              Text(
-                date,
-                style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
-              ),
+              Text(date, style: TextStyle(color: AppColors.grey, fontSize: 12)),
             ],
           ),
           Text(
@@ -331,7 +328,7 @@ class _HomeScreenState extends State<HomeScreen> {
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w600,
-              color: Colors.blue,
+              color: AppColors.lightblue,
             ),
           ),
         ],
@@ -356,12 +353,12 @@ class _HomeScreenState extends State<HomeScreen> {
             Container(
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
-                color: isActive ? AppColors.darkblue : Colors.transparent,
+                color: isActive ? AppColors.darkblue : AppColors.transparent,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
                 icon,
-                color: isActive ? Colors.white : Colors.grey,
+                color: isActive ? AppColors.white : AppColors.greytextfields,
                 size: 22,
               ),
             ),

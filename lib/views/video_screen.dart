@@ -193,6 +193,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quiz/model/subvideo_model.dart';
 import 'package:quiz/provider/subvideo_provider.dart';
+import 'package:quiz/utils/colors.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoScreen extends StatefulWidget {
@@ -222,7 +223,7 @@ class _VideoScreenState extends State<VideoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -235,7 +236,7 @@ class _VideoScreenState extends State<VideoScreen> {
                 style: const TextStyle(
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  color: AppColors.black,
                 ),
               ),
             ),
@@ -283,11 +284,11 @@ class _VideoScreenState extends State<VideoScreen> {
                         },
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: AppColors.white,
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black12,
+                                color: AppColors.black,
                                 blurRadius: 4,
                                 offset: const Offset(0, 2),
                               ),
@@ -304,12 +305,12 @@ class _VideoScreenState extends State<VideoScreen> {
                                     imageUrl == null
                                         ? Container(
                                           height: 100,
-                                          color: Colors.grey[300],
+                                          color: AppColors.grey,
                                           child: const Center(
                                             child: Icon(
                                               Icons.broken_image,
                                               size: 40,
-                                              color: Colors.grey,
+                                              color: AppColors.black,
                                             ),
                                           ),
                                         )
@@ -325,12 +326,12 @@ class _VideoScreenState extends State<VideoScreen> {
                                           ) {
                                             return Container(
                                               height: 100,
-                                              color: Colors.grey[300],
+                                              color: AppColors.grey,
                                               child: const Center(
                                                 child: Icon(
                                                   Icons.broken_image,
                                                   size: 40,
-                                                  color: Colors.grey,
+                                                  color: AppColors.black,
                                                 ),
                                               ),
                                             );
@@ -355,7 +356,7 @@ class _VideoScreenState extends State<VideoScreen> {
                                       video.description,
                                       style: const TextStyle(
                                         fontSize: 12,
-                                        color: Colors.black54,
+                                        color: AppColors.black,
                                       ),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
@@ -443,11 +444,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                 ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
-                    Icon(Icons.error, size: 60, color: Colors.red),
+                    Icon(Icons.error, size: 60, color: AppColors.red),
                     SizedBox(height: 10),
                     Text(
                       "⚠️ Failed to load video",
-                      style: TextStyle(color: Colors.red),
+                      style: TextStyle(color: AppColors.red),
                     ),
                   ],
                 )
@@ -467,11 +468,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                         errorBuilder: (context, error, stackTrace) {
                           return Container(
                             height: 200,
-                            color: Colors.grey[300],
+                            color: AppColors.grey,
                             child: const Icon(
                               Icons.broken_image,
                               size: 50,
-                              color: Colors.grey,
+                              color: AppColors.black,
                             ),
                           );
                         },
@@ -479,17 +480,17 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                     else
                       Container(
                         height: 200,
-                        color: Colors.grey[300],
+                        color: AppColors.grey,
                         child: const Icon(
                           Icons.broken_image,
                           size: 50,
-                          color: Colors.grey,
+                          color: AppColors.black,
                         ),
                       ),
                     const SizedBox(height: 16),
                     const Text(
                       "Loading video...",
-                      style: TextStyle(color: Colors.black54),
+                      style: TextStyle(color: AppColors.black),
                     ),
                     const SizedBox(height: 10),
                     const CircularProgressIndicator(),

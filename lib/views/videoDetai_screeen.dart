@@ -200,14 +200,14 @@ class _VideoDetailsScreenState extends State<VideoDetailsScreen> {
     return Scaffold(
       backgroundColor: AppColors.grey,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         elevation: 0,
         automaticallyImplyLeading: false, // Removes back arrow
         title: const Text(
           "Video Trainings",
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: Colors.black87,
+            color: AppColors.black,
             fontSize: 22,
           ),
         ),
@@ -219,14 +219,14 @@ class _VideoDetailsScreenState extends State<VideoDetailsScreen> {
           width: double.infinity,
           height: screenHeight * 0.82,
           decoration: const BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(25),
               topRight: Radius.circular(25),
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black12,
+                color: AppColors.black,
                 blurRadius: 8,
                 offset: Offset(0, -2),
               ),
@@ -265,14 +265,14 @@ class _VideoDetailsScreenState extends State<VideoDetailsScreen> {
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
-                            color: Colors.black,
+                            color: AppColors.black,
                           ),
                         ),
                         Text(
                           video["subtitle"]!,
                           style: const TextStyle(
                             fontSize: 13,
-                            color: Colors.black54,
+                            color: AppColors.black,
                           ),
                         ),
                       ],
@@ -281,7 +281,7 @@ class _VideoDetailsScreenState extends State<VideoDetailsScreen> {
                       video["duration"]!,
                       style: const TextStyle(
                         fontSize: 14,
-                        color: Colors.black87,
+                        color: AppColors.black,
                       ),
                     ),
                   ],
@@ -296,7 +296,7 @@ class _VideoDetailsScreenState extends State<VideoDetailsScreen> {
                 const SizedBox(height: 6),
                 Text(
                   video["description"]!,
-                  style: const TextStyle(fontSize: 13, color: Colors.black87),
+                  style: const TextStyle(fontSize: 13, color: AppColors.black),
                 ),
 
                 const Spacer(),
@@ -307,8 +307,8 @@ class _VideoDetailsScreenState extends State<VideoDetailsScreen> {
                     Expanded(
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: Colors.black,
+                          backgroundColor: AppColors.white,
+                          foregroundColor: AppColors.black,
                           side: const BorderSide(
                             color: AppColors.greytextfields,
                           ),
@@ -338,8 +338,8 @@ class _VideoDetailsScreenState extends State<VideoDetailsScreen> {
                     Expanded(
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: Colors.black,
+                          backgroundColor: AppColors.white,
+                          foregroundColor: AppColors.black,
                           side: const BorderSide(
                             color: AppColors.greytextfields,
                           ),

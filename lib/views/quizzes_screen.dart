@@ -244,7 +244,7 @@ class Quizzes extends StatelessWidget {
                     return Center(
                       child: Text(
                         quizController.errorMessage.value,
-                        style: const TextStyle(color: Colors.red),
+                        style: const TextStyle(color: AppColors.red),
                       ),
                     );
                   }
@@ -318,7 +318,7 @@ class Quizzes extends StatelessWidget {
           style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w600,
-            color: Colors.black54,
+            color: AppColors.black,
           ),
         ),
         const SizedBox(height: 8),
@@ -329,7 +329,7 @@ class Quizzes extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: AppColors.black.withOpacity(0.1),
                 blurRadius: 8,
                 offset: const Offset(0, 4),
               ),
@@ -347,7 +347,7 @@ class Quizzes extends StatelessWidget {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.white,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
@@ -366,7 +366,7 @@ class Quizzes extends StatelessWidget {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.white,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
@@ -374,7 +374,7 @@ class Quizzes extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                        color: AppColors.black,
                       ),
                     ),
                   ),
@@ -389,13 +389,13 @@ class Quizzes extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color:AppColors.white,
                 ),
               ),
               const SizedBox(height: 4),
               Text(
                 questions,
-                style: const TextStyle(fontSize: 13, color: Colors.white70),
+                style: const TextStyle(fontSize: 13, color: AppColors.white),
               ),
 
               const SizedBox(height: 12),
@@ -405,18 +405,18 @@ class Quizzes extends StatelessWidget {
                 children: [
                   const CircleAvatar(
                     radius: 16,
-                    backgroundColor: Colors.white,
-                    child: Icon(Icons.person, color: Colors.black87, size: 20),
+                    backgroundColor: AppColors.white,
+                    child: Icon(Icons.person, color: AppColors.black, size: 20),
                   ),
                   const SizedBox(width: 8),
                   Text(
                     "Created by\n$creator",
-                    style: const TextStyle(fontSize: 12, color: Colors.white),
+                    style: const TextStyle(fontSize: 12, color: AppColors.white),
                   ),
                   const Spacer(),
                   const Icon(
                     Icons.arrow_forward_ios,
-                    color: Colors.white70,
+                    color: AppColors.white,
                     size: 18,
                   ),
                 ],

@@ -40,7 +40,7 @@ class _QuizResultPopupScreenState extends State<QuizResultPopupScreen> {
 
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 400),
@@ -72,7 +72,7 @@ class _QuizResultPopupScreenState extends State<QuizResultPopupScreen> {
                   IconButton(
                     icon: const Icon(
                       Icons.close,
-                      color: Colors.black87,
+                      color: AppColors.black,
                       size: 24,
                     ),
                     onPressed: () {
@@ -97,7 +97,7 @@ class _QuizResultPopupScreenState extends State<QuizResultPopupScreen> {
                 child: Text(
                   widget.category,
                   style: const TextStyle(
-                    color: Colors.redAccent,
+                    color: AppColors.red,
                     fontWeight: FontWeight.w500,
                     fontSize: 13,
                   ),
@@ -111,7 +111,7 @@ class _QuizResultPopupScreenState extends State<QuizResultPopupScreen> {
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
-                  color: Colors.black87,
+                  color: AppColors.black,
                 ),
               ),
 
@@ -154,11 +154,9 @@ class _QuizResultPopupScreenState extends State<QuizResultPopupScreen> {
                         padding: const EdgeInsets.symmetric(vertical: 12),
                       ),
                       child: Text(
-                        _showAiResponse
-                            ? "Hide AI Response"
-                            : "View Answersheet",
+                        _showAiResponse ? "Hide AI Response" : "View Response",
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: AppColors.white,
                           fontWeight: FontWeight.w600,
                           fontSize: 14,
                         ),
@@ -181,7 +179,7 @@ class _QuizResultPopupScreenState extends State<QuizResultPopupScreen> {
                     child: const Text(
                       "Close",
                       style: TextStyle(
-                        color: Colors.white,
+                        color: AppColors.white,
                         fontWeight: FontWeight.w600,
                         fontSize: 14,
                       ),
@@ -204,7 +202,7 @@ class _QuizResultPopupScreenState extends State<QuizResultPopupScreen> {
                     widget.aiResponse!,
                     style: const TextStyle(
                       fontSize: 14,
-                      color: Colors.black87,
+                      color: AppColors.black,
                       height: 1.4,
                     ),
                   ),
@@ -229,7 +227,7 @@ class _QuizResultPopupScreenState extends State<QuizResultPopupScreen> {
             style: const TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w500,
-              color: Colors.black87,
+              color: AppColors.black,
             ),
           ),
           Text(
@@ -237,7 +235,7 @@ class _QuizResultPopupScreenState extends State<QuizResultPopupScreen> {
             style: const TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w600,
-              color: Colors.blueAccent,
+              color: AppColors.lightblue,
             ),
           ),
         ],

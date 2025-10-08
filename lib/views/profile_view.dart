@@ -341,7 +341,7 @@ class _ViewProfileState extends State<ViewProfile> {
               onTap: () => Get.to(const HomeScreen()),
               child: const Icon(
                 Icons.arrow_back,
-                color: Colors.white,
+                color: AppColors.white,
                 size: 22,
               ),
             ),
@@ -354,11 +354,11 @@ class _ViewProfileState extends State<ViewProfile> {
               width: double.infinity,
               height: screenHeight * 0.55,
               decoration: const BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black12,
+                    color: AppColors.black,
                     blurRadius: 8,
                     offset: Offset(0, -2),
                   ),
@@ -377,7 +377,7 @@ class _ViewProfileState extends State<ViewProfile> {
                           child: Text(
                             profileProvider.errorMessage ??
                                 "No profile data available",
-                            style: const TextStyle(color: Colors.black54),
+                            style: const TextStyle(color: AppColors.black),
                           ),
                         )
                         : Column(
@@ -392,7 +392,7 @@ class _ViewProfileState extends State<ViewProfile> {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
-                                  color: Colors.grey.shade400,
+                                  color: AppColors.grey,
                                   width: 1,
                                 ),
                                 image: DecorationImage(
@@ -445,8 +445,8 @@ class _ViewProfileState extends State<ViewProfile> {
                                   width: screenWidth * 0.35,
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.white,
-                                      foregroundColor: Colors.black,
+                                      backgroundColor: AppColors.white,
+                                      foregroundColor: AppColors.black,
                                       side: const BorderSide(
                                         color: AppColors.greytextfields,
                                       ),
@@ -516,8 +516,8 @@ class _ViewProfileState extends State<ViewProfile> {
                                   width: screenWidth * 0.35,
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.white,
-                                      foregroundColor: Colors.black,
+                                      backgroundColor: AppColors.white,
+                                      foregroundColor: AppColors.black,
                                       side: const BorderSide(
                                         color: AppColors.greytextfields,
                                       ),
@@ -569,11 +569,11 @@ class _ViewProfileState extends State<ViewProfile> {
       padding: EdgeInsets.symmetric(horizontal: w(0.04), vertical: h(0.015)),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.grey.shade300, width: 1),
+        border: Border.all(color: AppColors.grey, width: 1),
       ),
       child: Row(
         children: [
-          Icon(icon, color: Colors.blue, size: sp(22)),
+          Icon(icon, color: AppColors.lightblue, size: sp(22)),
           SizedBox(width: w(0.04)),
           Expanded(
             child:
@@ -585,13 +585,19 @@ class _ViewProfileState extends State<ViewProfile> {
                         isDense: true,
                         contentPadding: EdgeInsets.zero,
                       ),
-                      style: TextStyle(fontSize: sp(14), color: Colors.black),
+                      style: TextStyle(
+                        fontSize: sp(14),
+                        color: AppColors.black,
+                      ),
                     )
                     : Text(
                       controller.text.isNotEmpty
                           ? controller.text
                           : "Not provided",
-                      style: TextStyle(fontSize: sp(14), color: Colors.black),
+                      style: TextStyle(
+                        fontSize: sp(14),
+                        color: AppColors.black,
+                      ),
                     ),
           ),
         ],

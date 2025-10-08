@@ -240,7 +240,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           content: Text(
             provider.registerModel?.message ?? "Registration Failed ❌",
           ),
-          backgroundColor: Colors.red,
+          backgroundColor: AppColors.red,
         ),
       );
     }
@@ -258,7 +258,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     double sp(double value) => screenWidth * (value / 390);
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: Stack(
         children: [
           // 🔹 Top Illustration
@@ -279,14 +279,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
               width: double.infinity,
               height: h(0.43),
               decoration: const BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(25),
                   topRight: Radius.circular(25),
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black12,
+                    color: AppColors.black,
                     blurRadius: 8,
                     offset: Offset(0, -2),
                   ),
@@ -307,14 +307,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       style: TextStyle(
                         fontSize: sp(18),
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: AppColors.black,
                         letterSpacing: 0.8,
                       ),
                     ),
                     SizedBox(height: h(0.005)),
                     Text(
                       "Create Your Account",
-                      style: TextStyle(fontSize: sp(13), color: Colors.grey),
+                      style: TextStyle(
+                        fontSize: sp(13),
+                        color: AppColors.black,
+                        fontWeight: FontWeight.normal,
+                      ),
                     ),
                     SizedBox(height: h(0.02)),
 
@@ -339,8 +343,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           width: screenWidth * 0.55,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: Colors.black,
+                              backgroundColor: AppColors.white,
+                              foregroundColor: AppColors.black,
                               side: const BorderSide(
                                 color: AppColors.greytextfields,
                               ),
@@ -360,7 +364,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       width: 20,
                                       child: CircularProgressIndicator(
                                         strokeWidth: 2,
-                                        color: Colors.black,
+                                        color: AppColors.black,
                                       ),
                                     )
                                     : Text(
@@ -380,8 +384,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           width: screenWidth * 0.27,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: Colors.black,
+                              backgroundColor: AppColors.white,
+                              foregroundColor: AppColors.black,
                               side: const BorderSide(
                                 color: AppColors.greytextfields,
                               ),

@@ -313,7 +313,7 @@ class _ProfileScreen3State extends State<ProfileScreen3> {
     double sp(double value) => screenWidth * (value / 390);
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: Stack(
         children: [
           // Background image
@@ -339,12 +339,12 @@ class _ProfileScreen3State extends State<ProfileScreen3> {
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.white,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: const Text(
                   "Skip",
-                  style: TextStyle(color: Colors.black, fontSize: 14),
+                  style: TextStyle(color: AppColors.black, fontSize: 14),
                 ),
               ),
             ),
@@ -359,14 +359,14 @@ class _ProfileScreen3State extends State<ProfileScreen3> {
                   width: double.infinity,
                   height: screenHeight * 0.43,
                   decoration: const BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.white,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(25),
                       topRight: Radius.circular(25),
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black12,
+                        color: AppColors.black,
                         blurRadius: 8,
                         offset: Offset(0, -2),
                       ),
@@ -387,7 +387,7 @@ class _ProfileScreen3State extends State<ProfileScreen3> {
                           style: TextStyle(
                             fontSize: sp(18),
                             fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                            color: AppColors.black,
                             letterSpacing: 0.8,
                           ),
                         ),
@@ -396,7 +396,7 @@ class _ProfileScreen3State extends State<ProfileScreen3> {
                           "Upload Picture",
                           style: TextStyle(
                             fontSize: sp(13),
-                            color: Colors.grey,
+                            color: AppColors.grey,
                           ),
                         ),
                         SizedBox(height: h(0.01)),
@@ -430,7 +430,7 @@ class _ProfileScreen3State extends State<ProfileScreen3> {
                                             ? Icon(
                                               Icons.person,
                                               size: sp(60),
-                                              color: Colors.grey,
+                                              color: AppColors.grey,
                                             )
                                             : Image.file(
                                               _pickedImage!,
@@ -446,7 +446,7 @@ class _ProfileScreen3State extends State<ProfileScreen3> {
                                   "Upload Your Picture",
                                   style: TextStyle(
                                     fontSize: sp(14),
-                                    color: Colors.blue,
+                                    color: AppColors.lightblue,
                                     fontWeight: FontWeight.w600,
                                     decoration: TextDecoration.underline,
                                   ),
@@ -466,8 +466,8 @@ class _ProfileScreen3State extends State<ProfileScreen3> {
                               width: screenWidth * 0.25,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white,
-                                  foregroundColor: Colors.black,
+                                  backgroundColor: AppColors.white,
+                                  foregroundColor: AppColors.black,
                                   side: const BorderSide(
                                     color: AppColors.greytextfields,
                                   ),
@@ -489,8 +489,8 @@ class _ProfileScreen3State extends State<ProfileScreen3> {
                               width: screenWidth * 0.35,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white,
-                                  foregroundColor: Colors.black,
+                                  backgroundColor: AppColors.white,
+                                  foregroundColor: AppColors.black,
                                   side: const BorderSide(
                                     color: AppColors.greytextfields,
                                   ),

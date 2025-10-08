@@ -294,7 +294,7 @@ class _OtpScreenState extends State<OtpScreen> {
     double sp(double value) => screenWidth * (value / 390);
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: Stack(
         children: [
           // 🔹 Background Illustration
@@ -315,14 +315,14 @@ class _OtpScreenState extends State<OtpScreen> {
               width: double.infinity,
               height: h(0.40),
               decoration: const BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(25),
                   topRight: Radius.circular(25),
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black12,
+                    color: AppColors.black,
                     blurRadius: 8,
                     offset: Offset(0, -2),
                   ),
@@ -343,7 +343,7 @@ class _OtpScreenState extends State<OtpScreen> {
                       style: TextStyle(
                         fontSize: sp(18),
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: AppColors.black,
                         letterSpacing: 0.8,
                       ),
                     ),
@@ -351,7 +351,7 @@ class _OtpScreenState extends State<OtpScreen> {
                     Text(
                       "Enter verification code that sent on your email",
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: sp(13), color: Colors.grey),
+                      style: TextStyle(fontSize: sp(13), color: AppColors.grey),
                     ),
                     SizedBox(height: h(0.03)),
 
@@ -381,7 +381,7 @@ class _OtpScreenState extends State<OtpScreen> {
                             decoration: InputDecoration(
                               counterText: "",
                               filled: true,
-                              fillColor: Colors.white,
+                              fillColor: AppColors.white,
                               contentPadding: EdgeInsets.symmetric(
                                 vertical: h(0.018),
                               ),
@@ -394,7 +394,7 @@ class _OtpScreenState extends State<OtpScreen> {
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                                 borderSide: const BorderSide(
-                                  color: Colors.black,
+                                  color: AppColors.black,
                                   width: 1.2,
                                 ),
                               ),
@@ -419,8 +419,8 @@ class _OtpScreenState extends State<OtpScreen> {
                           width: screenWidth * 0.55,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: Colors.black,
+                              backgroundColor: AppColors.white,
+                              foregroundColor: AppColors.black,
                               side: const BorderSide(
                                 color: AppColors.greytextfields,
                               ),
@@ -479,8 +479,8 @@ class _OtpScreenState extends State<OtpScreen> {
                         Expanded(
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: Colors.black,
+                              backgroundColor: AppColors.white,
+                              foregroundColor: AppColors.black,
                               side: const BorderSide(
                                 color: AppColors.greytextfields,
                               ),

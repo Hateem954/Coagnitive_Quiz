@@ -1123,6 +1123,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:quiz/utils/colors.dart';
 import 'package:quiz/views/home_screen.dart';
 import 'package:quiz/views/quiz_result_popup_screen.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
@@ -1233,8 +1234,8 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
         "No Option Selected",
         "Please select an option first!",
         snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.orange,
-        colorText: Colors.white,
+        backgroundColor: AppColors.transparent,
+        colorText: AppColors.white,
       );
       return;
     }
@@ -1278,8 +1279,9 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
         Get.snackbar(
           "Error",
           _quizController.errorMessage.value,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
+          backgroundColor: AppColors.red,
+          colorText: AppColors.white,
+          snackPosition: SnackPosition.BOTTOM,
         );
       } else {
         final result = _quizController.quizSubmitResponse.value;
@@ -1314,8 +1316,9 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
       Get.snackbar(
         "Error",
         "Something went wrong: $e",
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: AppColors.red,
+        colorText: AppColors.white,
       );
     }
   }
@@ -1337,7 +1340,7 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
             return Center(
               child: Text(
                 _questionController.errorMessage.value,
-                style: const TextStyle(color: Colors.red, fontSize: 16),
+                style: const TextStyle(color: AppColors.red, fontSize: 16),
               ),
             );
           }
@@ -1373,7 +1376,7 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
                       ),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.close, color: Colors.black87),
+                      icon: const Icon(Icons.close, color: AppColors.black),
                       onPressed: () => Navigator.pop(context),
                     ),
                   ],
@@ -1391,8 +1394,8 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
                         decoration: BoxDecoration(
                           color:
                               index <= _currentIndex
-                                  ? Colors.blue
-                                  : Colors.grey.shade300,
+                                  ? AppColors.lightblue
+                                  : AppColors.grey,
                           borderRadius: BorderRadius.circular(2),
                         ),
                       ),
@@ -1439,7 +1442,7 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
                                 style: TextStyle(
                                   fontSize: screenW * 0.045,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.black87,
+                                  color: AppColors.black,
                                 ),
                               ),
                               SizedBox(height: screenH * 0.02),
@@ -1458,7 +1461,7 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
                     IconButton(
                       icon: Icon(
                         _isListening ? Icons.mic : Icons.mic_none,
-                        color: _isListening ? Colors.red : Colors.grey,
+                        color: _isListening ? AppColors.red : AppColors.grey,
                         size: screenW * 0.08,
                       ),
                       onPressed: () => _listen(options),
@@ -1467,7 +1470,7 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
                     Expanded(
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
+                          backgroundColor: AppColors.lightblue,
                           padding: EdgeInsets.symmetric(
                             vertical: screenH * 0.018,
                           ),
@@ -1484,7 +1487,7 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
                           style: TextStyle(
                             fontSize: screenW * 0.045,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: AppColors.white,
                           ),
                         ),
                       ),

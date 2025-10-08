@@ -298,7 +298,7 @@ class _ProfileScreen1State extends State<ProfileScreen1> {
     double sp(double value) => screenWidth * (value / 390);
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: Stack(
         children: [
           // 🔹 Background Image
@@ -326,12 +326,12 @@ class _ProfileScreen1State extends State<ProfileScreen1> {
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.white,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: const Text(
                   "Skip",
-                  style: TextStyle(color: Colors.black, fontSize: 14),
+                  style: TextStyle(color: AppColors.black, fontSize: 14),
                 ),
               ),
             ),
@@ -344,14 +344,14 @@ class _ProfileScreen1State extends State<ProfileScreen1> {
               width: double.infinity,
               height: screenHeight * 0.43,
               decoration: const BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(25),
                   topRight: Radius.circular(25),
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black12,
+                    color: AppColors.black,
                     blurRadius: 8,
                     offset: Offset(0, -2),
                   ),
@@ -371,14 +371,14 @@ class _ProfileScreen1State extends State<ProfileScreen1> {
                       style: TextStyle(
                         fontSize: sp(18),
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: AppColors.black,
                         letterSpacing: 0.8,
                       ),
                     ),
                     SizedBox(height: h(0.005)),
                     Text(
                       "Verify Your Gender",
-                      style: TextStyle(fontSize: sp(13), color: Colors.grey),
+                      style: TextStyle(fontSize: sp(13), color: AppColors.grey),
                     ),
                     SizedBox(height: h(0.03)),
 
@@ -402,8 +402,8 @@ class _ProfileScreen1State extends State<ProfileScreen1> {
                           width: screenWidth * 0.25,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: Colors.black,
+                              backgroundColor: AppColors.white,
+                              foregroundColor: AppColors.black,
                               side: const BorderSide(
                                 color: AppColors.greytextfields,
                               ),
@@ -428,8 +428,8 @@ class _ProfileScreen1State extends State<ProfileScreen1> {
                           width: screenWidth * 0.35,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: Colors.black,
+                              backgroundColor: AppColors.white,
+                              foregroundColor: AppColors.black,
                               side: const BorderSide(
                                 color: AppColors.greytextfields,
                               ),
@@ -468,7 +468,7 @@ class _ProfileScreen1State extends State<ProfileScreen1> {
                             child:
                                 genderProvider.isLoading
                                     ? const CircularProgressIndicator(
-                                      color: Colors.black,
+                                      color: AppColors.black,
                                     )
                                     : Text(
                                       "Next",
@@ -510,10 +510,10 @@ class _ProfileScreen1State extends State<ProfileScreen1> {
       child: Container(
         width: w(0.22),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.grey.shade200 : Colors.transparent,
+          color: isSelected ? AppColors.grey : AppColors.transparent,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected ? Colors.black : AppColors.greytextfields,
+            color: isSelected ? AppColors.black : AppColors.greytextfields,
             width: 1.5,
           ),
         ),
@@ -532,8 +532,7 @@ class _ProfileScreen1State extends State<ProfileScreen1> {
               width: double.infinity,
               padding: EdgeInsets.symmetric(vertical: h(0.01)),
               decoration: BoxDecoration(
-                color:
-                    isSelected ? Colors.transparent : const Color(0xFFE0E0E0),
+                color: isSelected ? AppColors.transparent : AppColors.grey,
                 borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(12),
                   bottomRight: Radius.circular(12),
@@ -545,7 +544,7 @@ class _ProfileScreen1State extends State<ProfileScreen1> {
                 style: TextStyle(
                   fontSize: sp(13),
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  color: AppColors.black,
                 ),
               ),
             ),

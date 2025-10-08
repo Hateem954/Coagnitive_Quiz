@@ -173,13 +173,13 @@ class LevelScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.grey,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         elevation: 0,
         title: Text(
           "Quiz Levels",
           style: const TextStyle(
             fontWeight: FontWeight.bold,
-            color: Colors.black87,
+            color: AppColors.black,
             fontSize: 22,
           ),
         ),
@@ -193,14 +193,14 @@ class LevelScreen extends StatelessWidget {
           width: double.infinity,
           height: MediaQuery.of(context).size.height * 0.55,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(30),
               topRight: Radius.circular(30),
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: AppColors.black.withOpacity(0.1),
                 blurRadius: 10,
                 offset: const Offset(0, -4),
               ),
@@ -216,7 +216,7 @@ class LevelScreen extends StatelessWidget {
               return const Center(
                 child: Text(
                   "No Levels Available 😕",
-                  style: TextStyle(fontSize: 16, color: Colors.black54),
+                  style: TextStyle(fontSize: 16, color: AppColors.black),
                 ),
               );
             }
@@ -257,10 +257,10 @@ class LevelScreen extends StatelessWidget {
                             color:
                                 isSelected
                                     ? AppColors.black.withOpacity(0.85)
-                                    : Colors.grey[100],
+                                    : AppColors.grey,
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.05),
+                                color: AppColors.black.withOpacity(0.05),
                                 blurRadius: 5,
                                 offset: const Offset(0, 2),
                               ),
@@ -274,14 +274,16 @@ class LevelScreen extends StatelessWidget {
                             leading: CircleAvatar(
                               radius: 25,
                               backgroundColor:
-                                  isSelected ? Colors.white : AppColors.black,
+                                  isSelected
+                                      ? AppColors.white
+                                      : AppColors.black,
                               child: Text(
                                 level.name.substring(0, 1).toUpperCase(),
                                 style: TextStyle(
                                   color:
                                       isSelected
                                           ? AppColors.black
-                                          : Colors.white,
+                                          : AppColors.white,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20,
                                 ),
@@ -293,13 +295,17 @@ class LevelScreen extends StatelessWidget {
                                 fontSize: 18,
                                 fontWeight: FontWeight.w700,
                                 color:
-                                    isSelected ? Colors.white : Colors.black87,
+                                    isSelected
+                                        ? AppColors.white
+                                        : AppColors.black,
                               ),
                             ),
                             trailing: Icon(
                               Icons.arrow_forward_ios,
                               color:
-                                  isSelected ? Colors.white70 : Colors.black45,
+                                  isSelected
+                                      ? AppColors.white
+                                      : AppColors.black,
                               size: 20,
                             ),
                           ),
@@ -314,10 +320,10 @@ class LevelScreen extends StatelessWidget {
                   () =>
                       levelController.isPosting.value
                           ? Container(
-                            color: Colors.black26,
+                            color: AppColors.black,
                             child: const Center(
                               child: CircularProgressIndicator(
-                                color: Colors.white,
+                                color: AppColors.white,
                               ),
                             ),
                           )
