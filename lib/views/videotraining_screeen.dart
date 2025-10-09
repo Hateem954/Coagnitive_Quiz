@@ -565,7 +565,7 @@ class VideoTrainingsScreen extends StatelessWidget {
                       provider: provider,
                       categoryName: categoryWithVideo.category.name,
                       videoCount: categoryWithVideo.videosCount,
-                      duration: "6 min each",
+                      // duration: "6 min each",
                       trainer: "Dr. Boon",
                       categoryHashId: categoryWithVideo.category.hashid,
                     );
@@ -587,7 +587,7 @@ class VideoTrainingsScreen extends StatelessWidget {
     required VideoProvider provider,
     required String categoryName,
     required int videoCount,
-    required String duration,
+    // required String duration,
     required String trainer,
     required String categoryHashId,
   }) {
@@ -599,7 +599,7 @@ class VideoTrainingsScreen extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
-          color: const Color(0xFF6A4C4C), // 🔹 card background color
+          color: Colors.grey.shade800,
           borderRadius: BorderRadius.circular(16),
         ),
         padding: const EdgeInsets.all(16),
@@ -616,7 +616,7 @@ class VideoTrainingsScreen extends StatelessWidget {
                     children: [
                       _buildChip(categoryName, Colors.red, Colors.white),
                       const SizedBox(width: 8),
-                      _buildChip("60 min", Colors.white, Colors.black),
+                      // _buildChip("60 min", Colors.white, Colors.black),
                     ],
                   ),
                   const SizedBox(height: 10),
@@ -634,7 +634,7 @@ class VideoTrainingsScreen extends StatelessWidget {
 
                   /// Subtitle
                   Text(
-                    "$videoCount Videos - $duration",
+                    "$videoCount Videos ",
                     style: const TextStyle(fontSize: 14, color: Colors.white70),
                   ),
                   const SizedBox(height: 12),
