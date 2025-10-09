@@ -320,7 +320,7 @@ class LevelScreen extends StatelessWidget {
                   () =>
                       levelController.isPosting.value
                           ? Container(
-                            color: AppColors.black,
+                            color: AppColors.transparent,
                             child: const Center(
                               child: CircularProgressIndicator(
                                 color: AppColors.white,

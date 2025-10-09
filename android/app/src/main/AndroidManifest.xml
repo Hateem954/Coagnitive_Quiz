@@ -6,6 +6,9 @@
 
 <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 <uses-permission android:name="android.permission.INTERNET"/>
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
 
 
     <application
@@ -29,6 +32,9 @@
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
               />
+
+              
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -39,6 +45,10 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+            <meta-data
+    android:name="com.google.android.geo.API_KEY"
+    android:value="AIzaSyBoJie2FJyNdvygmRHZSB4aw4w9gQFvez8" />
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

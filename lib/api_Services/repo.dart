@@ -489,6 +489,23 @@ class ApiService {
     }
   }
 
+  Future<Response> messaging({required String content}) async {
+    final formData = FormData.fromMap({'content': content});
+    try {
+      return await apiClient.post(
+        url: AppUrl.mesasging,
+        params: formData,
+        headers: {
+          'X-API-KEY': _apiKey,
+          'Accept': "application/json",
+          'Authorization': 'Bearer ${AppConstant.getUserToken}',
+        },
+      );
+    } catch (e) {
+      print('Messages error: $e');
+      rethrow;
+    }
+  }
   // Future<Response> fetchOrderDetails({required String orderId}) async {
   //   final formData = FormData.fromMap({'order_id': orderId});
   //   try {

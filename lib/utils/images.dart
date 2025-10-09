@@ -14,4 +14,5 @@ class AppImages {
   static const String editbg = "assets/images/pbd.png";
   static const String error_image = "assets/images/error_image.jpg";
   static const String result_image = "assets/images/result_image.png";
+  static const String bot = "assets/images/bot.png";
 }

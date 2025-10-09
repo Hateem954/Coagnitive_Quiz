@@ -35,4 +35,7 @@ class AppUrl {
 
   static const String getlevel = '/quiz-level';
   static const String add_level = '/level-profile';
+
+  // messgaing
+  static const String mesasging = '/send-message';
 }

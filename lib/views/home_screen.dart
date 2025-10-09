@@ -393,6 +393,8 @@ import 'package:quiz/api_Services/app_url.dart';
 import 'package:quiz/provider/profile_provider.dart';
 import 'package:quiz/utils/colors.dart';
 import 'package:quiz/views/category_quiz_screen.dart';
+import 'package:quiz/views/map_screen.dart';
+import 'package:quiz/views/message_screen.dart';
 import 'package:quiz/views/profile_view.dart';
 import 'package:quiz/views/quizzes_screen.dart';
 import 'package:quiz/views/videotraining_screeen.dart';
@@ -434,7 +436,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _homePage(h, w, sp),
       Quizzes(),
       VideoTrainingsScreen(),
-      const Center(child: Text("Advice Page")),
+      GoogleMapPage(),
     ];
 
     return Scaffold(
@@ -442,7 +444,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(child: pages[_selectedIndex]),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.snackbar("Action", "Create new quiz tapped");
+          Get.to(ChatScreen());
         },
         backgroundColor: AppColors.darkblue,
         child: const Icon(Icons.chat, color: AppColors.white),
@@ -459,7 +461,7 @@ class _HomeScreenState extends State<HomeScreen> {
               _bottomNavItem(Icons.home, "Home", 0),
               _bottomNavItem(Icons.quiz, "Quizzes", 1),
               const SizedBox(width: 40),
-              _bottomNavItem(Icons.bar_chart, "Videos", 2),
+              _bottomNavItem(Icons.video_library, "Videos", 2),
               _bottomNavItem(Icons.lightbulb, "Advice", 3),
             ],
           ),

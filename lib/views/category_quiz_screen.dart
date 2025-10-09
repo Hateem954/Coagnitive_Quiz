@@ -1,19 +1,30 @@
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
-// import 'package:quiz/Controller/get_category_quiz_controller.dart'; // ✅ Controller
+// import 'package:quiz/Controller/get_category_quiz_controller.dart';
 // import 'package:quiz/utils/colors.dart';
-// import 'home_screen.dart';
+// import 'package:quiz/utils/customimage.dart';
+// import 'package:quiz/utils/images.dart';
+// import 'package:quiz/views/home_screen.dart';
+// import 'package:quiz/views/level_screen.dart';
+// import 'package:quiz/views/message_screen.dart';
+// import 'package:quiz/views/videotraining_screeen.dart';
 
 // class CategoryQuizScreen extends StatefulWidget {
 //   final String hashid;
-//   const CategoryQuizScreen({super.key, required this.hashid});
+//   final String CategoryName;
+
+//   const CategoryQuizScreen({
+//     super.key,
+//     required this.hashid,
+//     required this.CategoryName,
+//   });
 
 //   @override
 //   State<CategoryQuizScreen> createState() => _CategoryQuizScreenState();
 // }
 
 // class _CategoryQuizScreenState extends State<CategoryQuizScreen> {
-//   int _selectedIndex = 1; // default = Quizzes tab
+//   int _selectedIndex = 1; // Default = Quizzes tab
 //   final CategoryQuizController quizController = Get.put(
 //     CategoryQuizController(),
 //   );
@@ -21,10 +32,37 @@
 //   @override
 //   void initState() {
 //     super.initState();
-//     debugPrint("CategoryQuizScreen opened with hashid: ${widget.hashid}");
-
-//     /// 🔹 Fetch quizzes on screen load
 //     quizController.fetchCategoryQuizzes(widget.hashid);
+//   }
+
+//   /// 🔹 Handle bottom navigation taps
+//   void _onItemTapped(int index) {
+//     setState(() => _selectedIndex = index);
+
+//     switch (index) {
+//       case 0:
+//         Get.offAll(() => const HomeScreen(), transition: Transition.fadeIn);
+//         break;
+//       case 1:
+//         // Already on CategoryQuizScreen
+//         break;
+//       case 2:
+//       // ✅ Correctly navigate to VideoTraining screen
+//       case 2:
+//         Get.to(
+//           () => const VideoTrainingsScreen(),
+//           transition: Transition.fadeIn,
+//         );
+//         break;
+//       case 3:
+//         Get.snackbar(
+//           "Advice",
+//           "Advice section coming soon!",
+//           backgroundColor: AppColors.darkblue,
+//           colorText: Colors.white,
+//         );
+//         break;
+//     }
 //   }
 
 //   @override
@@ -35,65 +73,73 @@
 //     return Scaffold(
 //       backgroundColor: AppColors.grey,
 //       body: SafeArea(
-//         child: Obx(() {
-//           if (quizController.isLoading.value) {
-//             return const Center(child: CircularProgressIndicator());
-//           }
-
-//           if (quizController.quizes.isEmpty) {
-//             return const Center(
-//               child: Text(
-//                 "No quizzes found",
-//                 style: TextStyle(fontSize: 16, color: Colors.black54),
-//               ),
-//             );
-//           }
-
-//           return Padding(
-//             padding: const EdgeInsets.all(16.0),
-//             child: ListView(
-//               children: [
-//                 const SizedBox(height: 40),
-//                 const Text(
-//                   "Your Quizzes",
-//                   style: TextStyle(
-//                     fontSize: 22,
-//                     fontWeight: FontWeight.bold,
-//                     color: Color(0xFF1A1A40),
-//                   ),
+//         child: Padding(
+//           padding: const EdgeInsets.all(16.0),
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               const SizedBox(height: 40),
+//               Text(
+//                 "${widget.CategoryName} Quizzes",
+//                 style: const TextStyle(
+//                   fontSize: 22,
+//                   fontWeight: FontWeight.bold,
+//                   color: AppColors.black,
 //                 ),
-//                 const SizedBox(height: 20),
+//               ),
+//               const SizedBox(height: 20),
 
-//                 /// 🔹 Dynamic quizzes from API
-//                 ...quizController.quizes.map((quiz) {
-//                   return Padding(
-//                     padding: const EdgeInsets.only(bottom: 15),
-//                     child: _quizCard(
-//                       bgColor: const Color(0xFFE6E9FF),
-//                       icon: Icons.quiz,
-//                       iconColor: AppColors.darkblue,
-//                       title: quiz.title,
-//                       date: quiz.createdAt, // ✅ Added
-//                       hashid: quiz.hashid, // ✅ Added
-//                     ),
+//               /// ✅ Quiz List Section
+//               Expanded(
+//                 child: Obx(() {
+//                   if (quizController.isLoading.value) {
+//                     return const Center(child: CircularProgressIndicator());
+//                   }
+
+//                   if (quizController.quizes.isEmpty) {
+//                     return const Center(
+//                       child: Text(
+//                         "No quizzes found",
+//                         style: TextStyle(fontSize: 16, color: AppColors.black),
+//                       ),
+//                     );
+//                   }
+
+//                   return ListView.builder(
+//                     itemCount: quizController.quizes.length,
+//                     itemBuilder: (context, index) {
+//                       final quiz = quizController.quizes[index];
+//                       return Padding(
+//                         padding: const EdgeInsets.only(bottom: 15),
+//                         child: _quizCard(
+//                           duration: "5 min",
+//                           title: quiz.title,
+//                           questions: 10,
+//                           createdBy: "Dr. Boon",
+//                           hashid: quiz.hashid,
+//                           context: context,
+//                         ),
+//                       );
+//                     },
 //                   );
-//                 }).toList(),
-//               ],
-//             ),
-//           );
-//         }),
+//                 }),
+//               ),
+//             ],
+//           ),
+//         ),
 //       ),
 
+//       /// ✅ Floating Action Button
 //       floatingActionButton: FloatingActionButton(
 //         onPressed: () {
-//           debugPrint("FAB tapped with hashid: ${widget.hashid}");
-//           Get.snackbar("Action", "Create new quiz tapped");
+//           Get.to(ChatScreen());
 //         },
 //         backgroundColor: AppColors.darkblue,
-//         child: const Icon(Icons.add, color: Colors.white),
+//         child: const Icon(Icons.chat, color: AppColors.white),
 //       ),
 //       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
+//       /// ✅ Bottom Navigation Bar (fixed)
 //       bottomNavigationBar: BottomAppBar(
 //         shape: const CircularNotchedRectangle(),
 //         notchMargin: 6,
@@ -104,11 +150,11 @@
 //             child: Row(
 //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
 //               children: [
-//                 _bottomNavItem(Icons.home, "Home", 0, context),
-//                 _bottomNavItem(Icons.quiz, "Quizzes", 1, context),
-//                 SizedBox(width: w(0.1)), // space for FAB
-//                 _bottomNavItem(Icons.bar_chart, "Results", 2, context),
-//                 _bottomNavItem(Icons.lightbulb, "Advice", 3, context),
+//                 _bottomNavItem(Icons.home, "Home", 0),
+//                 _bottomNavItem(Icons.quiz, "Quizzes", 1),
+//                 const SizedBox(width: 40), // Space for FAB
+//                 _bottomNavItem(Icons.bar_chart, "Videos", 2),
+//                 _bottomNavItem(Icons.lightbulb, "Advice", 3),
 //               ],
 //             ),
 //           ),
@@ -117,29 +163,13 @@
 //     );
 //   }
 
-//   /// 🔹 Bottom Nav Item
-//   Widget _bottomNavItem(
-//     IconData icon,
-//     String label,
-//     int index,
-//     BuildContext context,
-//   ) {
+//   /// 🔹 Bottom Navigation Item Widget
+//   Widget _bottomNavItem(IconData icon, String label, int index) {
 //     final bool isActive = _selectedIndex == index;
 
 //     return Expanded(
 //       child: GestureDetector(
-//         onTap: () {
-//           if (index == 0) {
-//             Get.offAll(() => const HomeScreen());
-//           } else {
-//             setState(() {
-//               _selectedIndex = index;
-//               debugPrint(
-//                 "BottomNav tapped → $label with hashid: ${widget.hashid}",
-//               );
-//             });
-//           }
-//         },
+//         onTap: () => _onItemTapped(index), // ✅ FIXED — now uses _onItemTapped
 //         child: Column(
 //           mainAxisAlignment: MainAxisAlignment.end,
 //           children: [
@@ -172,41 +202,30 @@
 
 //   /// 🔹 Quiz Card Widget
 //   Widget _quizCard({
-//     required Color bgColor,
-//     required IconData icon,
-//     required Color iconColor,
+//     required String duration,
 //     required String title,
-//     required String date,
+//     required int questions,
+//     required String createdBy,
 //     required String hashid,
+//     required BuildContext context,
 //   }) {
+//     final screenHeight = MediaQuery.of(context).size.height;
+//     final screenWidth = MediaQuery.of(context).size.width;
+
 //     return GestureDetector(
 //       onTap: () {
-//         debugPrint("Quiz tapped: $title | hashid: $hashid");
+//         Get.to(() => LevelScreen(hashid: hashid, title: title, id: title));
 //       },
 //       child: Container(
-//         padding: const EdgeInsets.all(12),
+//         padding: const EdgeInsets.all(16),
 //         decoration: BoxDecoration(
-//           color: Colors.white,
+//           color: Colors.grey.shade800,
 //           borderRadius: BorderRadius.circular(16),
-//           boxShadow: [
-//             BoxShadow(
-//               color: Colors.black.withOpacity(0.05),
-//               blurRadius: 6,
-//               offset: const Offset(0, 4),
-//             ),
-//           ],
 //         ),
 //         child: Row(
+//           crossAxisAlignment: CrossAxisAlignment.start,
 //           children: [
-//             Container(
-//               padding: const EdgeInsets.all(12),
-//               decoration: BoxDecoration(
-//                 color: bgColor,
-//                 borderRadius: BorderRadius.circular(12),
-//               ),
-//               child: Icon(icon, color: iconColor, size: 28),
-//             ),
-//             const SizedBox(width: 12),
+//             /// Quiz Info
 //             Expanded(
 //               child: Column(
 //                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -214,36 +233,50 @@
 //                   Text(
 //                     title,
 //                     style: const TextStyle(
-//                       fontSize: 16,
-//                       fontWeight: FontWeight.w600,
-//                       color: Colors.black87,
+//                       fontSize: 18,
+//                       color: AppColors.white,
+//                       fontWeight: FontWeight.bold,
 //                     ),
 //                   ),
-//                   const SizedBox(height: 4),
+//                   const SizedBox(height: 6),
 //                   Text(
-//                     date,
-//                     style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+//                     "$questions Questions • $duration",
+//                     style: const TextStyle(
+//                       fontSize: 13,
+//                       color: AppColors.white,
+//                     ),
+//                   ),
+//                   const SizedBox(height: 12),
+//                   Row(
+//                     children: [
+//                       const CircleAvatar(
+//                         radius: 14,
+//                         backgroundColor: AppColors.white,
+//                         child: Icon(
+//                           Icons.person,
+//                           size: 18,
+//                           color: AppColors.black,
+//                         ),
+//                       ),
+//                       const SizedBox(width: 8),
+//                       Text(
+//                         "Created by $createdBy",
+//                         style: const TextStyle(
+//                           fontSize: 12,
+//                           color: AppColors.white,
+//                         ),
+//                       ),
+//                     ],
 //                   ),
 //                 ],
 //               ),
 //             ),
-//             TextButton.icon(
-//               onPressed: () {
-//                 debugPrint("Result button tapped: $title | hashid: $hashid");
-//               },
-//               icon: const Icon(
-//                 Icons.stacked_bar_chart,
-//                 color: AppColors.darkblue,
-//                 size: 18,
-//               ),
-//               label: const Text(
-//                 "Result",
-//                 style: TextStyle(
-//                   fontSize: 14,
-//                   color: AppColors.darkblue,
-//                   fontWeight: FontWeight.w500,
-//                 ),
-//               ),
+
+//             /// Quiz Image
+//             CustomImageContainer(
+//               height: screenHeight * 0.08,
+//               width: screenWidth * 0.25,
+//               imageUrl: AppImages.error_image,
 //             ),
 //           ],
 //         ),
@@ -251,18 +284,22 @@
 //     );
 //   }
 // }
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:quiz/Controller/get_category_quiz_controller.dart'; // ✅ Controller
+import 'package:quiz/Controller/get_category_quiz_controller.dart';
 import 'package:quiz/utils/colors.dart';
 import 'package:quiz/utils/customimage.dart';
 import 'package:quiz/utils/images.dart';
+import 'package:quiz/views/home_screen.dart';
 import 'package:quiz/views/level_screen.dart';
-import 'home_screen.dart';
+import 'package:quiz/views/message_screen.dart';
+import 'package:quiz/views/videotraining_screeen.dart';
 
 class CategoryQuizScreen extends StatefulWidget {
   final String hashid;
   final String CategoryName;
+
   const CategoryQuizScreen({
     super.key,
     required this.hashid,
@@ -274,7 +311,7 @@ class CategoryQuizScreen extends StatefulWidget {
 }
 
 class _CategoryQuizScreenState extends State<CategoryQuizScreen> {
-  int _selectedIndex = 1; // default = Quizzes tab
+  int _selectedIndex = 1; // Default: Quizzes tab
   final CategoryQuizController quizController = Get.put(
     CategoryQuizController(),
   );
@@ -282,15 +319,39 @@ class _CategoryQuizScreenState extends State<CategoryQuizScreen> {
   @override
   void initState() {
     super.initState();
-    debugPrint("CategoryQuizScreen opened with hashid: ${widget.hashid}");
-
-    /// 🔹 Fetch quizzes on screen load
     quizController.fetchCategoryQuizzes(widget.hashid);
+  }
+
+  /// 🔹 Handle bottom navigation
+  void _onItemTapped(int index) {
+    setState(() => _selectedIndex = 1);
+
+    switch (index) {
+      case 0:
+        Get.offAll(() => const HomeScreen(), transition: Transition.fadeIn);
+        break;
+      case 1:
+        // Already on this screen
+        break;
+      case 2:
+        Get.to(() => VideoTrainingsScreen(), transition: Transition.fadeIn);
+        break;
+      case 3:
+        Get.snackbar(
+          "Advice",
+          "Advice section coming soon!",
+          backgroundColor: AppColors.darkblue,
+          colorText: Colors.white,
+        );
+        break;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     double w(double value) => screenWidth * value;
 
     return Scaffold(
@@ -304,7 +365,7 @@ class _CategoryQuizScreenState extends State<CategoryQuizScreen> {
               const SizedBox(height: 40),
               Text(
                 "${widget.CategoryName} Quizzes",
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                   color: AppColors.black,
@@ -312,7 +373,7 @@ class _CategoryQuizScreenState extends State<CategoryQuizScreen> {
               ),
               const SizedBox(height: 20),
 
-              /// 🔹 Wrap dynamic data with Obx
+              /// 🔹 Quiz List
               Expanded(
                 child: Obx(() {
                   if (quizController.isLoading.value) {
@@ -335,6 +396,7 @@ class _CategoryQuizScreenState extends State<CategoryQuizScreen> {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 15),
                         child: _quizCard(
+                          id: quiz.id.toString(),
                           duration: "5 min",
                           title: quiz.title,
                           questions: 10,
@@ -352,93 +414,38 @@ class _CategoryQuizScreenState extends State<CategoryQuizScreen> {
         ),
       ),
 
+      /// 🔹 Floating Chat Button
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          debugPrint("FAB tapped with hashid: ${widget.hashid}");
-          Get.snackbar("Action", "Create new quiz tapped");
+          Get.to(() => ChatScreen());
         },
         backgroundColor: AppColors.darkblue,
-        child: const Icon(Icons.add, color: AppColors.white),
+        child: const Icon(Icons.chat, color: AppColors.white),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
+      /// 🔹 Bottom Navigation Bar (same as HomeScreen)
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         notchMargin: 6,
         child: SizedBox(
           height: 60,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: w(0.001)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _bottomNavItem(Icons.home, "Home", 0, context),
-                _bottomNavItem(Icons.quiz, "Quizzes", 1, context),
-                SizedBox(width: w(0.1)), // space for FAB
-                _bottomNavItem(Icons.bar_chart, "Results", 2, context),
-                _bottomNavItem(Icons.lightbulb, "Advice", 3, context),
-              ],
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _bottomNavItem(Icons.home, "Home", 0),
+              _bottomNavItem(Icons.quiz, "Quizzes", 1),
+              const SizedBox(width: 40), // space for FAB
+              _bottomNavItem(Icons.video_library, "Videos", 2),
+              _bottomNavItem(Icons.lightbulb, "Advice", 3),
+            ],
           ),
         ),
       ),
     );
   }
 
-  /// 🔹 Bottom Nav Item
-  Widget _bottomNavItem(
-    IconData icon,
-    String label,
-    int index,
-    BuildContext context,
-  ) {
-    final bool isActive = _selectedIndex == index;
-
-    return Expanded(
-      child: GestureDetector(
-        onTap: () {
-          if (index == 0) {
-            Get.offAll(() => const HomeScreen());
-          } else {
-            setState(() {
-              _selectedIndex = index;
-              debugPrint(
-                "BottomNav tapped → $label with hashid: ${widget.hashid}",
-              );
-            });
-          }
-        },
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: isActive ? AppColors.darkblue : AppColors.transparent,
-                borderRadius: BorderRadius.circular(50),
-              ),
-              child: Icon(
-                icon,
-                color: isActive ? AppColors.white : AppColors.grey,
-                size: 22,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 12,
-                color: isActive ? AppColors.darkblue : AppColors.grey,
-                fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /// 🔹 Custom Quiz Card
+  /// 🔹 Quiz Card Widget
   Widget _quizCard({
     required String duration,
     required String title,
@@ -446,25 +453,26 @@ class _CategoryQuizScreenState extends State<CategoryQuizScreen> {
     required String createdBy,
     required String hashid,
     required BuildContext context,
+    required String id,
   }) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
     return GestureDetector(
       onTap: () {
-        debugPrint("Quiz tapped: $title | hashid: $hashid");
-        // Get.to(LevelScreen(hashid: hashid, title: title,id: ,));
+        Get.snackbar("title", "hashid: $hashid, id: $id, title: $title");
+        Get.to(() => LevelScreen(hashid: hashid, title: title, id: id));
       },
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: const Color(0xFF7C4D4D), // Brownish like screenshot
+          color: Colors.grey.shade800,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /// LEFT SIDE (Quiz Info)
+            /// Text Section
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -511,11 +519,48 @@ class _CategoryQuizScreenState extends State<CategoryQuizScreen> {
               ),
             ),
 
-            /// RIGHT SIDE (Image)
+            /// Image Section
             CustomImageContainer(
               height: screenHeight * 0.08,
               width: screenWidth * 0.25,
               imageUrl: AppImages.error_image,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// 🔹 Reusable Bottom Nav Item
+  Widget _bottomNavItem(IconData icon, String label, int index) {
+    final bool isActive = _selectedIndex == index;
+
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => _onItemTapped(index),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: isActive ? AppColors.darkblue : Colors.transparent,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                icon,
+                color: isActive ? Colors.white : Colors.grey,
+                size: 22,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                color: isActive ? AppColors.darkblue : Colors.grey,
+                fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+              ),
             ),
           ],
         ),
