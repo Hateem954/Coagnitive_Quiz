@@ -293,6 +293,7 @@ import 'package:quiz/utils/customimage.dart';
 import 'package:quiz/utils/images.dart';
 import 'package:quiz/views/home_screen.dart';
 import 'package:quiz/views/level_screen.dart';
+import 'package:quiz/views/map_screen.dart';
 import 'package:quiz/views/message_screen.dart';
 import 'package:quiz/views/videotraining_screeen.dart';
 
@@ -337,12 +338,8 @@ class _CategoryQuizScreenState extends State<CategoryQuizScreen> {
         Get.to(() => VideoTrainingsScreen(), transition: Transition.fadeIn);
         break;
       case 3:
-        Get.snackbar(
-          "Advice",
-          "Advice section coming soon!",
-          backgroundColor: AppColors.darkblue,
-          colorText: Colors.white,
-        );
+        Get.to(GoogleMapPage());
+
         break;
     }
   }
@@ -460,7 +457,7 @@ class _CategoryQuizScreenState extends State<CategoryQuizScreen> {
 
     return GestureDetector(
       onTap: () {
-        Get.snackbar("title", "hashid: $hashid, id: $id, title: $title");
+        // Get.snackbar("title", "hashid: $hashid, id: $id, title: $title");
         Get.to(() => LevelScreen(hashid: hashid, title: title, id: id));
       },
       child: Container(

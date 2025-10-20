@@ -90,7 +90,7 @@ class ChatController extends GetxController {
 
       // 🕒 Show thinking placeholder
       isThinking(true);
-      messages.add(ChatMessage(sender: 'bot', content: 'Thinking...'));
+      messages.add(ChatMessage(sender: 'bot', content: 'typing...'));
 
       // 📨 API call
       final response = await apiService.messaging(content: content);
@@ -100,7 +100,7 @@ class ChatController extends GetxController {
         final chatResponse = ChatResponse.fromJson(data);
 
         // 🧹 Remove the "Thinking..." placeholder before adding real response
-        if (messages.isNotEmpty && messages.last.content == 'Thinking...') {
+        if (messages.isNotEmpty && messages.last.content == 'typing...') {
           messages.removeLast();
         }
 

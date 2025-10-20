@@ -270,6 +270,7 @@ class _GuardianInfoScreenState extends State<GuardianInfoScreen> {
     double sp(double value) => screenWidth * (value / 390);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.white,
       body: Consumer<GuardianProvider>(
         builder: (context, guardianProvider, child) {
@@ -322,7 +323,7 @@ class _GuardianInfoScreenState extends State<GuardianInfoScreen> {
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.black,
+                        color: Colors.black26,
                         blurRadius: 8,
                         offset: Offset(0, -2),
                       ),

@@ -268,6 +268,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
     double sp(double value) => screenWidth * (value / 390);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.white,
       body: Consumer<BasicInfoProvider>(
         builder: (context, provider, child) {

@@ -313,6 +313,7 @@ class _ProfileScreen3State extends State<ProfileScreen3> {
     double sp(double value) => screenWidth * (value / 390);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.white,
       body: Stack(
         children: [

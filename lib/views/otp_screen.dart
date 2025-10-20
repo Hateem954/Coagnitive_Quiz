@@ -449,18 +449,23 @@ class _OtpScreenState extends State<OtpScreen> {
                                   Get.snackbar(
                                     "Success",
                                     otpProvider.otpResponse!.message,
+                                    snackPosition: SnackPosition.BOTTOM,
                                   );
                                   Get.to(Login()); // ✅ Navigate to login
                                 } else {
                                   Get.snackbar(
                                     "Error",
                                     otpProvider.errorMessage ?? "Invalid OTP",
+                                    snackPosition: SnackPosition.BOTTOM,
                                   );
                                 }
                               } else {
                                 Get.snackbar(
                                   "Error",
                                   "Please enter all 4 digits",
+                                  snackPosition: SnackPosition.BOTTOM,
+                                  colorText: AppColors.black,
+                                  backgroundColor: AppColors.transparent,
                                 );
                               }
                             },

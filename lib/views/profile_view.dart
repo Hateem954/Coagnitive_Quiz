@@ -473,14 +473,14 @@ class _ViewProfileState extends State<ViewProfile> {
                                             updateProvider
                                                 .profileResponse!
                                                 .success) {
-                                          ScaffoldMessenger.of(
-                                            context,
-                                          ).showSnackBar(
-                                            const SnackBar(
-                                              content: Text(
-                                                "✅ Profile updated successfully!",
-                                              ),
-                                            ),
+                                          // ✅ Use GetX Snackbar (no ScaffoldMessenger here)
+                                          Get.snackbar(
+                                            "Success",
+                                            "Profile updated successfully",
+                                            backgroundColor:
+                                                AppColors.transparent,
+                                            colorText: AppColors.black,
+                                            snackPosition: SnackPosition.BOTTOM,
                                           );
 
                                           // ✅ Refresh profile data

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:quiz/model/login_model.dart';
 import 'package:quiz/utils/app_consultant.dart';
+import 'package:quiz/utils/colors.dart';
 import 'package:quiz/views/signup_screen.dart';
 import '../api_Services/repo.dart';
 
@@ -30,10 +31,24 @@ class LoginProvider with ChangeNotifier {
 
         // ✅ Save token globally if needed
         // AppConstant.setUserToken(_loginResponse!.token);
+        Get.snackbar(
+          "Success",
+          "Login Sucessfully",
+          colorText: AppColors.black,
+          backgroundColor: AppColors.transparent,
+          snackPosition: SnackPosition.BOTTOM,
+        );
       } else {
         final errorMessage =
             response.data?["message"] ?? "Unknown error occurred";
-        throw Exception("Login failed [${response.statusCode}]: $errorMessage");
+        Get.snackbar(
+          "Failed",
+          "Something went wrong",
+          snackPosition: SnackPosition.BOTTOM,
+          colorText: AppColors.black,
+          backgroundColor: AppColors.transparent,
+        );
+        //   throw Exception("Login failed [${response.statusCode}]: $response.responsemes");
       }
     } on DioException catch (e) {
       throw Exception("Login error: ${e.response?.data ?? e.message}");

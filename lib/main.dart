@@ -20,6 +20,7 @@ import 'package:quiz/splash_screen.dart';
 import 'package:quiz/views/Quiz_questionscreen.dart';
 import 'package:quiz/views/basic_info.dart';
 import 'package:quiz/views/guardian_screen.dart';
+import 'package:quiz/views/map_screen.dart';
 import 'package:quiz/views/video_screen.dart';
 
 void main() {
@@ -56,6 +57,7 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
+          // home: SplashScreen(),
           home: SplashScreen(),
           // home: VideoScreen(hashid: "a9ngZBglWw"),
         );

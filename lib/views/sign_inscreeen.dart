@@ -38,6 +38,7 @@ class _LoginState extends State<Login> {
         screenWidth * (value / 390); // scale font (390 = base width iPhone 12)
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.white,
       body: Stack(
         children: [
@@ -186,11 +187,7 @@ class _LoginState extends State<Login> {
                                     ),
                                   );
                                 }
-                              } catch (e) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text("Error: $e")),
-                                );
-                              }
+                              } catch (e) {}
                             },
 
                             child: Text(
