@@ -11,6 +11,9 @@
 //   var quizResults = <QuizResult>[].obs;
 //   var errorMessage = ''.obs;
 
+//   // ✅ Expansion states for each quiz card
+//   RxList<bool> expandedStates = <bool>[].obs;
+
 //   /// 🔹 Fetch quiz performance results from API
 //   Future<void> fetchQuizResults() async {
 //     try {
@@ -72,12 +75,23 @@
 //         errorMessage.value = "Failed to load results: ${response.statusCode}";
 //       }
 
+//       // ✅ Sync expansion states with list length
+//       expandedStates.value =
+//           List.generate(quizResults.length, (_) => false).obs;
+
 //       print("✅ Parsed ${quizResults.length} quiz results successfully");
 //     } catch (e) {
 //       errorMessage.value = "Error fetching results: $e";
 //       print("❌ Fetch quiz results error: $e");
 //     } finally {
 //       isLoading(false);
+//     }
+//   }
+
+//   /// 🔹 Toggle a quiz card's expanded state
+//   void toggleExpanded(int index) {
+//     if (index >= 0 && index < expandedStates.length) {
+//       expandedStates[index] = !expandedStates[index];
 //     }
 //   }
 // }
@@ -97,6 +111,12 @@ class QuizResultController extends GetxController {
 
   // ✅ Expansion states for each quiz card
   RxList<bool> expandedStates = <bool>[].obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchQuizResults(); // ✅ Safe to call here (won’t cause rebuild errors)
+  }
 
   /// 🔹 Fetch quiz performance results from API
   Future<void> fetchQuizResults() async {
@@ -121,10 +141,9 @@ class QuizResultController extends GetxController {
             rawData.map((e) => Map<String, dynamic>.from(e)).toList(),
           );
         }
-        // ✅ CASE 2: JSON string (but not properly formatted)
+        // ✅ CASE 2: JSON string
         else if (rawData is String) {
           try {
-            // Try decoding directly
             final decoded = json.decode(rawData);
             if (decoded is List) {
               quizResults.value = QuizResult.fromJsonList(
@@ -134,7 +153,6 @@ class QuizResultController extends GetxController {
               throw const FormatException("Not a list");
             }
           } catch (_) {
-            // Try to repair malformed JSON like {id: 9, user_id: ...}
             final fixed = rawData
                 .replaceAll(RegExp(r'([{,])(\s*)([a-zA-Z0-9_]+):'), r'\1"\3":')
                 .replaceAll("'", '"');
@@ -159,9 +177,8 @@ class QuizResultController extends GetxController {
         errorMessage.value = "Failed to load results: ${response.statusCode}";
       }
 
-      // ✅ Sync expansion states with list length
-      expandedStates.value =
-          List.generate(quizResults.length, (_) => false).obs;
+      // ✅ Sync expansion states
+      expandedStates.value = List.generate(quizResults.length, (_) => false);
 
       print("✅ Parsed ${quizResults.length} quiz results successfully");
     } catch (e) {
@@ -172,7 +189,7 @@ class QuizResultController extends GetxController {
     }
   }
 
-  /// 🔹 Toggle a quiz card's expanded state
+  /// 🔹 Toggle a quiz card’s expanded state
   void toggleExpanded(int index) {
     if (index >= 0 && index < expandedStates.length) {
       expandedStates[index] = !expandedStates[index];

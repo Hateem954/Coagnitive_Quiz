@@ -67,7 +67,7 @@ class _LoginState extends State<Login> {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.black,
+                    color: Colors.black26,
                     blurRadius: 8,
                     offset: Offset(0, -2),
                   ),

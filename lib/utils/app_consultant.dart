@@ -171,6 +171,7 @@ class AppConstant {
   }
 
   /// Clear user data from SharedPreferences
+  /// Clear user data from SharedPreferences
   static Future<void> clearUserToken() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(saveUserToken);
@@ -180,9 +181,12 @@ class AppConstant {
     await prefs.remove(saveUserPassword);
     await prefs.remove(saveUserAPIKey);
 
+    // ✅ Clear runtime variables as well
     getUserToken = '';
     getUserAPIKey = '';
     getUserEmail = '';
     getUserPassword = '';
+
+    debugPrint('✅ User token and data cleared from local storage.');
   }
 }

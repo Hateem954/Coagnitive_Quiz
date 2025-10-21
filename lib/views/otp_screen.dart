@@ -351,7 +351,10 @@ class _OtpScreenState extends State<OtpScreen> {
                     Text(
                       "Enter verification code that sent on your email",
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: sp(13), color: AppColors.grey),
+                      style: TextStyle(
+                        fontSize: sp(13),
+                        color: AppColors.black,
+                      ),
                     ),
                     SizedBox(height: h(0.03)),
 

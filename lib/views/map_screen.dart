@@ -317,10 +317,10 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Nearby Medical Map'),
-        backgroundColor: Colors.blueAccent,
-      ),
+      // appBar: AppBar(
+      //   title: const Text('Nearby Medical Map'),
+      //   backgroundColor: Colors.blueAccent,
+      // ),
       body: Stack(
         children: [
           if (_currentPosition == null)
