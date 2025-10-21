@@ -464,7 +464,7 @@ class ApiService {
           'Authorization': 'Bearer ${AppConstant.getUserToken}',
         },
       );
-    } catch (e) {
+    } on DioException catch (e) {
       print('Get Questions error: $e');
       rethrow;
     }

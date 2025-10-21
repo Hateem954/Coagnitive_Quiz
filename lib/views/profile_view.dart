@@ -1,9 +1,13 @@
 // import 'package:flutter/material.dart';
-// import 'package:get/get.dart'; // ✅ Required for Get.to()
+// import 'package:provider/provider.dart';
+// import 'package:get/get.dart';
+// import 'package:quiz/provider/login_provider.dart';
+// import 'package:quiz/provider/profile_update_provider.dart';
+// import 'package:quiz/provider/profile_provider.dart';
 // import 'package:quiz/utils/colors.dart';
 // import 'package:quiz/utils/customimage.dart';
 // import 'package:quiz/utils/images.dart';
-// import 'package:quiz/views/home_screen.dart'; // ✅ Make sure HomeScreen is imported
+// import 'package:quiz/views/home_screen.dart';
 
 // class ViewProfile extends StatefulWidget {
 //   const ViewProfile({super.key});
@@ -13,33 +17,44 @@
 // }
 
 // class _ViewProfileState extends State<ViewProfile> {
-//   bool isEditing = false; // ✅ Toggle between view & edit mode
+//   bool isEditing = false;
 
-//   // Controllers for editable fields
-//   final TextEditingController phoneController = TextEditingController(
-//     text: "+92 333 1234567",
-//   );
-//   final TextEditingController genderController = TextEditingController(
-//     text: "Female",
-//   );
-//   final TextEditingController ageController = TextEditingController(
-//     text: "05-07",
-//   );
+//   final TextEditingController phoneController = TextEditingController();
+//   final TextEditingController genderController = TextEditingController();
+//   final TextEditingController ageController = TextEditingController();
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     Future.microtask(() {
+//       Provider.of<ProfileProvider>(context, listen: false).fetchProfile();
+//     });
+//   }
 
 //   @override
 //   Widget build(BuildContext context) {
-//     final double screenWidth = MediaQuery.of(context).size.width;
-//     final double screenHeight = MediaQuery.of(context).size.height;
+//     final profileProvider = Provider.of<ProfileProvider>(context);
+//     final updateProvider = Provider.of<ProfileUpdateProvider>(context);
+//     final profile = profileProvider.profile;
 
-//     double h(double value) => screenHeight * value;
-//     double w(double value) => screenWidth * value;
-//     double sp(double value) => screenWidth * (value / 390);
+//     final screenWidth = MediaQuery.of(context).size.width;
+//     final screenHeight = MediaQuery.of(context).size.height;
+
+//     double h(double v) => screenHeight * v;
+//     double w(double v) => screenWidth * v;
+//     double sp(double v) => screenWidth * (v / 390);
+
+//     // populate text fields if not editing
+//     if (profile != null && !isEditing) {
+//       phoneController.text = profile.emergencyContact;
+//       genderController.text = profile.gender;
+//       ageController.text = profile.age;
+//     }
 
 //     return Scaffold(
-//       // backgroundColor: Colors.white,
 //       body: Stack(
 //         children: [
-//           // 🔹 Background Illustration
+//           /// 🔹 Background
 //           SizedBox(
 //             height: screenHeight,
 //             width: screenWidth,
@@ -50,41 +65,32 @@
 //             ),
 //           ),
 
-//           // 🔹 Back Arrow Button (Top Left)
+//           /// 🔹 Back Arrow
 //           Positioned(
 //             top: 40,
 //             left: 10,
 //             child: GestureDetector(
-//               onTap: () {
-//                 Get.to(const HomeScreen()); // ✅ Navigate back to HomeScreen
-//               },
-//               child: Container(
-//                 padding: const EdgeInsets.all(8),
-
-//                 child: const Icon(
-//                   Icons.arrow_back,
-//                   color: Colors.white,
-//                   size: 22,
-//                 ),
+//               onTap: () => Get.to(const HomeScreen()),
+//               child: const Icon(
+//                 Icons.arrow_back,
+//                 color: AppColors.white,
+//                 size: 22,
 //               ),
 //             ),
 //           ),
 
-//           // 🔹 Bottom Card
+//           /// 🔹 Main Card
 //           Align(
 //             alignment: Alignment.bottomCenter,
 //             child: Container(
 //               width: double.infinity,
 //               height: screenHeight * 0.55,
 //               decoration: const BoxDecoration(
-//                 color: Colors.white,
-//                 borderRadius: BorderRadius.only(
-//                   topLeft: Radius.circular(25),
-//                   topRight: Radius.circular(25),
-//                 ),
+//                 color: AppColors.white,
+//                 borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
 //                 boxShadow: [
 //                   BoxShadow(
-//                     color: Colors.black12,
+//                     color: AppColors.black,
 //                     blurRadius: 8,
 //                     offset: Offset(0, -2),
 //                   ),
@@ -92,130 +98,188 @@
 //               ),
 //               child: Padding(
 //                 padding: EdgeInsets.symmetric(
-//                   horizontal: screenWidth * 0.06,
-//                   vertical: screenHeight * 0.02,
+//                   horizontal: w(0.06),
+//                   vertical: h(0.02),
 //                 ),
-//                 child: Column(
-//                   crossAxisAlignment: CrossAxisAlignment.center,
-//                   children: [
-//                     SizedBox(height: h(0.02)),
-
-//                     // 🔹 Profile Image in Box
-//                     Container(
-//                       width: w(0.25),
-//                       height: w(0.25),
-//                       decoration: BoxDecoration(
-//                         borderRadius: BorderRadius.circular(12),
-//                         border: Border.all(
-//                           color: Colors.grey.shade400,
-//                           width: 1,
-//                         ),
-//                         image: const DecorationImage(
-//                           image: NetworkImage(
-//                             "https://i.pravatar.cc/150?img=3",
+//                 child:
+//                     profileProvider.isLoading || updateProvider.isLoading
+//                         ? const Center(child: CircularProgressIndicator())
+//                         : profile == null
+//                         ? Center(
+//                           child: Text(
+//                             profileProvider.errorMessage ??
+//                                 "No profile data available",
+//                             style: const TextStyle(color: AppColors.black),
 //                           ),
-//                           fit: BoxFit.cover,
+//                         )
+//                         : Column(
+//                           crossAxisAlignment: CrossAxisAlignment.center,
+//                           children: [
+//                             SizedBox(height: h(0.02)),
+
+//                             /// 🔹 Profile Image
+//                             Container(
+//                               width: w(0.25),
+//                               height: w(0.25),
+//                               decoration: BoxDecoration(
+//                                 borderRadius: BorderRadius.circular(12),
+//                                 border: Border.all(
+//                                   color: AppColors.grey,
+//                                   width: 1,
+//                                 ),
+//                                 image: DecorationImage(
+//                                   image: NetworkImage(
+//                                     profile.image.isNotEmpty
+//                                         ? profile.image
+//                                         : "https://i.pravatar.cc/150?img=3",
+//                                   ),
+//                                   fit: BoxFit.cover,
+//                                 ),
+//                               ),
+//                             ),
+
+//                             SizedBox(height: h(0.03)),
+
+//                             /// 🔹 Editable Info Fields
+//                             profileInfoRow(
+//                               Icons.phone,
+//                               "Phone",
+//                               phoneController,
+//                               sp,
+//                               h,
+//                               w,
+//                             ),
+//                             SizedBox(height: h(0.015)),
+//                             profileInfoRow(
+//                               Icons.wc,
+//                               "Gender",
+//                               genderController,
+//                               sp,
+//                               h,
+//                               w,
+//                             ),
+//                             SizedBox(height: h(0.015)),
+//                             profileInfoRow(
+//                               Icons.hourglass_bottom,
+//                               "Age Group",
+//                               ageController,
+//                               sp,
+//                               h,
+//                               w,
+//                             ),
+//                             SizedBox(height: h(0.04)),
+
+//                             /// 🔹 Buttons
+//                             Row(
+//                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                               children: [
+//                                 SizedBox(
+//                                   width: screenWidth * 0.35,
+//                                   child: ElevatedButton(
+//                                     style: ElevatedButton.styleFrom(
+//                                       backgroundColor: AppColors.white,
+//                                       foregroundColor: AppColors.black,
+//                                       side: const BorderSide(
+//                                         color: AppColors.greytextfields,
+//                                       ),
+//                                       padding: EdgeInsets.symmetric(
+//                                         vertical: h(0.018),
+//                                       ),
+//                                       shape: RoundedRectangleBorder(
+//                                         borderRadius: BorderRadius.circular(6),
+//                                       ),
+//                                     ),
+//                                     onPressed: () async {
+//                                       if (isEditing) {
+//                                         // ✅ Send correct API keys
+//                                         await updateProvider.updateProfile(
+//                                           fEmergencyContact:
+//                                               phoneController.text.trim(),
+//                                           sGender: genderController.text.trim(),
+//                                           sAge: ageController.text.trim(),
+//                                           sLevel: profile.level,
+//                                         );
+
+//                                         if (updateProvider.profileResponse !=
+//                                                 null &&
+//                                             updateProvider
+//                                                 .profileResponse!
+//                                                 .success) {
+//                                           // ✅ Use GetX Snackbar (no ScaffoldMessenger here)
+//                                           Get.snackbar(
+//                                             "Success",
+//                                             "Profile updated successfully",
+//                                             backgroundColor:
+//                                                 AppColors.transparent,
+//                                             colorText: AppColors.black,
+//                                             snackPosition: SnackPosition.BOTTOM,
+//                                           );
+
+//                                           // ✅ Refresh profile data
+//                                           await Provider.of<ProfileProvider>(
+//                                             context,
+//                                             listen: false,
+//                                           ).fetchProfile();
+//                                         } else {
+//                                           ScaffoldMessenger.of(
+//                                             context,
+//                                           ).showSnackBar(
+//                                             SnackBar(
+//                                               content: Text(
+//                                                 updateProvider.errorMessage ??
+//                                                     "Failed to update profile.",
+//                                               ),
+//                                             ),
+//                                           );
+//                                         }
+//                                       }
+
+//                                       setState(() {
+//                                         isEditing = !isEditing;
+//                                       });
+//                                     },
+//                                     child: Text(
+//                                       isEditing ? "Save" : "Edit Details",
+//                                       style: TextStyle(fontSize: sp(14)),
+//                                     ),
+//                                   ),
+//                                 ),
+//                                 SizedBox(
+//                                   width: screenWidth * 0.35,
+//                                   child: ElevatedButton(
+//                                     style: ElevatedButton.styleFrom(
+//                                       backgroundColor: AppColors.white,
+//                                       foregroundColor: AppColors.black,
+//                                       side: const BorderSide(
+//                                         color: AppColors.greytextfields,
+//                                       ),
+//                                       padding: EdgeInsets.symmetric(
+//                                         vertical: h(0.018),
+//                                       ),
+//                                       shape: RoundedRectangleBorder(
+//                                         borderRadius: BorderRadius.circular(6),
+//                                       ),
+//                                     ),
+//                                     onPressed: () {
+//                                       // TODO: Add logout logic
+//                                       Provider.of<LoginProvider>(
+//                                         context,
+//                                         listen: false,
+//                                       ).logout();
+//                                     },
+//                                     child: Text(
+//                                       "Logout",
+//                                       style: TextStyle(
+//                                         fontSize: sp(14),
+//                                         fontWeight: FontWeight.bold,
+//                                       ),
+//                                     ),
+//                                   ),
+//                                 ),
+//                               ],
+//                             ),
+//                           ],
 //                         ),
-//                       ),
-//                     ),
-
-//                     SizedBox(height: h(0.03)),
-
-//                     // 🔹 Phone
-//                     profileInfoRow(
-//                       Icons.phone,
-//                       "Phone",
-//                       phoneController,
-//                       sp,
-//                       h,
-//                       w,
-//                     ),
-//                     SizedBox(height: h(0.015)),
-
-//                     // 🔹 Gender
-//                     profileInfoRow(
-//                       Icons.wc,
-//                       "Gender",
-//                       genderController,
-//                       sp,
-//                       h,
-//                       w,
-//                     ),
-//                     SizedBox(height: h(0.015)),
-
-//                     // 🔹 Age
-//                     profileInfoRow(
-//                       Icons.hourglass_bottom,
-//                       "Age Group",
-//                       ageController,
-//                       sp,
-//                       h,
-//                       w,
-//                     ),
-//                     SizedBox(height: h(0.04)),
-
-//                     // 🔹 Buttons
-//                     Row(
-//                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                       children: [
-//                         SizedBox(
-//                           width: screenWidth * 0.35,
-//                           child: ElevatedButton(
-//                             style: ElevatedButton.styleFrom(
-//                               backgroundColor: Colors.white,
-//                               foregroundColor: Colors.black,
-//                               side: const BorderSide(
-//                                 color: AppColors.greytextfields,
-//                               ),
-//                               padding: EdgeInsets.symmetric(vertical: h(0.018)),
-//                               shape: RoundedRectangleBorder(
-//                                 borderRadius: BorderRadius.circular(6),
-//                               ),
-//                             ),
-//                             onPressed: () {
-//                               setState(() {
-//                                 isEditing = !isEditing; // toggle edit mode
-//                               });
-//                             },
-//                             child: Text(
-//                               isEditing ? "Save" : "Edit Details",
-//                               style: TextStyle(
-//                                 fontSize: sp(14),
-//                                 fontWeight: FontWeight.normal,
-//                               ),
-//                             ),
-//                           ),
-//                         ),
-//                         SizedBox(
-//                           width: screenWidth * 0.35,
-//                           child: ElevatedButton(
-//                             style: ElevatedButton.styleFrom(
-//                               backgroundColor: Colors.white,
-//                               foregroundColor: Colors.black,
-//                               side: const BorderSide(
-//                                 color: AppColors.greytextfields,
-//                               ),
-//                               padding: EdgeInsets.symmetric(vertical: h(0.018)),
-//                               shape: RoundedRectangleBorder(
-//                                 borderRadius: BorderRadius.circular(6),
-//                               ),
-//                             ),
-//                             onPressed: () {
-//                               // logout logic
-//                             },
-//                             child: Text(
-//                               "Logout",
-//                               style: TextStyle(
-//                                 fontSize: sp(14),
-//                                 fontWeight: FontWeight.bold,
-//                               ),
-//                             ),
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                   ],
-//                 ),
 //               ),
 //             ),
 //           ),
@@ -224,7 +288,7 @@
 //     );
 //   }
 
-//   // 🔹 Profile Row Helper
+//   /// 🔹 Reusable Input Row
 //   Widget profileInfoRow(
 //     IconData icon,
 //     String label,
@@ -237,11 +301,11 @@
 //       padding: EdgeInsets.symmetric(horizontal: w(0.04), vertical: h(0.015)),
 //       decoration: BoxDecoration(
 //         borderRadius: BorderRadius.circular(10),
-//         border: Border.all(color: Colors.grey.shade300, width: 1),
+//         border: Border.all(color: AppColors.grey, width: 1),
 //       ),
 //       child: Row(
 //         children: [
-//           Icon(icon, color: Colors.blue, size: sp(22)),
+//           Icon(icon, color: AppColors.lightblue, size: sp(22)),
 //           SizedBox(width: w(0.04)),
 //           Expanded(
 //             child:
@@ -253,11 +317,19 @@
 //                         isDense: true,
 //                         contentPadding: EdgeInsets.zero,
 //                       ),
-//                       style: TextStyle(fontSize: sp(14), color: Colors.black),
+//                       style: TextStyle(
+//                         fontSize: sp(14),
+//                         color: AppColors.black,
+//                       ),
 //                     )
 //                     : Text(
-//                       controller.text,
-//                       style: TextStyle(fontSize: sp(14), color: Colors.black),
+//                       controller.text.isNotEmpty
+//                           ? controller.text
+//                           : "Not provided",
+//                       style: TextStyle(
+//                         fontSize: sp(14),
+//                         color: AppColors.black,
+//                       ),
 //                     ),
 //           ),
 //         ],
@@ -275,6 +347,7 @@ import 'package:quiz/provider/profile_provider.dart';
 import 'package:quiz/utils/colors.dart';
 import 'package:quiz/utils/customimage.dart';
 import 'package:quiz/utils/images.dart';
+import 'package:quiz/views/guardian_screen.dart';
 import 'package:quiz/views/home_screen.dart';
 
 class ViewProfile extends StatefulWidget {
@@ -312,12 +385,16 @@ class _ViewProfileState extends State<ViewProfile> {
     double w(double v) => screenWidth * v;
     double sp(double v) => screenWidth * (v / 390);
 
-    // populate text fields if not editing
+    // Populate fields when not editing and data available
     if (profile != null && !isEditing) {
       phoneController.text = profile.emergencyContact;
       genderController.text = profile.gender;
       ageController.text = profile.age;
     }
+
+    final isProfileNotFound =
+        profileProvider.errorMessage != null &&
+        profileProvider.errorMessage!.contains("Profile not found");
 
     return Scaffold(
       body: Stack(
@@ -372,6 +449,8 @@ class _ViewProfileState extends State<ViewProfile> {
                 child:
                     profileProvider.isLoading || updateProvider.isLoading
                         ? const Center(child: CircularProgressIndicator())
+                        : isProfileNotFound
+                        ? _buildProfileNotFoundUI(context, sp, h, w)
                         : profile == null
                         ? Center(
                           child: Text(
@@ -380,178 +459,226 @@ class _ViewProfileState extends State<ViewProfile> {
                             style: const TextStyle(color: AppColors.black),
                           ),
                         )
-                        : Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(height: h(0.02)),
-
-                            /// 🔹 Profile Image
-                            Container(
-                              width: w(0.25),
-                              height: w(0.25),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: AppColors.grey,
-                                  width: 1,
-                                ),
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                    profile.image.isNotEmpty
-                                        ? profile.image
-                                        : "https://i.pravatar.cc/150?img=3",
-                                  ),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-
-                            SizedBox(height: h(0.03)),
-
-                            /// 🔹 Editable Info Fields
-                            profileInfoRow(
-                              Icons.phone,
-                              "Phone",
-                              phoneController,
-                              sp,
-                              h,
-                              w,
-                            ),
-                            SizedBox(height: h(0.015)),
-                            profileInfoRow(
-                              Icons.wc,
-                              "Gender",
-                              genderController,
-                              sp,
-                              h,
-                              w,
-                            ),
-                            SizedBox(height: h(0.015)),
-                            profileInfoRow(
-                              Icons.hourglass_bottom,
-                              "Age Group",
-                              ageController,
-                              sp,
-                              h,
-                              w,
-                            ),
-                            SizedBox(height: h(0.04)),
-
-                            /// 🔹 Buttons
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                SizedBox(
-                                  width: screenWidth * 0.35,
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: AppColors.white,
-                                      foregroundColor: AppColors.black,
-                                      side: const BorderSide(
-                                        color: AppColors.greytextfields,
-                                      ),
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: h(0.018),
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(6),
-                                      ),
-                                    ),
-                                    onPressed: () async {
-                                      if (isEditing) {
-                                        // ✅ Send correct API keys
-                                        await updateProvider.updateProfile(
-                                          fEmergencyContact:
-                                              phoneController.text.trim(),
-                                          sGender: genderController.text.trim(),
-                                          sAge: ageController.text.trim(),
-                                          sLevel: profile.level,
-                                        );
-
-                                        if (updateProvider.profileResponse !=
-                                                null &&
-                                            updateProvider
-                                                .profileResponse!
-                                                .success) {
-                                          // ✅ Use GetX Snackbar (no ScaffoldMessenger here)
-                                          Get.snackbar(
-                                            "Success",
-                                            "Profile updated successfully",
-                                            backgroundColor:
-                                                AppColors.transparent,
-                                            colorText: AppColors.black,
-                                            snackPosition: SnackPosition.BOTTOM,
-                                          );
-
-                                          // ✅ Refresh profile data
-                                          await Provider.of<ProfileProvider>(
-                                            context,
-                                            listen: false,
-                                          ).fetchProfile();
-                                        } else {
-                                          ScaffoldMessenger.of(
-                                            context,
-                                          ).showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                updateProvider.errorMessage ??
-                                                    "Failed to update profile.",
-                                              ),
-                                            ),
-                                          );
-                                        }
-                                      }
-
-                                      setState(() {
-                                        isEditing = !isEditing;
-                                      });
-                                    },
-                                    child: Text(
-                                      isEditing ? "Save" : "Edit Details",
-                                      style: TextStyle(fontSize: sp(14)),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: screenWidth * 0.35,
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: AppColors.white,
-                                      foregroundColor: AppColors.black,
-                                      side: const BorderSide(
-                                        color: AppColors.greytextfields,
-                                      ),
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: h(0.018),
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(6),
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      // TODO: Add logout logic
-                                      Provider.of<LoginProvider>(
-                                        context,
-                                        listen: false,
-                                      ).logout();
-                                    },
-                                    child: Text(
-                                      "Logout",
-                                      style: TextStyle(
-                                        fontSize: sp(14),
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+                        : _buildProfileUI(
+                          context,
+                          profileProvider,
+                          updateProvider,
+                          profile,
+                          sp,
+                          h,
+                          w,
+                          screenWidth,
                         ),
               ),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  /// 🔹 UI for existing profile
+  Widget _buildProfileUI(
+    BuildContext context,
+    ProfileProvider profileProvider,
+    ProfileUpdateProvider updateProvider,
+    dynamic profile,
+    double Function(double) sp,
+    double Function(double) h,
+    double Function(double) w,
+    double screenWidth,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SizedBox(height: h(0.02)),
+
+        /// 🔹 Profile Image
+        Container(
+          width: w(0.25),
+          height: w(0.25),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: AppColors.grey, width: 1),
+            image: DecorationImage(
+              image: NetworkImage(
+                profile.image.isNotEmpty
+                    ? profile.image
+                    : "https://i.pravatar.cc/150?img=3",
+              ),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+
+        SizedBox(height: h(0.03)),
+
+        /// 🔹 Editable Info Fields
+        profileInfoRow(Icons.phone, "Phone", phoneController, sp, h, w),
+        SizedBox(height: h(0.015)),
+        profileInfoRow(Icons.wc, "Gender", genderController, sp, h, w),
+        SizedBox(height: h(0.015)),
+        profileInfoRow(
+          Icons.hourglass_bottom,
+          "Age Group",
+          ageController,
+          sp,
+          h,
+          w,
+        ),
+        SizedBox(height: h(0.04)),
+
+        /// 🔹 Buttons
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            SizedBox(
+              width: screenWidth * 0.35,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.white,
+                  foregroundColor: AppColors.black,
+                  side: const BorderSide(color: AppColors.greytextfields),
+                  padding: EdgeInsets.symmetric(vertical: h(0.018)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                ),
+                onPressed: () async {
+                  if (isEditing) {
+                    await updateProvider.updateProfile(
+                      fEmergencyContact: phoneController.text.trim(),
+                      sGender: genderController.text.trim(),
+                      sAge: ageController.text.trim(),
+                      sLevel: profile.level,
+                    );
+
+                    if (updateProvider.profileResponse != null &&
+                        updateProvider.profileResponse!.success) {
+                      Get.snackbar(
+                        "Success",
+                        "Profile updated successfully",
+                        backgroundColor: AppColors.transparent,
+                        colorText: AppColors.black,
+                        snackPosition: SnackPosition.BOTTOM,
+                      );
+                      await Provider.of<ProfileProvider>(
+                        context,
+                        listen: false,
+                      ).fetchProfile();
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            updateProvider.errorMessage ??
+                                "Failed to update profile.",
+                          ),
+                        ),
+                      );
+                    }
+                  }
+
+                  setState(() {
+                    isEditing = !isEditing;
+                  });
+                },
+                child: Text(
+                  isEditing ? "Save" : "Edit Details",
+                  style: TextStyle(fontSize: sp(14)),
+                ),
+              ),
+            ),
+            _logoutButton(screenWidth, h, sp),
+          ],
+        ),
+      ],
+    );
+  }
+
+  /// 🔹 UI for "Profile Not Found"
+  Widget _buildProfileNotFoundUI(
+    BuildContext context,
+    double Function(double) sp,
+    double Function(double) h,
+    double Function(double) w,
+  ) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Icon(Icons.error_outline, color: Colors.red, size: 50),
+        SizedBox(height: h(0.02)),
+        const Text(
+          "Profile not found.\nPlease create one.",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: AppColors.black,
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        SizedBox(height: h(0.04)),
+
+        /// 🔹 Buttons: Create Profile + Logout
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            SizedBox(
+              width: screenWidth * 0.35,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.white,
+                  foregroundColor: AppColors.black,
+                  side: const BorderSide(color: AppColors.greytextfields),
+                  padding: EdgeInsets.symmetric(vertical: h(0.018)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                ),
+                onPressed: () {
+                  // ✅ Navigate to create profile screen
+                  Get.to(GuardianInfoScreen());
+                },
+                child: Text(
+                  "Create Profile",
+                  style: TextStyle(
+                    fontSize: sp(14),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            _logoutButton(screenWidth, h, sp),
+          ],
+        ),
+      ],
+    );
+  }
+
+  /// 🔹 Reusable logout button
+  Widget _logoutButton(
+    double screenWidth,
+    double Function(double) h,
+    double Function(double) sp,
+  ) {
+    return SizedBox(
+      width: screenWidth * 0.35,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.white,
+          foregroundColor: AppColors.black,
+          side: const BorderSide(color: AppColors.greytextfields),
+          padding: EdgeInsets.symmetric(vertical: h(0.018)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+        ),
+        onPressed: () {
+          Provider.of<LoginProvider>(context, listen: false).logout();
+        },
+        child: Text(
+          "Logout",
+          style: TextStyle(fontSize: sp(14), fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }
