@@ -114,7 +114,7 @@ class _YourQuizzesState extends State<YourQuizzes> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _bottomNavItem(Icons.home, "Home", 0),
-                _bottomNavItem(Icons.quiz, "Quizzes", 1),
+                _bottomNavItem(Icons.grid_view, "Quizzes", 1),
                 const SizedBox(width: 40),
                 _bottomNavItem(Icons.video_library, "Videos", 2),
                 _bottomNavItem(Icons.location_on, "Location", 3),
