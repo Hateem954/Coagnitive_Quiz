@@ -93,13 +93,13 @@
 //     );
 //   }
 // }
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:http/http.dart' as http;
 
 class GoogleMapPage extends StatefulWidget {
   const GoogleMapPage({super.key});
@@ -113,12 +113,14 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
   Position? _currentPosition;
   final Set<Marker> _markers = {};
   final Set<Polyline> _polylines = {};
+  List<LatLng> _polylineCoordinates = [];
+
+  // ⚠️ Use your valid "Web Service" Google Maps API key (with Places + Directions enabled)
+  static const String _googleAPIKey =
+      'AIzaSyYYYCD8bY_JqPR9R6H-PaCp06DMc1dpyFaFbg';
+
   final TextEditingController _searchController = TextEditingController();
-
-  List<dynamic> _placePredictions = []; // 🔍 Suggestions list
-
-  // 🔑 Your Google API Key (make sure Places + Routes API enabled)
-  final String _googleApiKey = "AIzaSyBoJie2FJyNdvygmRHZSB4aw4w9gQFvez8";
+  LatLng? _selectedDestination;
 
   @override
   void initState() {
@@ -126,7 +128,7 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
     _getCurrentLocation();
   }
 
-  /// 📍 Get current location
+  /// ✅ Get Current Location
   Future<void> _getCurrentLocation() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
@@ -141,12 +143,13 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
     }
     if (permission == LocationPermission.deniedForever) return;
 
-    final position = await Geolocator.getCurrentPosition(
+    Position position = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     );
 
     setState(() {
       _currentPosition = position;
+      _markers.clear();
       _markers.add(
         Marker(
           markerId: const MarkerId("currentLocation"),
@@ -166,230 +169,221 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
     );
   }
 
-  /// 🔍 Get autocomplete suggestions
-  Future<void> _getPlacePredictions(String input) async {
-    if (input.isEmpty) {
-      setState(() => _placePredictions = []);
+  /// ✅ Search for nearby places (clinics/pharmacies) within 5 km
+  Future<void> _searchAndDisplayNearby(String query) async {
+    if (_currentPosition == null || query.isEmpty) return;
+
+    final lat = _currentPosition!.latitude;
+    final lng = _currentPosition!.longitude;
+
+    final url = Uri.parse(
+      'https://maps.googleapis.com/maps/api/place/nearbysearch/json'
+      '?location=$lat,$lng'
+      '&radius=5000'
+      '&keyword=${Uri.encodeComponent(query)}'
+      '&type=pharmacy|doctor|health|hospital|clinic'
+      '&key=$_googleAPIKey',
+    );
+
+    final response = await http.get(url);
+    if (response.statusCode != 200) {
+      debugPrint('Places API HTTP error: ${response.statusCode}');
       return;
     }
 
-    final url =
-        "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&key=$_googleApiKey&components=country:pk"; // limit to Pakistan
-
-    final response = await http.get(Uri.parse(url));
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      setState(() => _placePredictions = data["predictions"]);
+    final data = json.decode(response.body);
+    if (data['status'] != 'OK') {
+      debugPrint('Places API status: ${data['status']}');
+      return;
     }
-  }
 
-  /// 📍 Handle place selection from suggestions
-  Future<void> _selectPlace(String placeId, String description) async {
-    setState(() => _placePredictions = []);
-    _searchController.text = description;
-
-    final detailsUrl =
-        "https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&key=$_googleApiKey";
-    final response = await http.get(Uri.parse(detailsUrl));
-    final data = jsonDecode(response.body);
-
-    if (data["status"] == "OK") {
-      final location = data["result"]["geometry"]["location"];
-      final destination = LatLng(location["lat"], location["lng"]);
-
-      setState(() {
-        _markers.add(
-          Marker(
-            markerId: const MarkerId("destination"),
-            position: destination,
-            infoWindow: InfoWindow(title: description),
-          ),
-        );
-      });
-
-      await _drawRoute(
-        LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
-        destination,
-      );
-
-      _controller?.animateCamera(
-        CameraUpdate.newLatLngBounds(
-          LatLngBounds(
-            southwest: LatLng(
-              _currentPosition!.latitude <= destination.latitude
-                  ? _currentPosition!.latitude
-                  : destination.latitude,
-              _currentPosition!.longitude <= destination.longitude
-                  ? _currentPosition!.longitude
-                  : destination.longitude,
-            ),
-            northeast: LatLng(
-              _currentPosition!.latitude >= destination.latitude
-                  ? _currentPosition!.latitude
-                  : destination.latitude,
-              _currentPosition!.longitude >= destination.longitude
-                  ? _currentPosition!.longitude
-                  : destination.longitude,
-            ),
-          ),
-          80,
-        ),
-      );
-    }
-  }
-
-  /// 🚗 Draw route using Google Routes API
-  Future<void> _drawRoute(LatLng origin, LatLng destination) async {
-    final url = "https://routes.googleapis.com/directions/v2:computeRoutes";
-
-    final response = await http.post(
-      Uri.parse(url),
-      headers: {
-        "Content-Type": "application/json",
-        "X-Goog-Api-Key": _googleApiKey,
-      },
-      body: jsonEncode({
-        "origin": {
-          "location": {
-            "latLng": {
-              "latitude": origin.latitude,
-              "longitude": origin.longitude,
-            },
-          },
-        },
-        "destination": {
-          "location": {
-            "latLng": {
-              "latitude": destination.latitude,
-              "longitude": destination.longitude,
-            },
-          },
-        },
-        "travelMode": "DRIVE",
-        "routingPreference": "TRAFFIC_AWARE",
-        "polylineQuality": "OVERVIEW",
-      }),
-    );
-
-    final data = jsonDecode(response.body);
-
-    if (data["routes"] != null && data["routes"].isNotEmpty) {
-      final encodedPolyline = data["routes"][0]["polyline"]["encodedPolyline"];
-      final decodedPoints = PolylinePoints.decodePolyline(encodedPolyline);
-
-      setState(() {
-        _polylines.clear();
-        _polylines.add(
-          Polyline(
-            polylineId: const PolylineId("route"),
-            color: Colors.blueAccent,
-            width: 6,
-            points:
-                decodedPoints
-                    .map((e) => LatLng(e.latitude, e.longitude))
-                    .toList(),
-          ),
-        );
-      });
-    } else {
+    final List results = data['results'];
+    if (results.isEmpty) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text("No route found")));
+      ).showSnackBar(const SnackBar(content: Text('No nearby results found.')));
+      return;
     }
+
+    // ✅ Limit to top 2 results only
+    final topResults = results.take(2).toList();
+
+    setState(() {
+      _markers.removeWhere((m) => m.markerId.value.startsWith('item_'));
+      for (var place in topResults) {
+        final lat = place['geometry']['location']['lat'];
+        final lng = place['geometry']['location']['lng'];
+        final name = place['name'];
+        final id = place['place_id'];
+
+        _markers.add(
+          Marker(
+            markerId: MarkerId('item_$id'),
+            position: LatLng(lat, lng),
+            infoWindow: InfoWindow(title: name),
+            onTap: () {
+              _onDestinationSelected(LatLng(lat, lng), name);
+            },
+          ),
+        );
+      }
+    });
+
+    // Center map around the found results
+    if (topResults.isNotEmpty) {
+      final first = topResults.first;
+      final lat = first['geometry']['location']['lat'];
+      final lng = first['geometry']['location']['lng'];
+      _controller?.animateCamera(
+        CameraUpdate.newLatLngZoom(LatLng(lat, lng), 13.5),
+      );
+    }
+  }
+
+  /// ✅ When user taps a marker
+  void _onDestinationSelected(LatLng destLatLng, String name) {
+    _selectedDestination = destLatLng;
+    _createRoute();
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('Showing route to $name')));
+  }
+
+  /// ✅ Draw route between user location and selected destination
+  Future<void> _createRoute() async {
+    if (_currentPosition == null || _selectedDestination == null) return;
+
+    final origin = LatLng(
+      _currentPosition!.latitude,
+      _currentPosition!.longitude,
+    );
+    final destination = _selectedDestination!;
+
+    final polylinePoints = PolylinePoints(apiKey: _googleAPIKey);
+
+    final result = await polylinePoints.getRouteBetweenCoordinates(
+      request: PolylineRequest(
+        origin: PointLatLng(origin.latitude, origin.longitude),
+        destination: PointLatLng(destination.latitude, destination.longitude),
+        mode: TravelMode.driving,
+      ),
+    );
+
+    _polylineCoordinates.clear();
+    if (result.points.isNotEmpty) {
+      for (var point in result.points) {
+        _polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+      }
+    }
+
+    setState(() {
+      _polylines.clear();
+      _polylines.add(
+        Polyline(
+          polylineId: const PolylineId('route'),
+          width: 5,
+          color: Colors.blueAccent,
+          points: _polylineCoordinates,
+        ),
+      );
+    });
+
+    _controller?.animateCamera(
+      CameraUpdate.newLatLngBounds(
+        LatLngBounds(
+          southwest: LatLng(
+            origin.latitude < destination.latitude
+                ? origin.latitude
+                : destination.latitude,
+            origin.longitude < destination.longitude
+                ? origin.longitude
+                : destination.longitude,
+          ),
+          northeast: LatLng(
+            origin.latitude > destination.latitude
+                ? origin.latitude
+                : destination.latitude,
+            origin.longitude > destination.longitude
+                ? origin.longitude
+                : destination.longitude,
+          ),
+        ),
+        70,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // appBar: AppBar(
+      //   title: const Text('Nearby Medical Map'),
+      //   backgroundColor: Colors.blueAccent,
+      // ),
       body: Stack(
         children: [
-          _currentPosition == null
-              ? const Center(child: CircularProgressIndicator())
-              : GoogleMap(
-                initialCameraPosition: CameraPosition(
-                  target: LatLng(
-                    _currentPosition!.latitude,
-                    _currentPosition!.longitude,
-                  ),
-                  zoom: 15.5,
+          if (_currentPosition == null)
+            const Center(child: CircularProgressIndicator())
+          else
+            GoogleMap(
+              initialCameraPosition: CameraPosition(
+                target: LatLng(
+                  _currentPosition!.latitude,
+                  _currentPosition!.longitude,
                 ),
-                myLocationEnabled: true,
-                myLocationButtonEnabled: true,
-                onMapCreated: (controller) => _controller = controller,
-                markers: _markers,
-                polylines: _polylines,
+                zoom: 15.5,
               ),
-
-          // 🔍 Search bar
+              myLocationEnabled: true,
+              myLocationButtonEnabled: true,
+              onMapCreated: (controller) => _controller = controller,
+              markers: _markers,
+              polylines: _polylines,
+            ),
+          // 🔍 Search Bar
           Positioned(
-            top: 40,
+            top: 10,
             left: 15,
             right: 15,
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 5,
-                        offset: const Offset(0, 2),
+            child: Container(
+              height: 50,
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: const [
+                  BoxShadow(color: Colors.black12, blurRadius: 5),
+                ],
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _searchController,
+                      decoration: const InputDecoration(
+                        hintText: 'Search for clinic or pharmacy...',
+                        border: InputBorder.none,
                       ),
-                    ],
-                  ),
-                  child: TextField(
-                    controller: _searchController,
-                    decoration: const InputDecoration(
-                      hintText: "Search destination...",
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 15,
-                        vertical: 15,
-                      ),
-                      border: InputBorder.none,
-                      suffixIcon: Icon(Icons.search, color: Colors.blueAccent),
-                    ),
-                    onChanged: _getPlacePredictions,
-                  ),
-                ),
-
-                // 🧭 Suggestions list
-                if (_placePredictions.isNotEmpty)
-                  Container(
-                    margin: const EdgeInsets.only(top: 5),
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                      boxShadow: const [
-                        BoxShadow(color: Colors.black26, blurRadius: 4),
-                      ],
-                    ),
-                    child: ListView.builder(
-                      itemCount: _placePredictions.length,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        final place = _placePredictions[index];
-                        return ListTile(
-                          leading: const Icon(
-                            Icons.location_on,
-                            color: Colors.blueAccent,
-                          ),
-                          title: Text(place["description"]),
-                          onTap:
-                              () => _selectPlace(
-                                place["place_id"],
-                                place["description"],
-                              ),
-                        );
-                      },
+                      onSubmitted:
+                          (value) => _searchAndDisplayNearby(value.trim()),
                     ),
                   ),
-              ],
+                  IconButton(
+                    icon: const Icon(Icons.search),
+                    onPressed:
+                        () => _searchAndDisplayNearby(
+                          _searchController.text.trim(),
+                        ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _getCurrentLocation,
+        backgroundColor: Colors.blueAccent,
+        child: const Icon(Icons.my_location, color: Colors.white),
       ),
     );
   }

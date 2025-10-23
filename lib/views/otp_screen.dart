@@ -351,7 +351,10 @@ class _OtpScreenState extends State<OtpScreen> {
                     Text(
                       "Enter verification code that sent on your email",
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: sp(13), color: AppColors.grey),
+                      style: TextStyle(
+                        fontSize: sp(13),
+                        color: AppColors.black,
+                      ),
                     ),
                     SizedBox(height: h(0.03)),
 
@@ -449,18 +452,23 @@ class _OtpScreenState extends State<OtpScreen> {
                                   Get.snackbar(
                                     "Success",
                                     otpProvider.otpResponse!.message,
+                                    snackPosition: SnackPosition.BOTTOM,
                                   );
                                   Get.to(Login()); // ✅ Navigate to login
                                 } else {
                                   Get.snackbar(
                                     "Error",
                                     otpProvider.errorMessage ?? "Invalid OTP",
+                                    snackPosition: SnackPosition.BOTTOM,
                                   );
                                 }
                               } else {
                                 Get.snackbar(
                                   "Error",
                                   "Please enter all 4 digits",
+                                  snackPosition: SnackPosition.BOTTOM,
+                                  colorText: AppColors.black,
+                                  backgroundColor: AppColors.transparent,
                                 );
                               }
                             },

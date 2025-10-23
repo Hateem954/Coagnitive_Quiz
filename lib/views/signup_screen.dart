@@ -216,32 +216,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
         Get.to(
           () => OtpScreen(email: emailController.text.trim()),
         ); // ✅ pass email
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              "✅ ${provider.registerModel?.message}\nWelcome, ${provider.registerModel?.user?.email}",
-            ),
-            backgroundColor: Colors.green,
-          ),
-        );
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //     content: Text(
+        //       "✅ ${provider.registerModel?.message}\nWelcome, ${provider.registerModel?.user?.email}",
+        //     ),
+        //     backgroundColor: Colors.green,
+        //   )
+        // ,
       }
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            "✅ ${provider.registerModel?.message}\nWelcome, ${provider.registerModel?.user?.email}",
-          ),
-          backgroundColor: Colors.green,
-        ),
+      Get.snackbar(
+        "Sucess",
+        "Sign up sucessfully now verify your email",
+        colorText: AppColors.black,
+        backgroundColor: AppColors.transparent,
+        snackPosition: SnackPosition.BOTTOM,
       );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            provider.registerModel?.message ?? "Registration Failed ❌",
-          ),
-          backgroundColor: AppColors.red,
-        ),
+      Get.snackbar(
+        "Failed",
+        "Plz check the authenticate email",
+        colorText: AppColors.black,
+        backgroundColor: AppColors.transparent,
+        snackPosition: SnackPosition.BOTTOM,
       );
     }
   }
@@ -258,6 +256,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     double sp(double value) => screenWidth * (value / 390);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.white,
       body: Stack(
         children: [

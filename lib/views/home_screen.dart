@@ -423,6 +423,21 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  // ✅ Move getGreeting here
+  String getGreeting() {
+    final hour = DateTime.now().hour;
+
+    if (hour >= 5 && hour < 12) {
+      return "GOOD MORNING";
+    } else if (hour >= 12 && hour < 17) {
+      return "GOOD AFTERNOON";
+    } else if (hour >= 17 && hour < 21) {
+      return "GOOD EVENING";
+    } else {
+      return "GOOD NIGHT";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -459,10 +474,10 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _bottomNavItem(Icons.home, "Home", 0),
-              _bottomNavItem(Icons.quiz, "Quizzes", 1),
+              _bottomNavItem(Icons.grid_view, "Quizzes", 1),
               const SizedBox(width: 40),
               _bottomNavItem(Icons.video_library, "Videos", 2),
-              _bottomNavItem(Icons.lightbulb, "Location", 3),
+              _bottomNavItem(Icons.location_on, "location", 3),
             ],
           ),
         ),
@@ -493,13 +508,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "GOOD MORNING",
+                        getGreeting(),
                         style: TextStyle(
                           fontSize: sp(12),
                           fontWeight: FontWeight.w500,
                           color: AppColors.lightblue,
                         ),
                       ),
+
                       const SizedBox(height: 4),
                       Consumer<ProfileProvider>(
                         builder: (context, profileProvider, child) {
@@ -672,7 +688,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () => Get.to(const YourQuizzes()),
+                        onTap: () => Get.to(YourQuizzes()),
                         child: const Text(
                           "See all",
                           style: TextStyle(

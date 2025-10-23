@@ -313,6 +313,7 @@ class _ProfileScreen3State extends State<ProfileScreen3> {
     double sp(double value) => screenWidth * (value / 390);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.white,
       body: Stack(
         children: [
@@ -366,7 +367,7 @@ class _ProfileScreen3State extends State<ProfileScreen3> {
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.black,
+                        color: Colors.black26,
                         blurRadius: 8,
                         offset: Offset(0, -2),
                       ),

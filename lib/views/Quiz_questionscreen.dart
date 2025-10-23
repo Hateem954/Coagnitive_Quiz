@@ -1340,7 +1340,11 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
             return Center(
               child: Text(
                 _questionController.errorMessage.value,
-                style: const TextStyle(color: AppColors.red, fontSize: 16),
+                style: const TextStyle(
+                  color: AppColors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
               ),
             );
           }

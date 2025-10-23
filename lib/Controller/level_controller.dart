@@ -91,8 +91,8 @@ class LevelController extends GetxController {
         Get.snackbar(
           "Success",
           message,
-          backgroundColor: AppColors.black,
-          colorText: Colors.white,
+          backgroundColor: AppColors.transparent,
+          colorText: Colors.black,
           snackPosition: SnackPosition.BOTTOM,
         );
 
