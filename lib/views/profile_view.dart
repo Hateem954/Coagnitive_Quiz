@@ -341,6 +341,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:get/get.dart';
+import 'package:quiz/api_Services/app_url.dart';
 import 'package:quiz/provider/login_provider.dart';
 import 'package:quiz/provider/profile_update_provider.dart';
 import 'package:quiz/provider/profile_provider.dart';
@@ -500,13 +501,25 @@ class _ViewProfileState extends State<ViewProfile> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: AppColors.grey, width: 1),
+
+            // image: DecorationImage(
+            //   image: NetworkImage(
+            //     profile.image.isNotEmpty
+            //         ? profile.image
+            //         : "https://i.pravatar.cc/150?img=3",
+            //   ),
+            //   fit: BoxFit.cover,
+            // ),
             image: DecorationImage(
               image: NetworkImage(
-                profile.image.isNotEmpty
-                    ? profile.image
+                (profile.image.isNotEmpty)
+                    ? (profile.image.startsWith("http")
+                        ? profile.image
+                        : "${AppUrl.imageBaseUrl}${profile.image.startsWith('/') ? '' : '/'}${profile.image}")
                     : "https://i.pravatar.cc/150?img=3",
               ),
               fit: BoxFit.cover,
+              onError: (_, __) => debugPrint("⚠️ Failed to load profile image"),
             ),
           ),
         ),

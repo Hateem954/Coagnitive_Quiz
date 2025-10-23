@@ -35,8 +35,8 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor: AppColors.grey, // Gray background
       body: Center(
         child: CustomImageContainer(
-          height: screenHeight * 0.45, // 30% of screen height
-          width: screenWidth * 0.83, // 60% of screen width
+          height: screenHeight * 0.26, // 30% of screen height
+          width: screenWidth * 0.84, // 60% of screen width
           imageUrl: AppImages.logo,
         ),
       ),
