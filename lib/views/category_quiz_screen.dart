@@ -293,6 +293,7 @@ import 'package:quiz/utils/customimage.dart';
 import 'package:quiz/utils/images.dart';
 import 'package:quiz/views/home_screen.dart';
 import 'package:quiz/views/level_screen.dart';
+import 'package:quiz/views/map_screen.dart';
 import 'package:quiz/views/message_screen.dart';
 import 'package:quiz/views/videotraining_screeen.dart';
 
@@ -337,12 +338,8 @@ class _CategoryQuizScreenState extends State<CategoryQuizScreen> {
         Get.to(() => VideoTrainingsScreen(), transition: Transition.fadeIn);
         break;
       case 3:
-        Get.snackbar(
-          "Advice",
-          "Advice section coming soon!",
-          backgroundColor: AppColors.darkblue,
-          colorText: Colors.white,
-        );
+        Get.to(GoogleMapPage());
+
         break;
     }
   }
@@ -437,7 +434,7 @@ class _CategoryQuizScreenState extends State<CategoryQuizScreen> {
               _bottomNavItem(Icons.quiz, "Quizzes", 1),
               const SizedBox(width: 40), // space for FAB
               _bottomNavItem(Icons.video_library, "Videos", 2),
-              _bottomNavItem(Icons.lightbulb, "Advice", 3),
+              _bottomNavItem(Icons.lightbulb, "Location", 3),
             ],
           ),
         ),
