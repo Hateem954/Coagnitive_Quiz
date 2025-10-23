@@ -1124,6 +1124,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:quiz/utils/colors.dart';
+import 'package:quiz/views/guardian_screen.dart';
 import 'package:quiz/views/home_screen.dart';
 import 'package:quiz/views/quiz_result_popup_screen.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
@@ -1336,15 +1337,59 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
             return const Center(child: CircularProgressIndicator());
           }
 
+          // if (_questionController.errorMessage.isNotEmpty) {
+          //   return Center(
+          //     child: Text(
+          //       _questionController.errorMessage.value,
+          //       style: const TextStyle(
+          //         color: AppColors.red,
+          //         fontWeight: FontWeight.bold,
+          //         fontSize: 16,
+          //       ),
+          //     ),
+          //   );
+          // }
+
           if (_questionController.errorMessage.isNotEmpty) {
             return Center(
-              child: Text(
-                _questionController.errorMessage.value,
-                style: const TextStyle(
-                  color: AppColors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    _questionController.errorMessage.value,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: AppColors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.white,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 12,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () {
+                      // 👇 Navigate to Guardian Screen when button is clicked
+                      Get.offAll(() => GuardianInfoScreen());
+                    },
+                    child: const Text(
+                      "Create Profile",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             );
           }

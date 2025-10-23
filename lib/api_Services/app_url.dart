@@ -1,6 +1,6 @@
 class AppUrl {
   // static const String baseUrl = 'https://cf6a732c447c.ngrok-free.app/api';
-  static const String baseUrl = 'https://ea496fda75c2.ngrok-free.app/api';
+  static const String baseUrl = 'https://4e9dd42eeb4b.ngrok-free.app/api';
 
   // login in section
   static const String login = '/login';
