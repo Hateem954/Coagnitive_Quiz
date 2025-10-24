@@ -359,6 +359,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quiz/api_Services/app_url.dart';
 import 'package:quiz/model/subvideo_model.dart';
 import 'package:quiz/provider/subvideo_provider.dart';
 import 'package:quiz/utils/colors.dart';
@@ -467,10 +468,18 @@ class _VideoScreenState extends State<VideoScreen> {
                             itemCount: videos.length,
                             itemBuilder: (context, index) {
                               final video = videos[index];
+                              // final imageUrl =
+                              //     (video.vedioImage != null &&
+                              //             video.vedioImage!.isNotEmpty)
+                              //         ? "https://d8ca871017cc.ngrok-free.app/${video.vedioImage}"
+                              //         : null;
+
                               final imageUrl =
                                   (video.vedioImage != null &&
                                           video.vedioImage!.isNotEmpty)
-                                      ? "https://d8ca871017cc.ngrok-free.app/${video.vedioImage}"
+                                      ? (video.vedioImage!.startsWith('http')
+                                          ? video.vedioImage
+                                          : "${AppUrl.imageBaseUrl}${video.vedioImage!.startsWith('/') ? '' : '/'}${video.vedioImage}")
                                       : null;
 
                               return GestureDetector(
