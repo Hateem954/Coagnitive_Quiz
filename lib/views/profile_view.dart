@@ -398,6 +398,7 @@ class _ViewProfileState extends State<ViewProfile> {
         profileProvider.errorMessage!.contains("Profile not found");
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           /// 🔹 Background

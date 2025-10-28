@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/utils.dart';
 import 'package:quiz/utils/colors.dart';
@@ -34,10 +35,11 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: AppColors.grey, // Gray background
       body: Center(
-        child: CustomImageContainer(
-          height: screenHeight * 0.26, // 30% of screen height
-          width: screenWidth * 0.84, // 60% of screen width
-          imageUrl: AppImages.logo,
+        child: Image.asset(
+          AppImages.logo,
+          height: 200.h, // 22% of typical screen height (~1000px)
+          width: 0.93.sw,
+          fit: BoxFit.contain,
         ),
       ),
     );

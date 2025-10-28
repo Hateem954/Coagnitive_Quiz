@@ -291,6 +291,7 @@ import 'package:quiz/Controller/get_category_quiz_controller.dart';
 import 'package:quiz/utils/colors.dart';
 import 'package:quiz/utils/customimage.dart';
 import 'package:quiz/utils/images.dart';
+import 'package:quiz/views/Quiz_questionscreen.dart';
 import 'package:quiz/views/home_screen.dart';
 import 'package:quiz/views/level_screen.dart';
 import 'package:quiz/views/map_screen.dart';
@@ -458,7 +459,8 @@ class _CategoryQuizScreenState extends State<CategoryQuizScreen> {
     return GestureDetector(
       onTap: () {
         // Get.snackbar("title", "hashid: $hashid, id: $id, title: $title");
-        Get.to(() => LevelScreen(hashid: hashid, title: title, id: id));
+        // Get.to(() => LevelScreen(hashid: hashid, title: title, id: id));
+        Get.to(QuizQuestionScreen(hashid: hashid, title: title, id: id));
       },
       child: Container(
         padding: const EdgeInsets.all(16),

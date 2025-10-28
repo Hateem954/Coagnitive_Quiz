@@ -1,8 +1,10 @@
 // import 'package:flutter/material.dart';
 // import 'package:provider/provider.dart';
+// import 'package:quiz/api_Services/app_url.dart';
 // import 'package:quiz/model/subvideo_model.dart';
 // import 'package:quiz/provider/subvideo_provider.dart';
 // import 'package:quiz/utils/colors.dart';
+// import 'package:quiz/views/videoDetai_screeen.dart';
 // import 'package:video_player/video_player.dart';
 
 // class VideoScreen extends StatefulWidget {
@@ -35,7 +37,7 @@
 //       backgroundColor: AppColors.grey,
 //       body: Stack(
 //         children: [
-//           // 🔹 Title at the top
+//           // 🔹 Title
 //           Padding(
 //             padding: EdgeInsets.only(top: screenHeight * 0.05, left: 20),
 //             child: const Text(
@@ -48,7 +50,7 @@
 //             ),
 //           ),
 
-//           // 🔹 Bottom-aligned video container
+//           // 🔹 Content area
 //           Align(
 //             alignment: Alignment.bottomCenter,
 //             child: Container(
@@ -78,7 +80,7 @@
 //                   children: [
 //                     const SizedBox(height: 5),
 
-//                     // 🔹 Dynamic Video Grid
+//                     // 🔹 Video grid
 //                     Expanded(
 //                       child: Consumer<SubVideoProvider>(
 //                         builder: (context, videoProvider, child) {
@@ -99,7 +101,7 @@
 //                           return GridView.builder(
 //                             gridDelegate:
 //                                 const SliverGridDelegateWithFixedCrossAxisCount(
-//                                   crossAxisCount: 2, // ✅ 2 videos per row
+//                                   crossAxisCount: 2,
 //                                   crossAxisSpacing: 12,
 //                                   mainAxisSpacing: 12,
 //                                   childAspectRatio: 0.85,
@@ -107,20 +109,36 @@
 //                             itemCount: videos.length,
 //                             itemBuilder: (context, index) {
 //                               final video = videos[index];
+//                               // final imageUrl =
+//                               //     (video.vedioImage != null &&
+//                               //             video.vedioImage!.isNotEmpty)
+//                               //         ? "https://d8ca871017cc.ngrok-free.app/${video.vedioImage}"
+//                               //         : null;
+
 //                               final imageUrl =
 //                                   (video.vedioImage != null &&
 //                                           video.vedioImage!.isNotEmpty)
-//                                       ? "https://d8ca871017cc.ngrok-free.app/${video.vedioImage}"
+//                                       ? (video.vedioImage!.startsWith('http')
+//                                           ? video.vedioImage
+//                                           : "${AppUrl.imageBaseUrl}${video.vedioImage!.startsWith('/') ? '' : '/'}${video.vedioImage}")
 //                                       : null;
 
 //                               return GestureDetector(
 //                                 onTap: () {
+//                                   // ✅ Navigate and pass title & description
 //                                   Navigator.push(
 //                                     context,
 //                                     MaterialPageRoute(
 //                                       builder:
-//                                           (_) =>
-//                                               VideoPlayerScreen(video: video),
+//                                           (_) => VideoDetailsScreen(
+//                                             title:
+//                                                 video.title.isNotEmpty
+//                                                     ? video.title
+//                                                     : "Untitled Video",
+//                                             description: video.description,
+//                                             video:
+//                                                 video, // optional: send full model
+//                                           ),
 //                                     ),
 //                                   );
 //                                 },
@@ -186,7 +204,7 @@
 //                                                 ),
 //                                       ),
 
-//                                       // Video details
+//                                       // Video info
 //                                       Padding(
 //                                         padding: const EdgeInsets.all(8.0),
 //                                         child: Column(
@@ -239,119 +257,6 @@
 //             ),
 //           ),
 //         ],
-//       ),
-//     );
-//   }
-// }
-
-// // ✅ Video Player Screen
-// class VideoPlayerScreen extends StatefulWidget {
-//   final SubVideoModel video;
-
-//   const VideoPlayerScreen({super.key, required this.video});
-
-//   @override
-//   State<VideoPlayerScreen> createState() => _VideoPlayerScreenState();
-// }
-
-// class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
-//   VideoPlayerController? _controller;
-//   bool _videoError = false;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     final videoUrl =
-//         "https://d8ca871017cc.ngrok-free.app/${widget.video.video}";
-
-//     debugPrint("▶️ Playing video from: $videoUrl");
-
-//     _controller = VideoPlayerController.networkUrl(Uri.parse(videoUrl))
-//       ..initialize()
-//           .then((_) {
-//             setState(() {});
-//             _controller!.play();
-//           })
-//           .catchError((_) {
-//             setState(() {
-//               _videoError = true;
-//             });
-//           });
-//   }
-
-//   @override
-//   void dispose() {
-//     _controller?.dispose();
-//     super.dispose();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final imageUrl =
-//         widget.video.vedioImage != null && widget.video.vedioImage!.isNotEmpty
-//             ? "https://d8ca871017cc.ngrok-free.app/${widget.video.vedioImage}"
-//             : null;
-
-//     return Scaffold(
-//       appBar: AppBar(title: Text(widget.video.title)),
-//       body: Center(
-//         child:
-//             _videoError
-//                 ? const Column(
-//                   mainAxisAlignment: MainAxisAlignment.center,
-//                   children: [
-//                     Icon(Icons.error, size: 60, color: AppColors.red),
-//                     SizedBox(height: 10),
-//                     Text(
-//                       "⚠️ Failed to load video",
-//                       style: TextStyle(color: AppColors.red),
-//                     ),
-//                   ],
-//                 )
-//                 : (_controller != null && _controller!.value.isInitialized)
-//                 ? AspectRatio(
-//                   aspectRatio: _controller!.value.aspectRatio,
-//                   child: VideoPlayer(_controller!),
-//                 )
-//                 : Column(
-//                   mainAxisAlignment: MainAxisAlignment.center,
-//                   children: [
-//                     if (imageUrl != null)
-//                       Image.network(
-//                         imageUrl,
-//                         height: 200,
-//                         fit: BoxFit.cover,
-//                         errorBuilder: (context, error, stackTrace) {
-//                           return Container(
-//                             height: 200,
-//                             color: AppColors.grey,
-//                             child: const Icon(
-//                               Icons.broken_image,
-//                               size: 50,
-//                               color: AppColors.black,
-//                             ),
-//                           );
-//                         },
-//                       )
-//                     else
-//                       Container(
-//                         height: 200,
-//                         color: AppColors.grey,
-//                         child: const Icon(
-//                           Icons.broken_image,
-//                           size: 50,
-//                           color: AppColors.black,
-//                         ),
-//                       ),
-//                     const SizedBox(height: 16),
-//                     const Text(
-//                       "Loading video...",
-//                       style: TextStyle(color: AppColors.black),
-//                     ),
-//                     const SizedBox(height: 10),
-//                     const CircularProgressIndicator(),
-//                   ],
-//                 ),
 //       ),
 //     );
 //   }
@@ -468,11 +373,6 @@ class _VideoScreenState extends State<VideoScreen> {
                             itemCount: videos.length,
                             itemBuilder: (context, index) {
                               final video = videos[index];
-                              // final imageUrl =
-                              //     (video.vedioImage != null &&
-                              //             video.vedioImage!.isNotEmpty)
-                              //         ? "https://d8ca871017cc.ngrok-free.app/${video.vedioImage}"
-                              //         : null;
 
                               final imageUrl =
                                   (video.vedioImage != null &&
@@ -484,7 +384,6 @@ class _VideoScreenState extends State<VideoScreen> {
 
                               return GestureDetector(
                                 onTap: () {
-                                  // ✅ Navigate and pass title & description
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -495,8 +394,7 @@ class _VideoScreenState extends State<VideoScreen> {
                                                     ? video.title
                                                     : "Untitled Video",
                                             description: video.description,
-                                            video:
-                                                video, // optional: send full model
+                                            video: video,
                                           ),
                                     ),
                                   );
@@ -517,7 +415,7 @@ class _VideoScreenState extends State<VideoScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      // Thumbnail
+                                      // Thumbnail with loading indicator
                                       ClipRRect(
                                         borderRadius: const BorderRadius.only(
                                           topLeft: Radius.circular(16),
@@ -541,6 +439,28 @@ class _VideoScreenState extends State<VideoScreen> {
                                                   height: 100,
                                                   width: double.infinity,
                                                   fit: BoxFit.cover,
+                                                  // ✅ Show loading while image loads
+                                                  loadingBuilder: (
+                                                    context,
+                                                    child,
+                                                    loadingProgress,
+                                                  ) {
+                                                    if (loadingProgress ==
+                                                        null) {
+                                                      return child;
+                                                    }
+                                                    return Container(
+                                                      height: 100,
+                                                      color:
+                                                          Colors.grey.shade200,
+                                                      child: const Center(
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                              strokeWidth: 2,
+                                                            ),
+                                                      ),
+                                                    );
+                                                  },
                                                   errorBuilder: (
                                                     context,
                                                     error,

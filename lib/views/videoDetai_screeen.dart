@@ -179,36 +179,36 @@ class _VideoDetailsScreenState extends State<VideoDetailsScreen> {
   }
 
   void _initializeVideo() async {
-    final videoPath = widget.video.video ?? widget.video.vedioImage;
+    final videoPath = widget.video.video;
+
+    if (videoPath == null || !videoPath.endsWith('.mp4')) {
+      print("❌ Invalid or missing video file: $videoPath");
+      setState(() => _isLoading = false);
+      return;
+    }
 
     final videoUrl =
-        (videoPath != null && videoPath.isNotEmpty)
-            ? (videoPath.startsWith('http')
-                ? videoPath
-                : "${AppUrl.imageBaseUrl}${videoPath.startsWith('/') ? '' : '/'}$videoPath")
-            : null;
+        videoPath.startsWith('http')
+            ? videoPath
+            : "${AppUrl.imageBaseUrl}${videoPath.startsWith('/') ? '' : '/'}$videoPath";
 
-    print("🎬 Video URL: $videoUrl");
+    print("🎥 Final Video URL: $videoUrl");
 
-    if (videoUrl != null) {
-      _controller = VideoPlayerController.network(videoUrl);
-      try {
-        await _controller!.initialize();
-        _controller!.setLooping(true);
-        setState(() {
-          _isInitialized = true;
-          _isLoading = false;
-        });
-      } catch (e) {
-        print("❌ Video initialization failed: $e");
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    } else {
+    try {
+      _controller = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
+      await _controller!.initialize();
+      _controller!.setLooping(true);
+
       setState(() {
+        _isInitialized = true;
         _isLoading = false;
       });
+    } catch (e) {
+      print("❌ Video initialization failed: $e");
+      setState(() => _isLoading = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Unable to load video from: $videoUrl")),
+      );
     }
   }
 

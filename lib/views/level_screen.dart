@@ -142,198 +142,199 @@
 //     );
 //   }
 // }
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:quiz/Controller/level_controller.dart';
-import 'package:quiz/utils/colors.dart';
-import 'package:quiz/views/Quiz_questionscreen.dart';
+//000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+// import 'package:quiz/Controller/level_controller.dart';
+// import 'package:quiz/utils/colors.dart';
+// import 'package:quiz/views/Quiz_questionscreen.dart';
 
-class LevelScreen extends StatelessWidget {
-  final String title;
-  final String hashid;
-  final String id;
-  final LevelController levelController = Get.put(LevelController());
+// class LevelScreen extends StatelessWidget {
+//   final String title;
+//   final String hashid;
+//   final String id;
+//   final LevelController levelController = Get.put(LevelController());
 
-  LevelScreen({
-    super.key,
-    required this.hashid,
-    required this.title,
-    required this.id,
-  });
+//   LevelScreen({
+//     super.key,
+//     required this.hashid,
+//     required this.title,
+//     required this.id,
+//   });
 
-  @override
-  Widget build(BuildContext context) {
-    print(
-      "Title is $title and hashid is $hashid OOOOOOOOOOOOOR ID is $id",
-    ); // ✅ added missing semicolon
+//   @override
+//   Widget build(BuildContext context) {
+//     print(
+//       "Title is $title and hashid is $hashid OOOOOOOOOOOOOR ID is $id",
+//     ); // ✅ added missing semicolon
 
-    // ✅ Fetch levels once when screen loads
-    levelController.fetchLevels();
+//     // ✅ Fetch levels once when screen loads
+//     levelController.fetchLevels();
 
-    return Scaffold(
-      backgroundColor: AppColors.grey,
-      appBar: AppBar(
-        backgroundColor: AppColors.transparent,
-        elevation: 0,
-        title: Text(
-          "Quiz Levels",
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            color: AppColors.black,
-            fontSize: 22,
-          ),
-        ),
-        centerTitle: true,
-      ),
+//     return Scaffold(
+//       backgroundColor: AppColors.grey,
+//       appBar: AppBar(
+//         backgroundColor: AppColors.transparent,
+//         elevation: 0,
+//         title: Text(
+//           "Quiz Levels",
+//           style: const TextStyle(
+//             fontWeight: FontWeight.bold,
+//             color: AppColors.black,
+//             fontSize: 22,
+//           ),
+//         ),
+//         centerTitle: true,
+//       ),
 
-      // ✅ BOTTOM CARD AREA
-      body: Align(
-        alignment: Alignment.bottomCenter,
-        child: Container(
-          width: double.infinity,
-          height: MediaQuery.of(context).size.height * 0.55,
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(30),
-              topRight: Radius.circular(30),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.black.withOpacity(0.1),
-                blurRadius: 10,
-                offset: const Offset(0, -4),
-              ),
-            ],
-          ),
-          padding: const EdgeInsets.all(16),
-          child: Obx(() {
-            if (levelController.isLoading.value) {
-              return const Center(child: CircularProgressIndicator());
-            }
+//       // ✅ BOTTOM CARD AREA
+//       body: Align(
+//         alignment: Alignment.bottomCenter,
+//         child: Container(
+//           width: double.infinity,
+//           height: MediaQuery.of(context).size.height * 0.55,
+//           decoration: BoxDecoration(
+//             color: AppColors.white,
+//             borderRadius: const BorderRadius.only(
+//               topLeft: Radius.circular(30),
+//               topRight: Radius.circular(30),
+//             ),
+//             boxShadow: [
+//               BoxShadow(
+//                 color: AppColors.black.withOpacity(0.1),
+//                 blurRadius: 10,
+//                 offset: const Offset(0, -4),
+//               ),
+//             ],
+//           ),
+//           padding: const EdgeInsets.all(16),
+//           child: Obx(() {
+//             if (levelController.isLoading.value) {
+//               return const Center(child: CircularProgressIndicator());
+//             }
 
-            if (levelController.levels.isEmpty) {
-              return const Center(
-                child: Text(
-                  "No Levels Available 😕",
-                  style: TextStyle(fontSize: 16, color: AppColors.black),
-                ),
-              );
-            }
+//             if (levelController.levels.isEmpty) {
+//               return const Center(
+//                 child: Text(
+//                   "No Levels Available 😕",
+//                   style: TextStyle(fontSize: 16, color: AppColors.black),
+//                 ),
+//               );
+//             }
 
-            return Stack(
-              children: [
-                // ✅ LEVEL LIST
-                ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: levelController.levels.length,
-                  itemBuilder: (context, index) {
-                    final level = levelController.levels[index];
+//             return Stack(
+//               children: [
+//                 // ✅ LEVEL LIST
+//                 ListView.builder(
+//                   physics: const BouncingScrollPhysics(),
+//                   itemCount: levelController.levels.length,
+//                   itemBuilder: (context, index) {
+//                     final level = levelController.levels[index];
 
-                    return Obx(() {
-                      bool isSelected =
-                          levelController.selectedLevel.value == level.name;
+//                     return Obx(() {
+//                       bool isSelected =
+//                           levelController.selectedLevel.value == level.name;
 
-                      return GestureDetector(
-                        onTap: () async {
-                          // ✅ Post selected level
-                          await levelController.addLevel(level.name);
+//                       return GestureDetector(
+//                         onTap: () async {
+//                           // ✅ Post selected level
+//                           await levelController.addLevel(level.name);
 
-                          // ✅ Update selected visually
-                          levelController.selectedLevel.value = level.name;
-                          Get.to(
-                            QuizQuestionScreen(
-                              title: title,
-                              hashid: hashid,
-                              id: id,
-                            ),
-                          );
-                        },
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 250),
-                          margin: const EdgeInsets.symmetric(vertical: 10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color:
-                                isSelected
-                                    ? AppColors.black.withOpacity(0.85)
-                                    : AppColors.grey,
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppColors.black.withOpacity(0.05),
-                                blurRadius: 5,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
-                          ),
-                          child: ListTile(
-                            contentPadding: const EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 16,
-                            ),
-                            leading: CircleAvatar(
-                              radius: 25,
-                              backgroundColor:
-                                  isSelected
-                                      ? AppColors.white
-                                      : AppColors.black,
-                              child: Text(
-                                level.name.substring(0, 1).toUpperCase(),
-                                style: TextStyle(
-                                  color:
-                                      isSelected
-                                          ? AppColors.black
-                                          : AppColors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                            title: Text(
-                              level.name,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w700,
-                                color:
-                                    isSelected
-                                        ? AppColors.white
-                                        : AppColors.black,
-                              ),
-                            ),
-                            trailing: Icon(
-                              Icons.arrow_forward_ios,
-                              color:
-                                  isSelected
-                                      ? AppColors.white
-                                      : AppColors.black,
-                              size: 20,
-                            ),
-                          ),
-                        ),
-                      );
-                    });
-                  },
-                ),
+//                           // ✅ Update selected visually
+//                           levelController.selectedLevel.value = level.name;
+//                           Get.to(
+//                             QuizQuestionScreen(
+//                               title: title,
+//                               hashid: hashid,
+//                               id: id,
+//                             ),
+//                           );
+//                         },
+//                         child: AnimatedContainer(
+//                           duration: const Duration(milliseconds: 250),
+//                           margin: const EdgeInsets.symmetric(vertical: 10),
+//                           decoration: BoxDecoration(
+//                             borderRadius: BorderRadius.circular(15),
+//                             color:
+//                                 isSelected
+//                                     ? AppColors.black.withOpacity(0.85)
+//                                     : AppColors.grey,
+//                             boxShadow: [
+//                               BoxShadow(
+//                                 color: AppColors.black.withOpacity(0.05),
+//                                 blurRadius: 5,
+//                                 offset: const Offset(0, 2),
+//                               ),
+//                             ],
+//                           ),
+//                           child: ListTile(
+//                             contentPadding: const EdgeInsets.symmetric(
+//                               vertical: 10,
+//                               horizontal: 16,
+//                             ),
+//                             leading: CircleAvatar(
+//                               radius: 25,
+//                               backgroundColor:
+//                                   isSelected
+//                                       ? AppColors.white
+//                                       : AppColors.black,
+//                               child: Text(
+//                                 level.name.substring(0, 1).toUpperCase(),
+//                                 style: TextStyle(
+//                                   color:
+//                                       isSelected
+//                                           ? AppColors.black
+//                                           : AppColors.white,
+//                                   fontWeight: FontWeight.bold,
+//                                   fontSize: 20,
+//                                 ),
+//                               ),
+//                             ),
+//                             title: Text(
+//                               level.name,
+//                               style: TextStyle(
+//                                 fontSize: 18,
+//                                 fontWeight: FontWeight.w700,
+//                                 color:
+//                                     isSelected
+//                                         ? AppColors.white
+//                                         : AppColors.black,
+//                               ),
+//                             ),
+//                             trailing: Icon(
+//                               Icons.arrow_forward_ios,
+//                               color:
+//                                   isSelected
+//                                       ? AppColors.white
+//                                       : AppColors.black,
+//                               size: 20,
+//                             ),
+//                           ),
+//                         ),
+//                       );
+//                     });
+//                   },
+//                 ),
 
-                // ✅ Loader overlay when posting
-                Obx(
-                  () =>
-                      levelController.isPosting.value
-                          ? Container(
-                            color: AppColors.transparent,
-                            child: const Center(
-                              child: CircularProgressIndicator(
-                                color: AppColors.white,
-                              ),
-                            ),
-                          )
-                          : const SizedBox(),
-                ),
-              ],
-            );
-          }),
-        ),
-      ),
-    );
-  }
-}
+//                 // ✅ Loader overlay when posting
+//                 Obx(
+//                   () =>
+//                       levelController.isPosting.value
+//                           ? Container(
+//                             color: AppColors.transparent,
+//                             child: const Center(
+//                               child: CircularProgressIndicator(
+//                                 color: AppColors.white,
+//                               ),
+//                             ),
+//                           )
+//                           : const SizedBox(),
+//                 ),
+//               ],
+//             );
+//           }),
+//         ),
+//       ),
+//     );
+//   }
+// }

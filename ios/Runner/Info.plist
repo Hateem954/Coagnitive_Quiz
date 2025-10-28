@@ -45,33 +45,5 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-
-	<!-- 🔹 iOS Permissions (match your Android permissions) -->
-
-	<!-- Camera access -->
-	<key>NSCameraUsageDescription</key>
-	<string>This app needs access to your camera to take photos and record videos.</string>
-
-	<!-- Microphone access -->
-	<key>NSMicrophoneUsageDescription</key>
-	<string>This app needs access to your microphone to record audio.</string>
-
-	<!-- Photo Library access -->
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app needs access to your photo library to select and upload images.</string>
-
-	<!-- Location access -->
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app needs your location to provide location-based services.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>This app may access your location even when running in the background.</string>
-
-	<!-- Internet/network access (needed for HTTP/HTTPS calls) -->
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
-
 </dict>
 </plist>

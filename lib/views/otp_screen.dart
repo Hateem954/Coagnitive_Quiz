@@ -295,6 +295,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.white,
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           // 🔹 Background Illustration

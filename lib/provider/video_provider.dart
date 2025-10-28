@@ -239,6 +239,7 @@
 
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:quiz/api_Services/app_url.dart';
 import 'package:quiz/api_Services/repo.dart';
 import 'package:quiz/model/video_model.dart';
 import 'package:video_player/video_player.dart';
@@ -299,7 +300,7 @@ class VideoProvider extends ChangeNotifier {
     if (videos.isEmpty) return;
 
     controller = VideoPlayerController.network(
-        "https://d8ca871017cc.ngrok-free.app/${videos[index].video}",
+        "${AppUrl.imageBaseUrl}${videos[index].video}",
       )
       ..initialize()
           .then((_) {

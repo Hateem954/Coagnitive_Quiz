@@ -268,7 +268,7 @@ class _HomeScreenState extends State<HomeScreen> {
           alignment: Alignment.bottomCenter,
           child: Container(
             width: double.infinity,
-            height: screenHeight * 0.55,
+            height: screenHeight * 0.52,
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
