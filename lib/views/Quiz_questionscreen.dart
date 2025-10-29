@@ -525,7 +525,7 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
   late stt.SpeechToText _speech;
   bool _isListening = false;
   bool _isImageLoading = false;
-  bool _isCorrectSpoken = false; // ✅ New flag for correct spoken answer
+  bool _isCorrectSpoken = false;
   String _spokenText = "";
 
   final List<Map<String, dynamic>> _userAnswers = [];
@@ -552,7 +552,7 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
       if (available) {
         setState(() {
           _isListening = true;
-          _isCorrectSpoken = false; // Reset before new listening
+          _isCorrectSpoken = false;
         });
         _speech.listen(
           onResult: (val) {
@@ -613,7 +613,6 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
       }
     }
 
-    // ✅ Change mic color to black when correct spoken option detected
     if (matched) {
       setState(() {
         _isCorrectSpoken = true;
@@ -849,7 +848,7 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Image
+                            // ✅ Image with loading indicator
                             if (image != null && image.isNotEmpty)
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(12),
@@ -860,8 +859,43 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
                                   height: screenH * 0.25,
                                   width: double.infinity,
                                   fit: BoxFit.cover,
+                                  loadingBuilder: (
+                                    context,
+                                    child,
+                                    loadingProgress,
+                                  ) {
+                                    if (loadingProgress == null) {
+                                      if (_isImageLoading) {
+                                        WidgetsBinding.instance
+                                            .addPostFrameCallback((_) {
+                                              setState(
+                                                () => _isImageLoading = false,
+                                              );
+                                            });
+                                      }
+                                      return child;
+                                    } else {
+                                      if (!_isImageLoading) {
+                                        WidgetsBinding.instance
+                                            .addPostFrameCallback((_) {
+                                              setState(
+                                                () => _isImageLoading = true,
+                                              );
+                                            });
+                                      }
+                                      return Container(
+                                        height: screenH * 0.25,
+                                        width: double.infinity,
+                                        color: Colors.grey.shade200,
+                                        child: const Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                      );
+                                    }
+                                  },
                                 ),
                               ),
+
                             SizedBox(height: screenH * 0.02),
 
                             // Question with speaker
@@ -948,8 +982,7 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
                     IconButton(
                       icon: Icon(
                         _isCorrectSpoken
-                            ? Icons
-                                .mic // Black mic for correct
+                            ? Icons.mic
                             : _isListening
                             ? Icons.mic
                             : Icons.mic_none,
