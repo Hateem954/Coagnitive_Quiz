@@ -1,8 +1,11 @@
 // import 'package:flutter/material.dart';
+// import 'package:flutter/services.dart';
+// import 'package:quiz/api_Services/app_url.dart';
 // import 'package:quiz/model/subvideo_model.dart';
 // import 'package:quiz/utils/colors.dart';
+// import 'package:video_player/video_player.dart';
 
-// class VideoDetailsScreen extends StatelessWidget {
+// class VideoDetailsScreen extends StatefulWidget {
 //   final String title;
 //   final String description;
 //   final SubVideoModel video;
@@ -15,9 +18,98 @@
 //   });
 
 //   @override
+//   State<VideoDetailsScreen> createState() => _VideoDetailsScreenState();
+// }
+
+// class _VideoDetailsScreenState extends State<VideoDetailsScreen> {
+//   VideoPlayerController? _controller;
+//   bool _isInitialized = false;
+//   bool _isLoading = true;
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     _initializeVideo();
+//   }
+
+//   void _initializeVideo() async {
+//     final videoPath = widget.video.video;
+
+//     if (videoPath == null || !videoPath.endsWith('.mp4')) {
+//       print("❌ Invalid or missing video file: $videoPath");
+//       setState(() => _isLoading = false);
+//       return;
+//     }
+
+//     final videoUrl =
+//         videoPath.startsWith('http')
+//             ? videoPath
+//             : "${AppUrl.imageBaseUrl}${videoPath.startsWith('/') ? '' : '/'}$videoPath";
+
+//     print("🎥 Final Video URL: $videoUrl");
+
+//     try {
+//       _controller = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
+//       await _controller!.initialize();
+//       _controller!.setLooping(true);
+
+//       setState(() {
+//         _isInitialized = true;
+//         _isLoading = false;
+//       });
+//     } catch (e) {
+//       print("❌ Video initialization failed: $e");
+//       setState(() => _isLoading = false);
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         SnackBar(content: Text("Unable to load video from: $videoUrl")),
+//       );
+//     }
+//   }
+
+//   @override
+//   void dispose() {
+//     _controller?.dispose();
+//     // Restore portrait mode when leaving the screen
+//     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+//     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+//     super.dispose();
+//   }
+
+//   void _goFullScreen() async {
+//     if (_controller == null || !_controller!.value.isInitialized) return;
+
+//     // Set landscape and fullscreen mode
+//     await SystemChrome.setPreferredOrientations([
+//       DeviceOrientation.landscapeRight,
+//       DeviceOrientation.landscapeLeft,
+//     ]);
+//     await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+
+//     // Push fullscreen player page
+//     await Navigator.push(
+//       context,
+//       MaterialPageRoute(
+//         builder: (context) => FullScreenVideoPlayer(controller: _controller!),
+//       ),
+//     );
+
+//     // Restore portrait mode when returning
+//     await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+//     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+//   }
+
+//   @override
 //   Widget build(BuildContext context) {
 //     final screenHeight = MediaQuery.of(context).size.height;
 //     final screenWidth = MediaQuery.of(context).size.width;
+
+//     final image = widget.video.vedioImage;
+//     final imageUrl =
+//         (image != null && image.isNotEmpty)
+//             ? (image.startsWith('http')
+//                 ? image
+//                 : "${AppUrl.imageBaseUrl}${image.startsWith('/') ? '' : '/'}$image")
+//             : null;
 
 //     return Scaffold(
 //       backgroundColor: Colors.grey.shade300,
@@ -57,24 +149,83 @@
 //                 child: Column(
 //                   crossAxisAlignment: CrossAxisAlignment.start,
 //                   children: [
-//                     // 🔹 Video thumbnail
+//                     // 🔹 Video player
 //                     ClipRRect(
 //                       borderRadius: BorderRadius.circular(12),
-//                       child:
-//                           (video.vedioImage != null &&
-//                                   video.vedioImage!.isNotEmpty)
-//                               ? Image.network(
-//                                 "https://ea496fda75c2.ngrok-free.app/${video.vedioImage}",
-//                                 height: 200,
-//                                 width: double.infinity,
-//                                 fit: BoxFit.cover,
-//                               )
-//                               : Container(
-//                                 height: 200,
-//                                 width: double.infinity,
-//                                 color: Colors.grey.shade300,
-//                               ),
+//                       child: SizedBox(
+//                         height: 200,
+//                         width: double.infinity,
+//                         child:
+//                             _isLoading
+//                                 ? const Center(
+//                                   child: CircularProgressIndicator(),
+//                                 )
+//                                 : _isInitialized && _controller != null
+//                                 ? Stack(
+//                                   alignment: Alignment.bottomCenter,
+//                                   children: [
+//                                     AspectRatio(
+//                                       aspectRatio:
+//                                           _controller!.value.aspectRatio,
+//                                       child: VideoPlayer(_controller!),
+//                                     ),
+//                                     VideoProgressIndicator(
+//                                       _controller!,
+//                                       allowScrubbing: true,
+//                                     ),
+//                                     Center(
+//                                       child: IconButton(
+//                                         icon: Icon(
+//                                           _controller!.value.isPlaying
+//                                               ? Icons.pause_circle
+//                                               : Icons.play_circle,
+//                                           size: 60,
+//                                           color: Colors.white.withOpacity(0.8),
+//                                         ),
+//                                         onPressed: () {
+//                                           setState(() {
+//                                             _controller!.value.isPlaying
+//                                                 ? _controller!.pause()
+//                                                 : _controller!.play();
+//                                           });
+//                                         },
+//                                       ),
+//                                     ),
+//                                     // 🔹 Fullscreen rectangle icon (top-right)
+//                                     Positioned(
+//                                       top: 160,
+//                                       right: 3,
+//                                       child: IconButton(
+//                                         icon: const Icon(
+//                                           Icons.crop_free,
+//                                           color: Colors.black,
+//                                           size: 20,
+//                                         ),
+//                                         onPressed: _goFullScreen,
+//                                       ),
+//                                     ),
+//                                   ],
+//                                 )
+//                                 : (imageUrl != null
+//                                     ? Image.network(
+//                                       imageUrl,
+//                                       fit: BoxFit.cover,
+//                                       errorBuilder:
+//                                           (context, error, stackTrace) =>
+//                                               Container(
+//                                                 color: Colors.grey.shade300,
+//                                                 child: const Icon(Icons.error),
+//                                               ),
+//                                     )
+//                                     : Container(
+//                                       color: Colors.grey.shade300,
+//                                       child: const Icon(
+//                                         Icons.image_not_supported,
+//                                       ),
+//                                     )),
+//                       ),
 //                     ),
+
 //                     const SizedBox(height: 15),
 
 //                     // 🔹 Title + Duration
@@ -86,7 +237,7 @@
 //                             crossAxisAlignment: CrossAxisAlignment.start,
 //                             children: [
 //                               Text(
-//                                 title,
+//                                 widget.title,
 //                                 style: const TextStyle(
 //                                   fontWeight: FontWeight.bold,
 //                                   fontSize: 16,
@@ -102,14 +253,6 @@
 //                                 ),
 //                               ),
 //                             ],
-//                           ),
-//                         ),
-//                         const Text(
-//                           "05 Min",
-//                           style: TextStyle(
-//                             fontSize: 13,
-//                             fontWeight: FontWeight.w500,
-//                             color: Colors.black,
 //                           ),
 //                         ),
 //                       ],
@@ -128,7 +271,7 @@
 //                     ),
 //                     const SizedBox(height: 8),
 //                     Text(
-//                       description,
+//                       widget.description,
 //                       style: const TextStyle(
 //                         fontSize: 14,
 //                         color: Colors.black87,
@@ -145,7 +288,54 @@
 //     );
 //   }
 // }
+
+// // 🔹 Fullscreen video player widget
+// class FullScreenVideoPlayer extends StatefulWidget {
+//   final VideoPlayerController controller;
+
+//   const FullScreenVideoPlayer({super.key, required this.controller});
+
+//   @override
+//   State<FullScreenVideoPlayer> createState() => _FullScreenVideoPlayerState();
+// }
+
+// class _FullScreenVideoPlayerState extends State<FullScreenVideoPlayer> {
+//   @override
+//   void initState() {
+//     super.initState();
+//     widget.controller.play();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: Colors.black,
+//       body: Stack(
+//         alignment: Alignment.center,
+//         children: [
+//           Center(
+//             child: AspectRatio(
+//               aspectRatio: widget.controller.value.aspectRatio,
+//               child: VideoPlayer(widget.controller),
+//             ),
+//           ),
+//           // 🔙 Exit fullscreen button
+//           Positioned(
+//             top: 20,
+//             left: 20,
+//             child: IconButton(
+//               icon: const Icon(Icons.close, color: Colors.white, size: 30),
+//               onPressed: () => Navigator.pop(context),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:quiz/api_Services/app_url.dart';
 import 'package:quiz/model/subvideo_model.dart';
 import 'package:quiz/utils/colors.dart';
@@ -192,8 +382,6 @@ class _VideoDetailsScreenState extends State<VideoDetailsScreen> {
             ? videoPath
             : "${AppUrl.imageBaseUrl}${videoPath.startsWith('/') ? '' : '/'}$videoPath";
 
-    print("🎥 Final Video URL: $videoUrl");
-
     try {
       _controller = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
       await _controller!.initialize();
@@ -215,7 +403,29 @@ class _VideoDetailsScreenState extends State<VideoDetailsScreen> {
   @override
   void dispose() {
     _controller?.dispose();
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     super.dispose();
+  }
+
+  void _goFullScreen() async {
+    if (_controller == null || !_controller!.value.isInitialized) return;
+
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+    ]);
+    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => FullScreenVideoPlayer(controller: _controller!),
+      ),
+    );
+
+    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   }
 
   @override
@@ -235,7 +445,6 @@ class _VideoDetailsScreenState extends State<VideoDetailsScreen> {
       backgroundColor: Colors.grey.shade300,
       body: Stack(
         children: [
-          // 🔹 Page Title
           Padding(
             padding: EdgeInsets.only(top: screenHeight * 0.07, left: 20),
             child: const Text(
@@ -247,8 +456,6 @@ class _VideoDetailsScreenState extends State<VideoDetailsScreen> {
               ),
             ),
           ),
-
-          // 🔹 Main content container
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -269,7 +476,6 @@ class _VideoDetailsScreenState extends State<VideoDetailsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // 🔹 Video player / thumbnail / loader
                     ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: SizedBox(
@@ -281,50 +487,52 @@ class _VideoDetailsScreenState extends State<VideoDetailsScreen> {
                                   child: CircularProgressIndicator(),
                                 )
                                 : _isInitialized && _controller != null
-                                ? AspectRatio(
-                                  aspectRatio: _controller!.value.aspectRatio,
-                                  child: Stack(
-                                    alignment: Alignment.bottomCenter,
-                                    children: [
-                                      VideoPlayer(_controller!),
-                                      VideoProgressIndicator(
-                                        _controller!,
-                                        allowScrubbing: true,
-                                      ),
-                                      Center(
-                                        child: IconButton(
-                                          icon: Icon(
-                                            _controller!.value.isPlaying
-                                                ? Icons.pause_circle
-                                                : Icons.play_circle,
-                                            size: 60,
-                                            color: Colors.white.withOpacity(
-                                              0.8,
-                                            ),
-                                          ),
-                                          onPressed: () {
-                                            setState(() {
-                                              _controller!.value.isPlaying
-                                                  ? _controller!.pause()
-                                                  : _controller!.play();
-                                            });
-                                          },
+                                ? Stack(
+                                  alignment: Alignment.bottomCenter,
+                                  children: [
+                                    AspectRatio(
+                                      aspectRatio:
+                                          _controller!.value.aspectRatio,
+                                      child: VideoPlayer(_controller!),
+                                    ),
+                                    VideoProgressIndicator(
+                                      _controller!,
+                                      allowScrubbing: true,
+                                    ),
+                                    Center(
+                                      child: IconButton(
+                                        icon: Icon(
+                                          _controller!.value.isPlaying
+                                              ? Icons.pause_circle
+                                              : Icons.play_circle,
+                                          size: 60,
+                                          color: AppColors.grey,
                                         ),
+                                        onPressed: () {
+                                          setState(() {
+                                            _controller!.value.isPlaying
+                                                ? _controller!.pause()
+                                                : _controller!.play();
+                                          });
+                                        },
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                    Positioned(
+                                      top: 160,
+                                      right: 3,
+                                      child: IconButton(
+                                        icon: const Icon(
+                                          Icons.crop_free,
+                                          color: Colors.black,
+                                          size: 20,
+                                        ),
+                                        onPressed: _goFullScreen,
+                                      ),
+                                    ),
+                                  ],
                                 )
                                 : (imageUrl != null
-                                    ? Image.network(
-                                      imageUrl,
-                                      fit: BoxFit.cover,
-                                      errorBuilder:
-                                          (context, error, stackTrace) =>
-                                              Container(
-                                                color: Colors.grey.shade300,
-                                                child: const Icon(Icons.error),
-                                              ),
-                                    )
+                                    ? Image.network(imageUrl, fit: BoxFit.cover)
                                     : Container(
                                       color: Colors.grey.shade300,
                                       child: const Icon(
@@ -333,10 +541,7 @@ class _VideoDetailsScreenState extends State<VideoDetailsScreen> {
                                     )),
                       ),
                     ),
-
                     const SizedBox(height: 15),
-
-                    // 🔹 Title + Duration
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -363,20 +568,9 @@ class _VideoDetailsScreenState extends State<VideoDetailsScreen> {
                             ],
                           ),
                         ),
-                        const Text(
-                          "05 Min",
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
-                          ),
-                        ),
                       ],
                     ),
-
                     const SizedBox(height: 20),
-
-                    // 🔹 Description
                     const Text(
                       "Description:",
                       style: TextStyle(
@@ -400,6 +594,120 @@ class _VideoDetailsScreenState extends State<VideoDetailsScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+// 🔹 FULLSCREEN VIDEO PLAYER WITH DOUBLE-TAP + CENTER PLAY BUTTON
+class FullScreenVideoPlayer extends StatefulWidget {
+  final VideoPlayerController controller;
+
+  const FullScreenVideoPlayer({super.key, required this.controller});
+
+  @override
+  State<FullScreenVideoPlayer> createState() => _FullScreenVideoPlayerState();
+}
+
+class _FullScreenVideoPlayerState extends State<FullScreenVideoPlayer> {
+  bool _showControls = true;
+
+  void _toggleControls() {
+    setState(() => _showControls = !_showControls);
+  }
+
+  void _seekForward() {
+    final current = widget.controller.value.position;
+    final duration = widget.controller.value.duration;
+    final target = current + const Duration(seconds: 10);
+    widget.controller.seekTo(target < duration ? target : duration);
+  }
+
+  void _seekBackward() {
+    final current = widget.controller.value.position;
+    final target = current - const Duration(seconds: 10);
+    widget.controller.seekTo(target > Duration.zero ? target : Duration.zero);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.play();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: GestureDetector(
+        onTap: _toggleControls,
+        onDoubleTapDown: (details) {
+          final width = MediaQuery.of(context).size.width;
+          if (details.localPosition.dx < width / 2) {
+            _seekBackward();
+          } else {
+            _seekForward();
+          }
+        },
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Center(
+              child: AspectRatio(
+                aspectRatio: widget.controller.value.aspectRatio,
+                child: VideoPlayer(widget.controller),
+              ),
+            ),
+
+            // 🎯 Center Play/Pause Button
+            if (_showControls)
+              Center(
+                child: IconButton(
+                  icon: Icon(
+                    widget.controller.value.isPlaying
+                        ? Icons.pause_circle
+                        : Icons.play_circle,
+                    color: Colors.white,
+                    size: 80,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      widget.controller.value.isPlaying
+                          ? widget.controller.pause()
+                          : widget.controller.play();
+                    });
+                  },
+                ),
+              ),
+
+            // 🎬 Bottom progress bar
+            if (_showControls)
+              Positioned(
+                bottom: 20,
+                left: 0,
+                right: 0,
+                child: VideoProgressIndicator(
+                  widget.controller,
+                  allowScrubbing: true,
+                  colors: const VideoProgressColors(
+                    playedColor: AppColors.red,
+                    bufferedColor: AppColors.white,
+                    backgroundColor: AppColors.transparent,
+                  ),
+                ),
+              ),
+
+            // ❌ Exit button (top-left)
+            Positioned(
+              top: 20,
+              left: 20,
+              child: IconButton(
+                icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

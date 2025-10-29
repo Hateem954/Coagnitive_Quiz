@@ -287,7 +287,7 @@ class _LoginState extends State<Login> {
             alignment: Alignment.bottomCenter,
             child: Container(
               width: double.infinity,
-              height: h(0.48),
+              height: h(0.54),
               decoration: const BoxDecoration(
                 color: AppColors.white,
                 borderRadius: BorderRadius.only(

@@ -293,11 +293,11 @@ class Quizzes extends StatelessWidget {
         elevation: 0,
         automaticallyImplyLeading: false,
         title: const Text(
-          "Quiz For You",
+          "All Quizzes",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.black87,
-            fontSize: 22,
+            fontSize: 24,
           ),
         ),
       ),
@@ -306,7 +306,7 @@ class Quizzes extends StatelessWidget {
         alignment: Alignment.bottomCenter,
         child: Container(
           width: double.infinity,
-          height: screenHeight * 0.85,
+          height: screenHeight * 0.75,
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
