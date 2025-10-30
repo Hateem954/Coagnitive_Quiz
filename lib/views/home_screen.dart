@@ -913,11 +913,12 @@ class _HomeScreenState extends State<HomeScreen> {
       _homePage(screenWidth, screenHeight),
       Quizzes(),
       VideoTrainingsScreen(),
-      GoogleMapPage(),
+      GoogleMapPage(doctorRecommendations: []),
     ];
 
     return Scaffold(
       backgroundColor: AppColors.grey,
+      resizeToAvoidBottomInset: false,
       body: SafeArea(child: pages[_selectedIndex]),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Get.to(ChatScreen()),

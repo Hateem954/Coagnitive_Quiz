@@ -700,6 +700,7 @@ class _QuizQuestionScreenState extends State<QuizQuestionScreen> {
                 percentage: result.data?.percentage ?? 0.0,
                 aiResponse: result.data?.aiFeedback,
                 detailedAnalysis: result.data?.detailedAnalysis,
+                recomendations: result.data?.categoryRecommendations,
                 onClose: () {
                   Get.to(HomeScreen());
                 },

@@ -339,7 +339,7 @@ class _CategoryQuizScreenState extends State<CategoryQuizScreen> {
         Get.to(() => VideoTrainingsScreen(), transition: Transition.fadeIn);
         break;
       case 3:
-        Get.to(GoogleMapPage());
+        Get.to(GoogleMapPage(doctorRecommendations: []));
 
         break;
     }
@@ -398,7 +398,7 @@ class _CategoryQuizScreenState extends State<CategoryQuizScreen> {
                           duration: "5 min",
                           title: quiz.title,
                           questions: 10,
-                          createdBy: "Dr. Boon",
+                          createdBy: "Admin",
                           hashid: quiz.hashid,
                           context: context,
                         ),

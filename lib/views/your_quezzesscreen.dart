@@ -41,7 +41,7 @@ class _YourQuizzesState extends State<YourQuizzes> {
         Get.offAll(() => VideoTrainingsScreen());
         break;
       case 3:
-        Get.offAll(() => GoogleMapPage());
+        Get.offAll(() => GoogleMapPage(doctorRecommendations: []));
         break;
     }
   }
