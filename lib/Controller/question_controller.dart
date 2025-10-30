@@ -40,7 +40,7 @@ class QuestionController extends GetxController {
         questions.clear();
       }
     } catch (e) {
-      errorMessage.value = 'Plz create your profile first.';
+      errorMessage.value = 'You need to create your profile before continuing.';
       questions.clear();
     } finally {
       isLoading(false);
