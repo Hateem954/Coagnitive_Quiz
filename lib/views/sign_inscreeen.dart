@@ -466,21 +466,33 @@ class _LoginState extends State<Login> {
                     ),
 
                     SizedBox(height: h(0.015)),
-
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: () {
-                          Get.to(() => ForgetEmail());
-                        },
-                        child: Text(
-                          "Forget password ?",
-                          style: TextStyle(
-                            fontSize: sp(13),
-                            color: AppColors.black,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            "Guest user?",
+                            style: TextStyle(
+                              fontSize: sp(13),
+                              color: AppColors.black,
+                            ),
                           ),
                         ),
-                      ),
+
+                        TextButton(
+                          onPressed: () {
+                            Get.to(() => ForgetEmail());
+                          },
+                          child: Text(
+                            "Forget password ?",
+                            style: TextStyle(
+                              fontSize: sp(13),
+                              color: AppColors.black,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

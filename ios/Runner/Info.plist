@@ -2,6 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -28,6 +29,7 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
@@ -41,9 +43,42 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+
+	<!-- ========================= -->
+	<!--      iOS Permissions      -->
+	<!-- ========================= -->
+
+	<!-- Location Permission -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app requires location access to provide location-based services.</string>
+
+	<!-- Camera Permission -->
+	<key>NSCameraUsageDescription</key>
+	<string>This app requires access to your camera to take photos.</string>
+
+	<!-- Microphone Permission -->
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app needs microphone access to record audio.</string>
+
+	<!-- Photo Library (READ/WRITE External Storage Android) -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app needs access to your photo library to upload and save photos.</string>
+
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>This app needs permission to save images to your photo library.</string>
+
+	<!-- File Access (equivalent to READ/WRITE_EXTERNAL_STORAGE) -->
+	<key>NSDocumentsFolderUsageDescription</key>
+	<string>This app needs access to your documents folder to save files.</string>
+
+	<!-- App Tracking Transparency (if needed) -->
+	<key>NSUserTrackingUsageDescription</key>
+	<string>This app does not track you. Permission is only required to comply with Apple guidelines.</string>
+
 </dict>
 </plist>
